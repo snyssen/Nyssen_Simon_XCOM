@@ -10,11 +10,21 @@ using System.Windows.Forms;
 
 namespace Nyssen_Simon_XCOM
 {
-    public partial class Form1 : Form
+    public partial class EcranAccueil : Form
     {
-        public Form1()
+        public EcranAccueil()
         {
             InitializeComponent();
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void btnNewGame_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

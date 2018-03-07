@@ -16,7 +16,8 @@ namespace Nyssen_Simon_XCOM
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new Splash_Screen());
+            Application.Run(new EcranAccueil());
         }
     }
 }
