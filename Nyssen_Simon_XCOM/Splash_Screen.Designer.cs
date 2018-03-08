@@ -28,7 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            this.timerSplash = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
+            // 
+            // timerSplash
+            // 
+            this.timerSplash.Interval = 10;
+            this.timerSplash.Tick += new System.EventHandler(this.timerSplash_Tick);
             // 
             // Splash_Screen
             // 
@@ -42,14 +49,18 @@
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Splash_Screen";
+            this.Opacity = 0D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.TransparencyKey = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.Load += new System.EventHandler(this.Splash_Screen_Load);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Splash_Screen_MouseClick);
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private System.Windows.Forms.Timer timerSplash;
     }
 }
 

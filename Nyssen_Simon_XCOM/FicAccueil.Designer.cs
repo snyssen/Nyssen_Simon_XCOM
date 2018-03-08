@@ -29,10 +29,11 @@
         private void InitializeComponent()
         {
             this.pAccueil = new System.Windows.Forms.Panel();
-            this.btnNewGame = new System.Windows.Forms.Button();
-            this.btnLoadGame = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
-            this.ofdLoadGame = new System.Windows.Forms.OpenFileDialog();
+            this.btnLoadGame = new System.Windows.Forms.Button();
+            this.btnNewGame = new System.Windows.Forms.Button();
+            this.dlgLoadGame = new System.Windows.Forms.OpenFileDialog();
+            this.llblCopyright = new System.Windows.Forms.LinkLabel();
             this.pAccueil.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,25 +48,6 @@
             this.pAccueil.Size = new System.Drawing.Size(352, 203);
             this.pAccueil.TabIndex = 0;
             // 
-            // btnNewGame
-            // 
-            this.btnNewGame.Location = new System.Drawing.Point(4, 4);
-            this.btnNewGame.Name = "btnNewGame";
-            this.btnNewGame.Size = new System.Drawing.Size(341, 59);
-            this.btnNewGame.TabIndex = 0;
-            this.btnNewGame.Text = "Nouvelle partie";
-            this.btnNewGame.UseVisualStyleBackColor = true;
-            this.btnNewGame.Click += new System.EventHandler(this.btnNewGame_Click);
-            // 
-            // btnLoadGame
-            // 
-            this.btnLoadGame.Location = new System.Drawing.Point(4, 69);
-            this.btnLoadGame.Name = "btnLoadGame";
-            this.btnLoadGame.Size = new System.Drawing.Size(341, 59);
-            this.btnLoadGame.TabIndex = 1;
-            this.btnLoadGame.Text = "Charger partie";
-            this.btnLoadGame.UseVisualStyleBackColor = true;
-            // 
             // btnExit
             // 
             this.btnExit.Location = new System.Drawing.Point(4, 134);
@@ -76,15 +58,47 @@
             this.btnExit.UseVisualStyleBackColor = true;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
-            // ofdLoadGame
+            // btnLoadGame
             // 
-            this.ofdLoadGame.FileName = "openFileDialog1";
+            this.btnLoadGame.Location = new System.Drawing.Point(4, 69);
+            this.btnLoadGame.Name = "btnLoadGame";
+            this.btnLoadGame.Size = new System.Drawing.Size(341, 59);
+            this.btnLoadGame.TabIndex = 1;
+            this.btnLoadGame.Text = "Charger partie";
+            this.btnLoadGame.UseVisualStyleBackColor = true;
+            this.btnLoadGame.Click += new System.EventHandler(this.btnLoadGame_Click);
+            // 
+            // btnNewGame
+            // 
+            this.btnNewGame.Location = new System.Drawing.Point(4, 4);
+            this.btnNewGame.Name = "btnNewGame";
+            this.btnNewGame.Size = new System.Drawing.Size(341, 59);
+            this.btnNewGame.TabIndex = 0;
+            this.btnNewGame.Text = "Nouvelle partie";
+            this.btnNewGame.UseVisualStyleBackColor = true;
+            this.btnNewGame.Click += new System.EventHandler(this.btnNewGame_Click);
+            // 
+            // dlgLoadGame
+            // 
+            this.dlgLoadGame.FileName = "openFileDialog1";
+            // 
+            // llblCopyright
+            // 
+            this.llblCopyright.AutoSize = true;
+            this.llblCopyright.Location = new System.Drawing.Point(279, 219);
+            this.llblCopyright.Name = "llblCopyright";
+            this.llblCopyright.Size = new System.Drawing.Size(86, 13);
+            this.llblCopyright.TabIndex = 1;
+            this.llblCopyright.TabStop = true;
+            this.llblCopyright.Text = "© Simon Nyssen";
+            this.llblCopyright.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llblCopyright_LinkClicked);
             // 
             // EcranAccueil
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(377, 231);
+            this.ClientSize = new System.Drawing.Size(377, 241);
+            this.Controls.Add(this.llblCopyright);
             this.Controls.Add(this.pAccueil);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -93,6 +107,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.pAccueil.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -102,6 +117,7 @@
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Button btnLoadGame;
         private System.Windows.Forms.Button btnNewGame;
-        private System.Windows.Forms.OpenFileDialog ofdLoadGame;
+        private System.Windows.Forms.OpenFileDialog dlgLoadGame;
+        private System.Windows.Forms.LinkLabel llblCopyright;
     }
 }
