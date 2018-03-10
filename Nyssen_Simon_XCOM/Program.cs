@@ -23,7 +23,14 @@ namespace Nyssen_Simon_XCOM
             if (accueil.GameLaunch) // On veut lancer/reprendre une partie
             {
                 if (accueil.Setup) // On veut commencer une nouvelle partie => Choix des paramètres
-                    Application.Run(new EcranSetup());
+                {
+                    EcranSetup setup = new EcranSetup();
+                    Application.Run(setup);
+                    if (setup.begin)
+                    {
+                        MessageBox.Show("Fin de la version d'évaluation !");
+                    }
+                }
                 //else // On reprend une partie précédente
             }
         }

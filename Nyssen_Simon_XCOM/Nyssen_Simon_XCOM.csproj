@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -106,6 +109,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\XCOM_Shield_Logo.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\desert_road.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Snowy_Pass.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Urban_Parking.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

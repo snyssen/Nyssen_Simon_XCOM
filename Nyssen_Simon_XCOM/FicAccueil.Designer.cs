@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EcranAccueil));
             this.pAccueil = new System.Windows.Forms.Panel();
             this.btnExit = new System.Windows.Forms.Button();
             this.btnLoadGame = new System.Windows.Forms.Button();
@@ -85,7 +86,7 @@
             // llblCopyright
             // 
             this.llblCopyright.AutoSize = true;
-            this.llblCopyright.Location = new System.Drawing.Point(279, 219);
+            this.llblCopyright.Location = new System.Drawing.Point(286, 239);
             this.llblCopyright.Name = "llblCopyright";
             this.llblCopyright.Size = new System.Drawing.Size(86, 13);
             this.llblCopyright.TabIndex = 1;
@@ -97,14 +98,16 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(377, 241);
+            this.ClientSize = new System.Drawing.Size(384, 261);
             this.Controls.Add(this.llblCopyright);
             this.Controls.Add(this.pAccueil);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "EcranAccueil";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "XCOM";
             this.pAccueil.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

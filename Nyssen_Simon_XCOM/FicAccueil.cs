@@ -12,7 +12,8 @@ namespace Nyssen_Simon_XCOM
 {
     public partial class EcranAccueil : Form
     {
-        public Boolean GameLaunch = false, Setup = false;
+        public Boolean GameLaunch = false; // Si true, on veut lancer une partie (peu importe que ce soit une nouvelle ou une ancienne); sinon on veut quitter le programme
+        public Boolean Setup = false;      // Si true, on veut lancer une NOUVELLE partie; sinon on veut reprendre une en cours (dépendant dans les deux cas de GameLaunch)
 
         public EcranAccueil()
         {
@@ -21,7 +22,7 @@ namespace Nyssen_Simon_XCOM
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            GameLaunch = false;
+            GameLaunch = false; 
             Setup = false;
             Close();
         }
@@ -38,11 +39,15 @@ namespace Nyssen_Simon_XCOM
             GameLaunch = true;
             Setup = false;
 
+            MessageBox.Show("Fonction non-implémentée...");
+
+            /*
             if (dlgLoadGame.ShowDialog() == DialogResult.OK)
             {
 
                 Close();
             }
+            */
         }
 
         private void llblCopyright_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
