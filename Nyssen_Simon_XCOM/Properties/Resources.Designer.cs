@@ -93,6 +93,36 @@ namespace Nyssen_Simon_XCOM.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Shield_Empty {
+            get {
+                object obj = ResourceManager.GetObject("Shield_Empty", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Shield_Full {
+            get {
+                object obj = ResourceManager.GetObject("Shield_Full", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Shield_Half {
+            get {
+                object obj = ResourceManager.GetObject("Shield_Half", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Snowy_Pass {
             get {
                 object obj = ResourceManager.GetObject("Snowy_Pass", resourceCulture);

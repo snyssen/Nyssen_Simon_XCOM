@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1D6D23CC-ED16-4C7C-9418-07FBCFD4F62E}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>Nyssen_Simon_XCOM</RootNamespace>
     <AssemblyName>Nyssen_Simon_XCOM</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -48,11 +48,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Case_Echiquier.cs" />
     <Compile Include="FicAccueil.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FicAccueil.Designer.cs">
       <DependentUpon>FicAccueil.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FicAide.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FicAide.Designer.cs">
+      <DependentUpon>FicAide.cs</DependentUpon>
     </Compile>
     <Compile Include="FicGame.cs">
       <SubType>Form</SubType>
@@ -77,6 +84,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FicAccueil.resx">
       <DependentUpon>FicAccueil.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FicAide.resx">
+      <DependentUpon>FicAide.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FicGame.resx">
       <DependentUpon>FicGame.cs</DependentUpon>
@@ -127,6 +137,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Urban_Parking.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shield_Empty.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shield_Full.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shield_Half.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

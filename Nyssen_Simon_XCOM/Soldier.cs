@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Nyssen_Simon_XCOM
 {
@@ -94,13 +95,32 @@ namespace Nyssen_Simon_XCOM
 
         public float Defense(int cover)
         {
-            float defense;
+            float defense = 0;
+
+            switch (cover)
+            {
+                case 0:
+                    defense = (float)(this.evasion * 0.1);
+                    break;
+                case 1:
+                    defense = (float)(this.evasion * 1.5);
+                    break;
+                case 2:
+                    defense = this.evasion * 2;
+                    break;
+                default:
+                    MessageBox.Show("ERREUR : Pas de niveau de couverture définie sur cette case !", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Error); // Peut on utiliser une message box en dehors d'un form ?
+                    break;
+            }
+
+            /*
             if (cover == 0)
                 defense = (float)(this.evasion * 0.1);
             else if (cover == 1)
                 defense = (float)(this.evasion * 1.5);
             else
                 defense = this.evasion * 2;
+            */
 
             if (this.covered)
                 defense += 10;

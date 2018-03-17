@@ -14,6 +14,7 @@ namespace Nyssen_Simon_XCOM
     {
         public Boolean GameLaunch = false; // Si true, on veut lancer une partie (peu importe que ce soit une nouvelle ou une ancienne); sinon on veut quitter le programme
         public Boolean Setup = false;      // Si true, on veut lancer une NOUVELLE partie; sinon on veut reprendre une en cours (dépendant dans les deux cas de GameLaunch)
+        public EcranSetup setup = new EcranSetup();
 
         public EcranAccueil()
         {
@@ -29,9 +30,19 @@ namespace Nyssen_Simon_XCOM
 
         private void btnNewGame_Click(object sender, EventArgs e)
         {
+            
+            setup.ShowDialog();
+            if (setup.begin)
+            {
+                Close();
+                GameLaunch = true;
+            }
+                
+            /*
             GameLaunch = true;
             Setup = true;
             Close();
+            */
         }
 
         private void btnLoadGame_Click(object sender, EventArgs e)
@@ -54,6 +65,12 @@ namespace Nyssen_Simon_XCOM
         {
             System.Diagnostics.Process.Start("https://github.com/snyssen");
             llblCopyright.LinkVisited = true;
+        }
+
+        private void btnAide_Click(object sender, EventArgs e)
+        {
+            EcranAide aide = new EcranAide();
+            aide.ShowDialog();
         }
     }
 }

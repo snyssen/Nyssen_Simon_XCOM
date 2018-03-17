@@ -35,6 +35,7 @@
             this.btnNewGame = new System.Windows.Forms.Button();
             this.dlgLoadGame = new System.Windows.Forms.OpenFileDialog();
             this.llblCopyright = new System.Windows.Forms.LinkLabel();
+            this.btnAide = new System.Windows.Forms.Button();
             this.pAccueil.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -94,11 +95,22 @@
             this.llblCopyright.Text = "© Simon Nyssen";
             this.llblCopyright.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llblCopyright_LinkClicked);
             // 
+            // btnAide
+            // 
+            this.btnAide.Location = new System.Drawing.Point(13, 222);
+            this.btnAide.Name = "btnAide";
+            this.btnAide.Size = new System.Drawing.Size(106, 29);
+            this.btnAide.TabIndex = 2;
+            this.btnAide.Text = "Comment Jouer";
+            this.btnAide.UseVisualStyleBackColor = true;
+            this.btnAide.Click += new System.EventHandler(this.btnAide_Click);
+            // 
             // EcranAccueil
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(384, 261);
+            this.Controls.Add(this.btnAide);
             this.Controls.Add(this.llblCopyright);
             this.Controls.Add(this.pAccueil);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -122,5 +134,6 @@
         private System.Windows.Forms.Button btnNewGame;
         private System.Windows.Forms.OpenFileDialog dlgLoadGame;
         private System.Windows.Forms.LinkLabel llblCopyright;
+        private System.Windows.Forms.Button btnAide;
     }
 }
