@@ -30,6 +30,12 @@ namespace Nyssen_Simon_XCOM
         {                                  
             InitializeComponent();
             tbNbrSoldats_Scroll(null, null);
+
+            // DEBUG
+            cbFantassin.SelectedIndex = 1;
+            cbSniper.SelectedIndex = 1;
+            cbLourd.SelectedIndex = 1;
+            cbLeger.SelectedIndex = 1;
         }
 
         private void tbNbrSoldats_Scroll(object sender, EventArgs e)
@@ -121,6 +127,7 @@ namespace Nyssen_Simon_XCOM
 
         private void btnLancer_Click(object sender, EventArgs e)
         {
+            /*
             if (SelectedbtnIndex == 3 || cbFantassin.SelectedItem == null || cbSniper.SelectedItem == null || cbLourd.SelectedItem == null || cbLeger.SelectedItem == null || NbrSoldats - NbrSoldatsSelect != 0)
             {
                 if (SelectedbtnIndex == 3)
@@ -132,7 +139,12 @@ namespace Nyssen_Simon_XCOM
                     MessageBox.Show("Vous n'avez pas fini d'assigner les rôles des soldats de votre escouade ! ");
                 }
             }
-            
+            */
+
+            // DEBUG
+            if (SelectedbtnIndex == 3)
+                MessageBox.Show("Vous devez sélectionner un champs de bataille !");
+
             else
             {
                 if (MessageBox.Show("Voici les paramètres de cette partie :\n Taille de l'escouade : " + tbNbrSoldats.Value + " soldats dont\n   " + cbFantassin.SelectedItem + " fantassins\n   " + cbSniper.SelectedItem + " Tireurs d'élite\n   " + cbLourd.SelectedItem + " Soldats lourds\n   " + cbLeger.SelectedItem + " Soldats léger.\n\nVoulez-vous lancer la partie ?", "Confirmez le lancement de la partie", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)

@@ -73,7 +73,11 @@
     <Compile Include="FicSetup.Designer.cs">
       <DependentUpon>FicSetup.cs</DependentUpon>
     </Compile>
-    <Compile Include="Soldier.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Splash_Screen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -99,14 +103,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -130,22 +129,34 @@
     <None Include="Resources\XCOM_Shield_Logo.gif" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\desert_road.jpg" />
+    <None Include="Resources\Maps\desert_road.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Snowy_Pass.jpg" />
+    <None Include="Resources\Maps\Snowy_Pass.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Urban_Parking.jpg" />
+    <None Include="Resources\Maps\Urban_Parking.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shield_Empty.png" />
+    <None Include="Resources\Cover\Shield_Empty.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shield_Full.png" />
+    <None Include="Resources\Cover\Shield_Full.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shield_Half.png" />
+    <None Include="Resources\Cover\Shield_Half.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Soldiers\Fantassin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Soldiers\Leger.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Soldiers\Lourd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Soldiers\Sniper.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -36,6 +36,8 @@ namespace Nyssen_Simon_XCOM
             this.NbrLegers = NbrLg;
             this.NbrSoldats = NbrFantassins + NbrSnipers + NbrLourds + NbrLegers;
 
+            pbCase.Parent = pbCarte;
+
             tsAvancement.Maximum = NbrSoldats;
             tsAvancement.Alignment = ToolStripItemAlignment.Right;
             tsNbrSoldatsJoue.Alignment = ToolStripItemAlignment.Right;
@@ -169,11 +171,6 @@ namespace Nyssen_Simon_XCOM
             ShowCover(Cases[IndexX, IndexY]);
         }
 
-        private void pbCarte_MouseDown(object sender, MouseEventArgs e) // On utilise un bouton de la souris
-        {
-
-        }
-
         private void EcranGame_Resize(object sender, EventArgs e)
         {
             Invalidate();
@@ -198,6 +195,11 @@ namespace Nyssen_Simon_XCOM
         private void tsfQuitter_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void pbCase_MouseDown(object sender, MouseEventArgs e)
+        {
+            
         }
 
         private void pbCarte_Paint(object sender, PaintEventArgs e)

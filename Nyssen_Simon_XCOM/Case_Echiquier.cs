@@ -14,7 +14,8 @@ namespace Nyssen_Simon_XCOM
     class Case_Echiquier
     {
         private int _posX, _posY, _Xmax, _Ymax;
-        //int Cover = 3; // Déclaré par défaut à 3, représente une valeur indéfinie => provoque une erreur si laissée telle quelle
+        private Point _Centre;
+        //public int Cover = 3; // Déclaré par défaut à 3, représente une valeur indéfinie => provoque une erreur si laissée telle quelle
         public int Cover = 2; // Debug
 
 
@@ -24,6 +25,7 @@ namespace Nyssen_Simon_XCOM
             this._posY = posY;
             this._Xmax = XMax;
             this._Ymax = YMax;
+            this._Centre = new Point((_Xmax - _posX) / 2, (_Ymax - _posY) / 2);
         }
 
         public int posX
@@ -34,6 +36,8 @@ namespace Nyssen_Simon_XCOM
         { get { return this._Xmax; } }
         public int Ymax
         { get { return this._Ymax; } }
+        public Point Centre
+        { get { return this._Centre; } }
 
         public void DessinerCase(IntPtr handle)
         {
@@ -41,7 +45,7 @@ namespace Nyssen_Simon_XCOM
 
             gr.DrawRectangle(new Pen(Color.AliceBlue, 50),_posX, _posY, _Xmax - _posX, _Ymax - _posY);
 
-            gr.Dispose();
+            //gr.Dispose();
         }
     }
 }

@@ -89,11 +89,11 @@
             this.pbCarte.TabIndex = 0;
             this.pbCarte.TabStop = false;
             this.pbCarte.Paint += new System.Windows.Forms.PaintEventHandler(this.pbCarte_Paint);
-            this.pbCarte.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbCarte_MouseDown);
             this.pbCarte.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCarte_MouseMove);
             // 
             // pbCase
             // 
+            this.pbCase.BackColor = System.Drawing.Color.Transparent;
             this.pbCase.Location = new System.Drawing.Point(12, 51);
             this.pbCase.Name = "pbCase";
             this.pbCase.Size = new System.Drawing.Size(100, 50);
@@ -101,6 +101,7 @@
             this.pbCase.TabIndex = 2;
             this.pbCase.TabStop = false;
             this.pbCase.Visible = false;
+            this.pbCase.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbCase_MouseDown);
             // 
             // tsBarreOutils
             // 
@@ -114,14 +115,14 @@
             // 
             // tsFichier
             // 
-            this.tsFichier.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsFichier.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.tsFichier.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsfSauvegarder,
             this.tsfCharger,
             this.tsfQuitter});
             this.tsFichier.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsFichier.Name = "tsFichier";
-            this.tsFichier.Size = new System.Drawing.Size(13, 22);
+            this.tsFichier.Size = new System.Drawing.Size(60, 22);
             this.tsFichier.Text = "Fichiers";
             // 
             // tsfSauvegarder
@@ -155,6 +156,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(100, 100);
             this.Name = "EcranGame";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Partie en cours";
             this.Load += new System.EventHandler(this.EcranGame_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.EcranGame_Paint);
