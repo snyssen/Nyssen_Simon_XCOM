@@ -78,6 +78,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Soldat.cs" />
     <Compile Include="Splash_Screen.cs">
       <SubType>Form</SubType>
     </Compile>

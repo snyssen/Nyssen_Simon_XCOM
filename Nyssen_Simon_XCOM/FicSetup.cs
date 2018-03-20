@@ -12,7 +12,7 @@ namespace Nyssen_Simon_XCOM
 {
     public partial class EcranSetup : Form
     {
-        public Boolean begin = false;
+        public bool begin = false;
         private int NbrSoldats; // Nombres de soldats dans l'escouade, definit par la reglette tbNbrSoldats
         private int NbrSoldatsSelect; // Nombre de soldats déjà assignés
         public short SelectedbtnIndex = 3; // Index de bouton appuyé -> 0 = Desert

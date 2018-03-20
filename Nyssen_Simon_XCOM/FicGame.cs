@@ -13,13 +13,13 @@ namespace Nyssen_Simon_XCOM
 {
     public partial class EcranGame : Form
     {
-        private short SelectedbtnIndex;
-        private int NbrFantassins;
-        private int NbrSnipers;
-        private int NbrLourds;
-        private int NbrLegers;
-        private int NbrSoldats;
-        Boolean error = false;
+        private short SelectedbtnIndex; // Choix de la carte
+        private int NbrFantassins; // Nombre de fantassins (par escouade)
+        private int NbrSnipers; // Nombre de snipers (par escouade)
+        private int NbrLourds; // Nombre de soldats lourds (par escouade)
+        private int NbrLegers; // Nombre de soldats légers (par escouade)
+        private int NbrSoldats; // Nombre de soldats toute classe confondue (par escouades)
+        bool error = false;
         Case_Echiquier[,] Cases = new Case_Echiquier[10,10];
         int IndexX, IndexY;
 
@@ -41,6 +41,7 @@ namespace Nyssen_Simon_XCOM
             tsAvancement.Maximum = NbrSoldats;
             tsAvancement.Alignment = ToolStripItemAlignment.Right;
             tsNbrSoldatsJoue.Alignment = ToolStripItemAlignment.Right;
+            tsNbrSoldatsJoue.Text = "0/" + NbrSoldats.ToString();
 
             switch (SelectedbtnIndex)
             {
