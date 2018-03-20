@@ -19,9 +19,14 @@ namespace Nyssen_Simon_XCOM
         private int NbrLourds; // Nombre de soldats lourds (par escouade)
         private int NbrLegers; // Nombre de soldats légers (par escouade)
         private int NbrSoldats; // Nombre de soldats toute classe confondue (par escouades)
-        bool error = false;
-        Case_Echiquier[,] Cases = new Case_Echiquier[10,10];
-        int IndexX, IndexY;
+        bool error = false; // Détecte une erreur
+        Case_Echiquier[,] Cases = new Case_Echiquier[10,10]; // Tableau de cases qui forme l'échiquier
+        int IndexX, IndexY; // Contient la position (l'index) de la case sur laquelle on travaille
+        List<PictureBox> SoldiersIcons1 = new List<PictureBox>(); // Icônes des soldats du joueur 1
+        List<PictureBox> SoldiersIcons2 = new List<PictureBox>(); // Icônes des soldats du joueur 2
+        List<Soldat> Soldiers1 = new List<Soldat>(); // Soldats du joueur 1
+        List<Soldat> Soldiers2 = new List<Soldat>(); // Soldats du joueur 2
+        private bool First = true; // Premier lancement
 
         //private GraphicsPath GraphEnr = null;
 
@@ -63,7 +68,78 @@ namespace Nyssen_Simon_XCOM
             if (!error)
             {
                 RemplirTabCases();
-                //DessinerEchiquier();
+                
+                for (int i = 0; i < NbrSoldats; i++) // Liste d'icônes des soldats du joueur 1
+                {
+                    SoldiersIcons1.Add(new PictureBox { Size = new Size(Cases[0, 0].Xmax - Cases[0, 0].posX, Cases[0, 0].Ymax - Cases[0, 0].posY), Parent = pbCarte, SizeMode = PictureBoxSizeMode.StretchImage, BackColor = Color.Transparent });
+                    this.Controls.Add(SoldiersIcons1[i]);
+                }
+                for (int i = 0; i < NbrSoldats; i++) // Liste d'icônes des soldats du joueur 2
+                {
+                    SoldiersIcons2.Add(new PictureBox { Size = new Size(Cases[0, 0].Xmax - Cases[0, 0].posX, Cases[0, 0].Ymax - Cases[0, 0].posY), Parent = pbCarte, SizeMode = PictureBoxSizeMode.StretchImage, BackColor = Color.Transparent });
+                    this.Controls.Add(SoldiersIcons2[i]);
+                }
+
+                // Listes des soldats
+                int j = 0;
+                for (int i = 0; i < NbrFantassins; i++) // Fantassins
+                {
+                    Soldiers1.Add(new Soldat(0, Cases[i, 0])); // On créée le soldat sur la case désirée
+                    Cases[i, 0].soldier = Soldiers1[j]; // Et on assigne ce soldat à la case
+                    Soldiers2.Add(new Soldat(0, Cases[9 - i, 9]));
+                    Cases[9 - i, 9].soldier = Soldiers2[j];
+                    SoldiersIcons1[i].Image = Properties.Resources.Fantassin;
+                    SoldiersIcons2[i].Image = Properties.Resources.Fantassin;
+                    SoldiersIcons1[i].Parent = pbCarte;
+                    SoldiersIcons2[i].Parent = pbCarte;
+                    SoldiersIcons1[i].Location = Cases[i, 0].Origin;
+                    SoldiersIcons2[i].Location = Cases[9 - i, 9].Origin;
+                    j++;
+                }
+                for (int i = 0; i < NbrSnipers; i++) // Snipers
+                {
+                    Soldiers1.Add(new Soldat(0, Cases[i + NbrFantassins, 0]));
+                    Cases[i + NbrFantassins, 0].soldier = Soldiers1[j];
+                    Soldiers2.Add(new Soldat(0, Cases[9 - i-NbrFantassins, 9]));
+                    Cases[9 - i - NbrFantassins, 9].soldier = Soldiers2[j];
+                    SoldiersIcons1[i + NbrFantassins].Image = Properties.Resources.Sniper;
+                    SoldiersIcons2[i + NbrFantassins].Image = Properties.Resources.Sniper;
+                    SoldiersIcons1[i + NbrFantassins].Parent = pbCarte;
+                    SoldiersIcons2[i + NbrFantassins].Parent = pbCarte;
+                    SoldiersIcons1[i + NbrFantassins].Location = Cases[i + NbrFantassins, 0].Origin;
+                    SoldiersIcons2[i + NbrFantassins].Location = Cases[9 - i - NbrFantassins, 9].Origin;
+                    j++;
+                }
+                for (int i = 0; i < NbrLourds; i++) // Soldats lourds
+                {
+                    Soldiers1.Add(new Soldat(0, Cases[i + NbrFantassins + NbrSnipers, 0]));
+                    Cases[i + NbrFantassins + NbrSnipers, 0].soldier = Soldiers1[j];
+                    Soldiers2.Add(new Soldat(0, Cases[9 - i - NbrFantassins - NbrSnipers, 9]));
+                    Cases[9 - i - NbrFantassins - NbrSnipers, 9].soldier = Soldiers2[j];
+                    SoldiersIcons1[i + NbrFantassins + NbrSnipers].Image = Properties.Resources.Lourd;
+                    SoldiersIcons2[i + NbrFantassins + NbrSnipers].Image = Properties.Resources.Lourd;
+                    SoldiersIcons1[i + NbrFantassins + NbrSnipers].Parent = pbCarte;
+                    SoldiersIcons2[i + NbrFantassins + NbrSnipers].Parent = pbCarte;
+                    SoldiersIcons1[i + NbrFantassins + NbrSnipers].Location = Cases[i + NbrFantassins + NbrSnipers, 0].Origin;
+                    SoldiersIcons2[i + NbrFantassins + NbrSnipers].Location = Cases[9 - i - NbrFantassins - NbrSnipers, 9].Origin;
+                    j++;
+                }
+                for (int i = 0; i < NbrLegers; i++) // Soldats légers
+                {
+                    Soldiers1.Add(new Soldat(0, Cases[i + NbrFantassins + NbrSnipers + NbrLourds, 0]));
+                    Cases[i + NbrFantassins + NbrSnipers + NbrLourds, 0].soldier = Soldiers1[j];
+                    Soldiers2.Add(new Soldat(0, Cases[9 - i - NbrFantassins - NbrSnipers - NbrLourds, 9]));
+                    Cases[9 - i - NbrFantassins - NbrSnipers - NbrLourds, 9].soldier = Soldiers2[j];
+                    SoldiersIcons1[i + NbrFantassins + NbrSnipers + NbrLourds].Image = Properties.Resources.Leger;
+                    SoldiersIcons2[i + NbrFantassins + NbrSnipers + NbrLourds].Image = Properties.Resources.Leger;
+                    SoldiersIcons1[i + NbrFantassins + NbrSnipers + NbrLourds].Parent = pbCarte;
+                    SoldiersIcons2[i + NbrFantassins + NbrSnipers + NbrLourds].Parent = pbCarte;
+                    SoldiersIcons1[i + NbrFantassins + NbrSnipers + NbrLourds].Location = Cases[i + NbrFantassins + NbrSnipers + NbrLourds, 0].Origin;
+                    SoldiersIcons2[i + NbrFantassins + NbrSnipers + NbrLourds].Location = Cases[9 - i - NbrFantassins - NbrSnipers - NbrLourds, 9].Origin;
+                    j++;
+                }
+
+                First = false;
             }
 
             else
@@ -75,13 +151,56 @@ namespace Nyssen_Simon_XCOM
             int Longueur = pbCarte.Width;
             int Hauteur = pbCarte.Height;
 
+            Soldat soldatTmp = null;
+
             for (int x = 0; x < 10; x++) // Colonnes
             {
                 for (int y = 0; y < 10; y++) // Lignes
                 {
-                    Cases[x, y] = new Case_Echiquier(x * Longueur / 10, y * Hauteur / 10, (x+1) * Longueur / 10, (y+1) * Hauteur / 10);
+                    if (!First)
+                    {
+                        soldatTmp = null;
+                        if (Cases[x, y].soldier != null)
+                            soldatTmp = Cases[x, y].soldier;
+                    }
+                    Cases[x, y] = new Case_Echiquier(x * Longueur / 10, y * Hauteur / 10, (x + 1) * Longueur / 10, (y + 1) * Hauteur / 10);
                     Cases[x, y].DessinerCase(pbCarte.Handle);
+                    if (!First)
+                    {
+                        if (soldatTmp != null)
+                        {
+                            Cases[x, y].soldier = soldatTmp;
+                            foreach (Soldat soldat in Soldiers1) // Soldats joueur 1
+                            {
+                                if (Cases[x, y].soldier == soldat)
+                                    soldat.position = Cases[x, y];
+                            }
+                            foreach (Soldat soldat in Soldiers2) // Soldats joueur 2
+                            {
+                                if (Cases[x, y].soldier == soldat)
+                                    soldat.position = Cases[x, y];
+                            }
+                        }
+                    }
                     Console.WriteLine("Case[" + x + ";" + y + "] cree. Elle a pour valeurs :\n\t\tPoint d'origine : (" + Cases[x, y].posX + ";" + Cases[x, y].posY + ")\n\t\tPoint de chute : (" + Cases[x, y].Xmax + ";" + Cases[x, y].Ymax + ")");
+                }
+            }
+
+            if (Soldiers1 != null)
+            {
+                int i = 0;
+                foreach (Soldat soldat in Soldiers1) // Soldats joueur 1
+                {
+                    SoldiersIcons1[i].Size = new Size(Cases[0, 0].Xmax - Cases[0, 0].posX, Cases[0, 0].Ymax - Cases[0, 0].posY);
+                    SoldiersIcons1[i].Location = soldat.position.Origin;
+                    i++;
+                }
+                i = 0;
+                foreach (Soldat soldat in Soldiers2) // Soldats joueur 2
+                {
+                    SoldiersIcons2[i].Size = new Size(Cases[0, 0].Xmax - Cases[0, 0].posX, Cases[0, 0].Ymax - Cases[0, 0].posY);
+                    SoldiersIcons2[i].Location = soldat.position.Origin;
+                    i++;
                 }
             }
         }
