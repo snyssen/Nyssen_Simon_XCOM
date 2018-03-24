@@ -41,7 +41,7 @@
             this.tsfQuitter = new System.Windows.Forms.ToolStripMenuItem();
             this.pbCase = new System.Windows.Forms.PictureBox();
             this.pbCarte = new System.Windows.Forms.PictureBox();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.ttInfos = new System.Windows.Forms.ToolTip(this.components);
             this.statusStrip1.SuspendLayout();
             this.tsBarreOutils.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbCase)).BeginInit();
@@ -184,6 +184,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsfSauvegarder;
         private System.Windows.Forms.ToolStripMenuItem tsfCharger;
         private System.Windows.Forms.ToolStripMenuItem tsfQuitter;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip ttInfos;
     }
 }

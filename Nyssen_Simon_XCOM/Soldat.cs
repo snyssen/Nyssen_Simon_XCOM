@@ -9,17 +9,18 @@ namespace Nyssen_Simon_XCOM
     class Soldat
     {
         private int _classe = 4; // Définit la classe du soldat (read only): // 0 -> Fantassin
-                                                                             // 1 -> Sniper
-                                                                             // 2 -> Lourd
-                                                                             // 3 -> Léger
-                                                                             // 4 -> Indéfini
+                                 // 1 -> Sniper
+                                 // 2 -> Lourd
+                                 // 3 -> Léger
+                                 // 4 -> Indéfini
         private bool _covered = false; // Permet de savoir si le soldat a renforcé sa position ce tour-ci ou non (read only avec accesseur)
         public Case_Echiquier position; // Position du soldat définit par une case dans l'échiquier, modifiable par le déplacement du soldat
         private int _HP; // Points de vie du soldat, modifiable par une attaque (via accesseur, avec condition > 0)
-        private int damage, precision, evasion, mobility; // Stats du soldat
+        private int _damage, _precision, _evasion, _mobility; // Stats du soldat
         private bool _alive = true; // Détermine si le soldat est en vie ou non
         public bool error = false; // Présence d'une erreur
         public bool played = false; // Vrai si le soldat a déjà utilisé son action
+        Random tir = new Random(); // Permet de tirer des nombres entre 0 et 100 pour déterminer si un tir touche ou non
 
         public Soldat(int classe, Case_Echiquier _position)
         {
@@ -29,37 +30,36 @@ namespace Nyssen_Simon_XCOM
             switch (_classe)
             {
                 case 0: // Fantassin
-                    this.damage = 5;
-                    this.precision = 5;
+                    this._damage = 5;
+                    this._precision = 5;
                     this._HP = 10;
-                    this.evasion = 4;
-                    this.mobility = 5;
+                    this._evasion = 4;
+                    this._mobility = 5;
                     break;
                 case 1: // Sniper
-                    this.damage = 6;
-                    this.precision = 7;
+                    this._damage = 6;
+                    this._precision = 7;
                     this._HP = 8;
-                    this.evasion = 5;
-                    this.mobility = 4;
+                    this._evasion = 5;
+                    this._mobility = 4;
                     break;
                 case 2: // Lourd
-                    this.damage = 4;
-                    this.precision = 3;
+                    this._damage = 4;
+                    this._precision = 3;
                     this._HP = 15;
-                    this.evasion = 2;
-                    this.mobility = 3;
+                    this._evasion = 2;
+                    this._mobility = 3;
                     break;
                 case 3: // Leger
-                    this.damage = 4;
-                    this.precision = 4;
+                    this._damage = 4;
+                    this._precision = 4;
                     this._HP = 5;
-                    this.evasion = 8;
-                    this.mobility = 8;
+                    this._evasion = 8;
+                    this._mobility = 8;
                     break;
                 default: // Erreur -> Pas de classe assignée
                     error = true;
                     break;
-
             }
         }
 
@@ -74,26 +74,43 @@ namespace Nyssen_Simon_XCOM
                     this._HP -= value;
                 else
                     this._alive = false;
-                }
+            }
         }
         public bool alive
         { get { return this._alive; } }
+        public int damage
+        { get { return this._damage; } }
         #endregion
 
         #region Méthodes
         #region Actions
-        public void Attack(Soldat target) // Attaque un soldat ciblé
+        public int Attack(Soldat target) // Attaque un soldat ciblé
         {
-
+            if (target.DefenseCalc() < 0)
+                return (int)target.DefenseCalc();
+            float chance = this._precision / (DistanceCalc(target.position) * target.DefenseCalc());
+            if (this.tir.Next(0, 101) <= chance)
+            {
+                target.HP = this._damage;
+                this.played = true;
+                return 0;
+            }
+            else
+            {
+                this.played = true;
+                return 1;
+            }
         }
 
         public int Move(Case_Echiquier targetPos) // Se déplace vers une case ciblée, renvoie 0 si pas d'erreur, 1 si la case ciblée est trop loin et 2 si la case ciblée est déjà occupée
         {
             if (targetPos.soldier == null)
             {
-                if (DistanceCalc(targetPos) <= this.mobility)
+                if (DistanceCalc(targetPos) <= this._mobility)
                 {
+                    //this.position.soldier = null;
                     this.position = targetPos;
+                    //targetPos.soldier = this;
                     this.played = true;
                     return 0;
                 }
@@ -110,20 +127,51 @@ namespace Nyssen_Simon_XCOM
             this.played = true;
         }
         #endregion
-        /*
-        private float DefenseCalc()
+        
+        private float DefenseCalc() // Calcul la "défense" du soldat, càd si il a plus ou moins de chance d'esquiver un tir
         {
-
+            float defense;
+            switch (this.position.Cover)
+            {
+                case 0:
+                    defense = (float)(this._evasion * 0.1);
+                    break;
+                case 1:
+                    defense = (float)(this._evasion * 1.5);
+                    break;
+                case 2:
+                    defense = this._evasion * 2;
+                    break;
+                default:
+                    defense = -1;
+                    break;
+            }
+            if (this.covered)
+                defense += 10;
+            return defense;
         }
-        */
+        
 
-        private float DistanceCalc(Case_Echiquier target) // Calcule la distance entre la case sur laquelle se trouve le soldat et une case visée
+        private int DistanceCalc(Case_Echiquier target) // Calcule la distance entre la case sur laquelle se trouve le soldat et une case visée (en nombre de cases)
         {
+            int distance = Math.Abs(this.position.IndexX - target.IndexX) + Math.Abs(this.position.IndexY + target.IndexY);
+            //int distance = this.position.IndexX - target.IndexX + this.position.IndexY + target.IndexY;
             // DEBUG
-            float distance = (float)Math.Sqrt(Math.Pow((position.Centre.X - target.Centre.X), 2) + Math.Pow((position.Centre.Y - target.Centre.Y), 2));
             Console.WriteLine("Distance = " + distance);
             return distance;
-            //return (float)Math.Sqrt(Math.Pow((position.Centre.X - target.Centre.X), 2) + Math.Pow((position.Centre.Y - target.Centre.Y), 2));
+        }
+
+        public string AfficherStats()
+        {
+            string stats = "Statistiques :" +
+                           "\n\t- Points de vie = " + this._HP +
+                           "\n\t- Dégâts = " + this._damage +
+                           "\n\t- Précision = " + this._precision +
+                           "\n\t- Esquive = " + this._evasion +
+                           "\n\t- Mobilité = " + this._mobility + " cases";
+            stats += (covered) ? "\nCe soldat a renforcé sa position et dispose d'un bonus à l'esquive." : "";
+            stats += (played) ? "\nCe soldat a déjà joué." : "\nCe soldat doit encore jouer.";
+            return stats;
         }
         #endregion
     }

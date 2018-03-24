@@ -13,21 +13,22 @@ namespace Nyssen_Simon_XCOM
 {
     class Case_Echiquier
     {
-        private int _posX, _posY, _Xmax, _Ymax;
-        private Point _Centre;
-        private Point _Origin;
+        private int _posX, _posY, _Xmax, _Ymax, _IndexX, _IndexY;
         //public int Cover = 3; // Déclaré par défaut à 3, représente une valeur indéfinie => provoque une erreur si laissée telle quelle
+                                // 0 = aucune
+                                // 1 = moyenne
+                                // 2 = élevée
         public int Cover = 2; // Debug
         public Soldat soldier = null;
 
-        public Case_Echiquier(int posX, int posY, int XMax, int YMax)
+        public Case_Echiquier(int posX, int posY, int XMax, int YMax, int IndexX, int IndexY)
         {
             this._posX = posX;
             this._posY = posY;
             this._Xmax = XMax;
             this._Ymax = YMax;
-            this._Centre = new Point((_Xmax - _posX) / 2, (_Ymax - _posY) / 2);
-            this._Origin = new Point(this._posX, this._posY);
+            this._IndexX = IndexX;
+            this._IndexY = IndexY;
         }
 
         public int posX
@@ -38,10 +39,14 @@ namespace Nyssen_Simon_XCOM
         { get { return this._Xmax; } }
         public int Ymax
         { get { return this._Ymax; } }
+        public int IndexX
+        { get { return this._IndexX; } }
+        public int IndexY
+        { get { return this._IndexY; } }
         public Point Centre
-        { get { return this._Centre; } }
+        { get { return new Point(_Xmax - ((_Xmax - _posX) / 2), _Ymax - ((_Ymax - _posY) / 2)); } }
         public Point Origin
-        { get { return this._Origin; } }
+        { get { return new Point(this._posX, this._posY); } }
 
         public void DessinerCase(IntPtr handle)
         {
