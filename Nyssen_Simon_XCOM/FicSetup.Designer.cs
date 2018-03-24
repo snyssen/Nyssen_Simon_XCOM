@@ -60,7 +60,6 @@
             this.tbNbrSoldats.Size = new System.Drawing.Size(121, 45);
             this.tbNbrSoldats.SmallChange = 2;
             this.tbNbrSoldats.TabIndex = 0;
-            this.tbNbrSoldats.TickFrequency = 2;
             this.tbNbrSoldats.Value = 4;
             this.tbNbrSoldats.Scroll += new System.EventHandler(this.tbNbrSoldats_Scroll);
             // 
