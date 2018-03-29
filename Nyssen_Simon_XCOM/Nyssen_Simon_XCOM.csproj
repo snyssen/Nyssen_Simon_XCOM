@@ -55,6 +55,12 @@
     <Compile Include="FicAccueil.Designer.cs">
       <DependentUpon>FicAccueil.cs</DependentUpon>
     </Compile>
+    <Compile Include="FicAction.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FicAction.Designer.cs">
+      <DependentUpon>FicAction.cs</DependentUpon>
+    </Compile>
     <Compile Include="FicAide.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -89,6 +95,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FicAccueil.resx">
       <DependentUpon>FicAccueil.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FicAction.resx">
+      <DependentUpon>FicAction.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FicAide.resx">
       <DependentUpon>FicAide.cs</DependentUpon>
@@ -158,6 +167,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Soldiers\Sniper.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\Actions\Covering.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Actions\Firing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Actions\Moving.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

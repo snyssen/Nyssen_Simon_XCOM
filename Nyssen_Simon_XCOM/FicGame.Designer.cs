@@ -28,22 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EcranGame));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsInfo = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsNbrSoldatsJoue = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsAvancement = new System.Windows.Forms.ToolStripProgressBar();
-            this.pbCarte = new System.Windows.Forms.PictureBox();
-            this.pbCase = new System.Windows.Forms.PictureBox();
             this.tsBarreOutils = new System.Windows.Forms.ToolStrip();
             this.tsFichier = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsfSauvegarder = new System.Windows.Forms.ToolStripMenuItem();
             this.tsfCharger = new System.Windows.Forms.ToolStripMenuItem();
             this.tsfQuitter = new System.Windows.Forms.ToolStripMenuItem();
+            this.pbCase = new System.Windows.Forms.PictureBox();
+            this.pbCarte = new System.Windows.Forms.PictureBox();
+            this.ttInfos = new System.Windows.Forms.ToolTip(this.components);
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbCarte)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbCase)).BeginInit();
             this.tsBarreOutils.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbCase)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbCarte)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -76,33 +78,6 @@
             this.tsAvancement.Size = new System.Drawing.Size(100, 16);
             this.tsAvancement.Step = 1;
             // 
-            // pbCarte
-            // 
-            this.pbCarte.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pbCarte.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pbCarte.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pbCarte.Location = new System.Drawing.Point(0, 28);
-            this.pbCarte.Name = "pbCarte";
-            this.pbCarte.Size = new System.Drawing.Size(500, 500);
-            this.pbCarte.TabIndex = 0;
-            this.pbCarte.TabStop = false;
-            this.pbCarte.Paint += new System.Windows.Forms.PaintEventHandler(this.pbCarte_Paint);
-            this.pbCarte.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCarte_MouseMove);
-            // 
-            // pbCase
-            // 
-            this.pbCase.BackColor = System.Drawing.Color.Transparent;
-            this.pbCase.Location = new System.Drawing.Point(12, 51);
-            this.pbCase.Name = "pbCase";
-            this.pbCase.Size = new System.Drawing.Size(100, 50);
-            this.pbCase.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbCase.TabIndex = 2;
-            this.pbCase.TabStop = false;
-            this.pbCase.Visible = false;
-            this.pbCase.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbCase_MouseDown);
-            // 
             // tsBarreOutils
             // 
             this.tsBarreOutils.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -128,21 +103,48 @@
             // tsfSauvegarder
             // 
             this.tsfSauvegarder.Name = "tsfSauvegarder";
-            this.tsfSauvegarder.Size = new System.Drawing.Size(180, 22);
+            this.tsfSauvegarder.Size = new System.Drawing.Size(139, 22);
             this.tsfSauvegarder.Text = "Sauvegarder";
             // 
             // tsfCharger
             // 
             this.tsfCharger.Name = "tsfCharger";
-            this.tsfCharger.Size = new System.Drawing.Size(180, 22);
+            this.tsfCharger.Size = new System.Drawing.Size(139, 22);
             this.tsfCharger.Text = "Charger";
             // 
             // tsfQuitter
             // 
             this.tsfQuitter.Name = "tsfQuitter";
-            this.tsfQuitter.Size = new System.Drawing.Size(180, 22);
+            this.tsfQuitter.Size = new System.Drawing.Size(139, 22);
             this.tsfQuitter.Text = "Quitter";
             this.tsfQuitter.Click += new System.EventHandler(this.tsfQuitter_Click);
+            // 
+            // pbCase
+            // 
+            this.pbCase.BackColor = System.Drawing.Color.Transparent;
+            this.pbCase.Location = new System.Drawing.Point(12, 51);
+            this.pbCase.Name = "pbCase";
+            this.pbCase.Size = new System.Drawing.Size(100, 50);
+            this.pbCase.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbCase.TabIndex = 2;
+            this.pbCase.TabStop = false;
+            this.pbCase.Visible = false;
+            this.pbCase.Click += new System.EventHandler(this.pbCase_Click);
+            // 
+            // pbCarte
+            // 
+            this.pbCarte.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pbCarte.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbCarte.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pbCarte.Location = new System.Drawing.Point(0, 28);
+            this.pbCarte.Name = "pbCarte";
+            this.pbCarte.Size = new System.Drawing.Size(500, 500);
+            this.pbCarte.TabIndex = 0;
+            this.pbCarte.TabStop = false;
+            this.pbCarte.Paint += new System.Windows.Forms.PaintEventHandler(this.pbCarte_Paint);
+            this.pbCarte.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCarte_MouseMove);
             // 
             // EcranGame
             // 
@@ -154,19 +156,18 @@
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.pbCarte);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(100, 100);
+            this.MinimumSize = new System.Drawing.Size(266, 342);
             this.Name = "EcranGame";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Partie en cours";
-            this.Load += new System.EventHandler(this.EcranGame_Load);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.EcranGame_Paint);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.EcranGame_FormClosed);
             this.Resize += new System.EventHandler(this.EcranGame_Resize);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbCarte)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbCase)).EndInit();
             this.tsBarreOutils.ResumeLayout(false);
             this.tsBarreOutils.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbCase)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbCarte)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -185,5 +186,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsfSauvegarder;
         private System.Windows.Forms.ToolStripMenuItem tsfCharger;
         private System.Windows.Forms.ToolStripMenuItem tsfQuitter;
+        private System.Windows.Forms.ToolTip ttInfos;
     }
 }

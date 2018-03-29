@@ -63,6 +63,16 @@ namespace Nyssen_Simon_XCOM.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Covering {
+            get {
+                object obj = ResourceManager.GetObject("Covering", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap desert_road {
             get {
                 object obj = ResourceManager.GetObject("desert_road", resourceCulture);
@@ -76,6 +86,16 @@ namespace Nyssen_Simon_XCOM.Properties {
         internal static System.Drawing.Bitmap Fantassin {
             get {
                 object obj = ResourceManager.GetObject("Fantassin", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Firing {
+            get {
+                object obj = ResourceManager.GetObject("Firing", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -116,6 +136,16 @@ namespace Nyssen_Simon_XCOM.Properties {
         internal static System.Drawing.Bitmap Lourd {
             get {
                 object obj = ResourceManager.GetObject("Lourd", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Moving {
+            get {
+                object obj = ResourceManager.GetObject("Moving", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
