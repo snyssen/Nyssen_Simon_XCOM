@@ -13,7 +13,7 @@ namespace Nyssen_Simon_XCOM
                                  // 2 -> Lourd
                                  // 3 -> Léger
                                  // 4 -> Indéfini
-        private bool _covered = false; // Permet de savoir si le soldat a renforcé sa position ce tour-ci ou non (read only avec accesseur)
+        private bool _covered = false; // Permet de savoir si le soldat a renforcé sa position ce tour-ci ou non (avec accesseur)
         public Case_Echiquier position; // Position du soldat définit par une case dans l'échiquier, modifiable par le déplacement du soldat
         private int _HP; // Points de vie du soldat, modifiable par une attaque (via accesseur, avec condition > 0)
         private int _damage, _precision, _evasion, _mobility; // Stats du soldat
@@ -65,7 +65,10 @@ namespace Nyssen_Simon_XCOM
 
         #region Accesseurs
         public bool covered
-        { get { return this._covered; } }
+        {
+            get { return this._covered; }
+            set { this._covered = value; }        
+        }
         public int HP
         {
             get { return this._HP; }
@@ -88,7 +91,10 @@ namespace Nyssen_Simon_XCOM
         {
             if (target.DefenseCalc() < 0)
                 return (int)target.DefenseCalc();
-            float chance = this._precision / (DistanceCalc(target.position) * target.DefenseCalc());
+            float chance = (this._precision / (DistanceCalc(target.position) * target.DefenseCalc())) * 1000;
+            // DEBUG
+            //float chance = 100;
+            Console.WriteLine("chance de toucher : " + chance);
             if (this.tir.Next(0, 101) <= chance)
             {
                 target.HP = this._damage;

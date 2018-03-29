@@ -20,6 +20,8 @@ namespace Nyssen_Simon_XCOM
         private int NbrLegers; // Nombre de soldats légers (par escouade)
         private int NbrSoldats; // Nombre de soldats toute classe confondue (par escouade)
         private int NbrSoldatsJoues; // Nombre de soldats ayant joués sur ce tour (par escouade)
+        private int NbrSoldatsJ1; // Nombre de soldats du joueur 1
+        private int NbrSoldatsJ2; // Nombre de soldats du joueur 2
         bool error = false; // Détecte une erreur
         Case_Echiquier[,] Cases = new Case_Echiquier[10,10]; // Tableau de cases qui forme l'échiquier
         int IndexX, IndexY; // Contient la position (l'index) de la case sur laquelle on travaille
@@ -30,6 +32,8 @@ namespace Nyssen_Simon_XCOM
         private bool First = true; // Premier lancement
         private bool ActionEnCours = false; // Une action est-elle en cours (déplacement ou tir)
         private bool HasClicked = false; // Case sélectionnée durant une action => On veut désactiver le FindLocation() de l'event pbCarte_MouseMove()
+        private bool Joueur1Joue = true; // Indique quel joueur joue -> si vrai, c'est le joueur 1, si faux c'est le joueur 2
+        private short FinPartie = 0; // Indique 0 si la partie est toujours en cours, 1 si le joueur 1 a gagné et 2 si le joueur 2 a gagné
 
         public EcranGame(short Index, int NbrFant, int NbrSnip, int NbrLd, int NbrLg)
         {
@@ -41,6 +45,7 @@ namespace Nyssen_Simon_XCOM
             this.NbrLourds = NbrLd;
             this.NbrLegers = NbrLg;
             this.NbrSoldats = NbrFantassins + NbrSnipers + NbrLourds + NbrLegers;
+            this.NbrSoldatsJ1 = this.NbrSoldatsJ2 = this.NbrSoldats;
             this.NbrSoldatsJoues = 0;
 
             pbCase.Parent = pbCarte;
@@ -220,6 +225,30 @@ namespace Nyssen_Simon_XCOM
             }
         }
 
+        private void ChangeTour()
+        {
+            if (Joueur1Joue)
+                foreach (Soldat soldier in Soldiers2)
+                    soldier.covered = false;
+            else
+                foreach (Soldat soldier in Soldiers1)
+                    soldier.covered = false;
+            Joueur1Joue = !Joueur1Joue;
+        }
+
+        private void Gagne() // Détermine si la partie est terminée ou non
+        {
+            if (NbrSoldatsJ1 <= 0)
+                FinPartie = 2;
+            else
+            {
+                if (NbrSoldatsJ2 <= 0)
+                    FinPartie = 1;
+                else
+                    FinPartie = 0;
+            }
+        }
+
         private void FindLocation(int posX, int posY) // VERIFIER LIBERATION DE MEMOIRE
         {
             bool Trouve = false;
@@ -325,7 +354,7 @@ namespace Nyssen_Simon_XCOM
                                             ttInfos.SetToolTip(SoldiersIcons[Index], Soldiers[Index].AfficherStats());
                                             tsAvancement.Increment(1);
                                             NbrSoldatsJoues++;
-                                            tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + NbrSoldats;
+                                            tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
                                             break;
                                         case 1:
                                             MessageBox.Show("Vous ne pouvez pas déplacer le soldat aussi loin !", "Déplacement impossible", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -342,7 +371,7 @@ namespace Nyssen_Simon_XCOM
                                 tsInfo.Text = "Position renforcée";
                                 tsAvancement.Increment(1);
                                 NbrSoldatsJoues++;
-                                tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + NbrSoldats;
+                                tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
                                 ttInfos.SetToolTip(SoldiersIcons[Index], Soldiers[Index].AfficherStats());
                                 break;
                             case 2: // Tir initié par le soldat
@@ -375,16 +404,47 @@ namespace Nyssen_Simon_XCOM
                                     if (Error == 0)
                                     {
                                         if (Cases[IndexX, IndexY].soldier.alive)
+                                        {
                                             MessageBox.Show("Le tir tir a touché ! Le soldat visé a reçu " + Soldiers[Index].damage + " points de dégâts, ce qui amène sa vie à " + Cases[IndexX, IndexY].soldier.HP);
+                                            List<PictureBox> Icons = (SoldiersIcons == SoldiersIcons1 ? SoldiersIcons2 : SoldiersIcons1);
+                                            foreach (PictureBox pb in Icons)
+                                            {
+                                                Console.WriteLine("Boucle de recherche de la PictureBox du soldat blessé");
+                                                if (pb.Location == Cases[IndexX, IndexY].Origin)
+                                                {
+                                                    Console.WriteLine("PictureBox du soldat blessé trouvée !");
+                                                    ttInfos.SetToolTip(pb, Cases[IndexX, IndexY].soldier.AfficherStats());
+                                                    break;
+                                                }
+                                            }
+                                        }
                                         else
+                                        {
                                             MessageBox.Show("Le tir tir a touché ! Le soldat visé a reçu " + Soldiers[Index].damage + " points de dégâts, ce qui a achevé le soldat !");
+                                            List<PictureBox> Icons = (SoldiersIcons == SoldiersIcons1 ? SoldiersIcons2 : SoldiersIcons1);
+                                            foreach (PictureBox pb in Icons)
+                                            {
+                                                Console.WriteLine("Boucle de recherche de la PictureBox du soldat tué");
+                                                if (pb.Location == Cases[IndexX, IndexY].Origin)
+                                                {
+                                                    Console.WriteLine("PictureBox du soldat tué trouvée !");
+                                                    pb.Enabled = false;
+                                                    pb.Dispose();
+                                                    break;
+                                                }
+                                            }
+                                            if (Joueur1Joue)
+                                                NbrSoldatsJ2--;
+                                            else
+                                                NbrSoldatsJ1--;
+                                        }
                                     }
                                     else
                                         MessageBox.Show("Le tir a échoué...");
                                     ttInfos.SetToolTip(SoldiersIcons[Index], Soldiers[Index].AfficherStats());
                                     tsAvancement.Increment(1);
                                     NbrSoldatsJoues++;
-                                    tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + NbrSoldats;
+                                    tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
                                 }
                                 break;
                             default: // Annulation
@@ -421,6 +481,30 @@ namespace Nyssen_Simon_XCOM
                     }
                 }
             }
+
+            Gagne();
+            if (FinPartie != 0)
+            {
+                MessageBox.Show("Le joueur " + (FinPartie == 1 ? "1 " : "2 ") + "gagne la partie !", "Fin de la partie", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                this.Close();
+            }
+
+            if ((Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2) - NbrSoldatsJoues == 0) // Tous les soldats de l'escouade ont joué => Changement de joueur
+            {
+                MessageBox.Show("Tour du joueur " + (Joueur1Joue ? "1 " : "2 ") + "terminé.\nAppuyez sur OK pour continuer", "Fin du tour", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ChangeTour();
+                NbrSoldatsJoues = 0;
+                tsAvancement.Value = 0;
+                tsAvancement.Maximum = (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
+                tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
+                int i = 0;
+                foreach (Soldat soldier in Soldiers)
+                {
+                    soldier.played = false;
+                    ttInfos.SetToolTip(SoldiersIcons[i], soldier.AfficherStats());
+                    i++;
+                }
+            }
         }
 
         private void DessinerEchiquier()
@@ -442,12 +526,18 @@ namespace Nyssen_Simon_XCOM
 
         private void SoldiersIcons1_Click(object sender, EventArgs e) // On clique sur un soldat du joueur 1
         {
-            DoAction(SoldiersIcons1, Soldiers1, sender);
+            if (Joueur1Joue || ActionEnCours)
+                DoAction(SoldiersIcons1, Soldiers1, sender);
+            else
+                MessageBox.Show("C'est au tour du joueur 2 de jouer !", "Action impossible", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         private void SoldiersIcons2_Click(object sender, EventArgs e) // On clique sur un soldat du joueur 2
         {
-            DoAction(SoldiersIcons2, Soldiers2, sender);
+            if (!Joueur1Joue || ActionEnCours) 
+                DoAction(SoldiersIcons2, Soldiers2, sender);
+            else
+                MessageBox.Show("C'est au tour du joueur 1 de jouer !", "Action impossible", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         private void pbCase_Click(object sender, EventArgs e)
