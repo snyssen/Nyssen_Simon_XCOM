@@ -52,7 +52,7 @@ namespace Nyssen_Simon_XCOM
         {
             Graphics gr = Graphics.FromHwnd(handle);
 
-            gr.DrawRectangle(new Pen(Color.AliceBlue, 50),_posX, _posY, _Xmax - _posX, _Ymax - _posY);
+            gr.DrawRectangle(new Pen(Color.AliceBlue, 3),_posX, _posY, _Xmax - _posX, _Ymax - _posY);
 
             //gr.Dispose();
         }

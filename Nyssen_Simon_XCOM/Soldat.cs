@@ -13,7 +13,7 @@ namespace Nyssen_Simon_XCOM
                                  // 2 -> Lourd
                                  // 3 -> Léger
                                  // 4 -> Indéfini
-        private bool _covered = false; // Permet de savoir si le soldat a renforcé sa position ce tour-ci ou non (read only avec accesseur)
+        private bool _covered = false; // Permet de savoir si le soldat a renforcé sa position ce tour-ci ou non (avec accesseur)
         public Case_Echiquier position; // Position du soldat définit par une case dans l'échiquier, modifiable par le déplacement du soldat
         private int _HP; // Points de vie du soldat, modifiable par une attaque (via accesseur, avec condition > 0)
         private int _damage, _precision, _evasion, _mobility; // Stats du soldat
@@ -65,7 +65,10 @@ namespace Nyssen_Simon_XCOM
 
         #region Accesseurs
         public bool covered
-        { get { return this._covered; } }
+        {
+            get { return this._covered; }
+            set { this._covered = value; }        
+        }
         public int HP
         {
             get { return this._HP; }
@@ -88,7 +91,10 @@ namespace Nyssen_Simon_XCOM
         {
             if (target.DefenseCalc() < 0)
                 return (int)target.DefenseCalc();
-            float chance = this._precision / (DistanceCalc(target.position) * target.DefenseCalc());
+            float chance = (this._precision / (DistanceCalc(target.position) * target.DefenseCalc())) * 1000;
+            // DEBUG
+            //float chance = 100;
+            Console.WriteLine("chance de toucher : " + chance);
             if (this.tir.Next(0, 101) <= chance)
             {
                 target.HP = this._damage;
@@ -104,13 +110,13 @@ namespace Nyssen_Simon_XCOM
 
         public int Move(Case_Echiquier targetPos) // Se déplace vers une case ciblée, renvoie 0 si pas d'erreur, 1 si la case ciblée est trop loin et 2 si la case ciblée est déjà occupée
         {
-            if (targetPos.soldier == null)
+            if (targetPos.soldier == null) // On vérifie que la case sélectionnée est vide
             {
-                if (DistanceCalc(targetPos) <= this._mobility)
+                if (DistanceCalc(targetPos) <= this._mobility) // On vérifie que le soldat a assez de mobilité pour atteindre la case
                 {
-                    //this.position.soldier = null;
+                    this.position.soldier = null;
                     this.position = targetPos;
-                    //targetPos.soldier = this;
+                    targetPos.soldier = this;
                     this.played = true;
                     return 0;
                 }
@@ -154,8 +160,7 @@ namespace Nyssen_Simon_XCOM
 
         private int DistanceCalc(Case_Echiquier target) // Calcule la distance entre la case sur laquelle se trouve le soldat et une case visée (en nombre de cases)
         {
-            int distance = Math.Abs(this.position.IndexX - target.IndexX) + Math.Abs(this.position.IndexY + target.IndexY);
-            //int distance = this.position.IndexX - target.IndexX + this.position.IndexY + target.IndexY;
+            int distance = Math.Abs(this.position.IndexX - target.IndexX) + Math.Abs(this.position.IndexY - target.IndexY);
             // DEBUG
             Console.WriteLine("Distance = " + distance);
             return distance;

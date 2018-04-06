@@ -143,6 +143,7 @@
             this.pbCarte.Size = new System.Drawing.Size(500, 500);
             this.pbCarte.TabIndex = 0;
             this.pbCarte.TabStop = false;
+            this.pbCarte.Paint += new System.Windows.Forms.PaintEventHandler(this.pbCarte_Paint);
             this.pbCarte.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCarte_MouseMove);
             // 
             // EcranGame
@@ -159,6 +160,7 @@
             this.Name = "EcranGame";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Partie en cours";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.EcranGame_FormClosed);
             this.Resize += new System.EventHandler(this.EcranGame_Resize);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
