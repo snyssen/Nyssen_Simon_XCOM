@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Nyssen_Simon_XCOM.Case_Echiquier">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAQAAQwCAAAAAAAAAAAAAAAAAAgABIAAAEAwCiAQAA=</HashCode>
+      <FileName>Case_Echiquier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nyssen_Simon_XCOM.EcranAccueil" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAmCAAAAgAABCDCAAGACAAQAAIAAEAAAAAAAE=</HashCode>
+      <FileName>FicAccueil.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nyssen_Simon_XCOM.EcranAction" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAICBAAAAAQgDgACASAAAAAAAAACAAAAABBAA=</HashCode>
+      <FileName>FicAction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nyssen_Simon_XCOM.EcranAide" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAACAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FicAide.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nyssen_Simon_XCOM.EcranGame">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAhAAEAACWAggQDFEiGKABCGBABLggYgFEMAAgAEAAU=</HashCode>
+      <FileName>FicGame.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nyssen_Simon_XCOM.EcranSetup" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gIgaAgSAACCAAAAEAgiCCABSABACggQAEAAIASBAEAA=</HashCode>
+      <FileName>FicSetup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nyssen_Simon_XCOM.Program" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nyssen_Simon_XCOM.Soldat">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAABAAIAAoCAAQAEIKgIARIAAAAABAFAACAAACCA=</HashCode>
+      <FileName>Soldat.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nyssen_Simon_XCOM.Splash_Screen" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAgCAAAACAAAAAAAAIAAAAIAAAAI=</HashCode>
+      <FileName>Splash_Screen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nyssen_Simon_XCOM.Properties.Resources" Collapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAJAAAAAAAAACBkQQQEUBAAAAAASAAAAQAIKA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nyssen_Simon_XCOM.Properties.Settings" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

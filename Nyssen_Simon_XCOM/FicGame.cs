@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using System.IO;
 
 namespace Nyssen_Simon_XCOM
 {
@@ -39,6 +40,7 @@ namespace Nyssen_Simon_XCOM
         {
             InitializeComponent();
             tsInfo.Text = "";
+            dlgSauvegarder.Filter = "Fichier de sauvegarde|*.sav|Tous fichiers|*.*";
             this.SelectedbtnIndex = Index;
             this.NbrFantassins = NbrFant;
             this.NbrSnipers = NbrSnip;
@@ -206,6 +208,8 @@ namespace Nyssen_Simon_XCOM
                 }
             }
 
+            LoadCover();
+
             if (Soldiers1 != null) // On resize les picturebox des soldats pour s'ajuster à la nouvelle taille des cases
             {
                 int i = 0;
@@ -306,6 +310,322 @@ namespace Nyssen_Simon_XCOM
                 pbCase.Height = Cases[IndexX, IndexY].Ymax - Cases[IndexX, IndexY].posY;
                 pbCase.Location = new Point(Cases[IndexX, IndexY].posX, Cases[IndexX, IndexY].posY);
                 pbCase.Visible = true;
+            }
+        }
+        private void LoadCover()
+        {
+            switch (SelectedbtnIndex)
+            {
+                case 0: // desert map
+                    Cases[0, 0].Cover = 0;
+                    Cases[1, 0].Cover = 0;
+                    Cases[2, 0].Cover = 1;
+                    Cases[3, 0].Cover = 1;
+                    Cases[4, 0].Cover = 1;
+                    Cases[5, 0].Cover = 0;
+                    Cases[6, 0].Cover = 0;
+                    Cases[7, 0].Cover = 0;
+                    Cases[8, 0].Cover = 0;
+                    Cases[9, 0].Cover = 1;
+                    Cases[0, 1].Cover = 0;
+                    Cases[1, 1].Cover = 0;
+                    Cases[2, 1].Cover = 1;
+                    Cases[3, 1].Cover = 0;
+                    Cases[4, 1].Cover = 2;
+                    Cases[5, 1].Cover = 2;
+                    Cases[6, 1].Cover = 0;
+                    Cases[7, 1].Cover = 0;
+                    Cases[8, 1].Cover = 0;
+                    Cases[9, 1].Cover = 0;
+                    Cases[0, 2].Cover = 0;
+                    Cases[1, 2].Cover = 0;
+                    Cases[2, 2].Cover = 1;
+                    Cases[3, 2].Cover = 0;
+                    Cases[4, 2].Cover = 1;
+                    Cases[5, 2].Cover = 1;
+                    Cases[6, 2].Cover = 0;
+                    Cases[7, 2].Cover = 0;
+                    Cases[8, 2].Cover = 0;
+                    Cases[9, 2].Cover = 0;
+                    Cases[0, 3].Cover = 0;
+                    Cases[1, 3].Cover = 0;
+                    Cases[2, 3].Cover = 0;
+                    Cases[3, 3].Cover = 0;
+                    Cases[4, 3].Cover = 0;
+                    Cases[5, 3].Cover = 0;
+                    Cases[6, 3].Cover = 0;
+                    Cases[7, 3].Cover = 0;
+                    Cases[8, 3].Cover = 0;
+                    Cases[9, 3].Cover = 0;
+                    Cases[0, 4].Cover = 0;
+                    Cases[1, 4].Cover = 0;
+                    Cases[2, 4].Cover = 0;
+                    Cases[3, 4].Cover = 0;
+                    Cases[4, 4].Cover = 0;
+                    Cases[5, 4].Cover = 0;
+                    Cases[6, 4].Cover = 0;
+                    Cases[7, 4].Cover = 0;
+                    Cases[8, 4].Cover = 0;
+                    Cases[9, 4].Cover = 0;
+                    Cases[0, 5].Cover = 0;
+                    Cases[1, 5].Cover = 0;
+                    Cases[2, 5].Cover = 0;
+                    Cases[3, 5].Cover = 0;
+                    Cases[4, 5].Cover = 0;
+                    Cases[5, 5].Cover = 0;
+                    Cases[6, 5].Cover = 0;
+                    Cases[7, 5].Cover = 1;
+                    Cases[8, 5].Cover = 1;
+                    Cases[9, 5].Cover = 0;
+                    Cases[0, 6].Cover = 0;
+                    Cases[1, 6].Cover = 0;
+                    Cases[2, 6].Cover = 1;
+                    Cases[3, 6].Cover = 0;
+                    Cases[4, 6].Cover = 0;
+                    Cases[5, 6].Cover = 1;
+                    Cases[6, 6].Cover = 0;
+                    Cases[7, 6].Cover = 0;
+                    Cases[8, 6].Cover = 0;
+                    Cases[9, 6].Cover = 1;
+                    Cases[0, 7].Cover = 1;
+                    Cases[1, 7].Cover = 0;
+                    Cases[2, 7].Cover = 1;
+                    Cases[3, 7].Cover = 0;
+                    Cases[4, 7].Cover = 0;
+                    Cases[5, 7].Cover = 1;
+                    Cases[6, 7].Cover = 1;
+                    Cases[7, 7].Cover = 0;
+                    Cases[8, 7].Cover = 0;
+                    Cases[9, 7].Cover = 1;
+                    Cases[0, 8].Cover = 2;
+                    Cases[1, 8].Cover = 0;
+                    Cases[2, 8].Cover = 0;
+                    Cases[3, 8].Cover = 0;
+                    Cases[4, 8].Cover = 1;
+                    Cases[5, 8].Cover = 0;
+                    Cases[6, 8].Cover = 0;
+                    Cases[7, 8].Cover = 2;
+                    Cases[8, 8].Cover = 1;
+                    Cases[9, 8].Cover = 1;
+                    Cases[0, 9].Cover = 1;
+                    Cases[1, 9].Cover = 1;
+                    Cases[2, 9].Cover = 0;
+                    Cases[3, 9].Cover = 0;
+                    Cases[4, 9].Cover = 0;
+                    Cases[5, 9].Cover = 0;
+                    Cases[6, 9].Cover = 1;
+                    Cases[7, 9].Cover = 2;
+                    Cases[8, 9].Cover = 0;
+                    Cases[9, 9].Cover = 0;
+                    break;
+                case 1: // snowy map
+                    Cases[0, 0].Cover = 0;
+                    Cases[1, 0].Cover = 1;
+                    Cases[2, 0].Cover = 1;
+                    Cases[3, 0].Cover = 0;
+                    Cases[4, 0].Cover = 0;
+                    Cases[5, 0].Cover = 0;
+                    Cases[6, 0].Cover = 0;
+                    Cases[7, 0].Cover = 1;
+                    Cases[8, 0].Cover = 1;
+                    Cases[9, 0].Cover = 0;
+                    Cases[0, 1].Cover = 1;
+                    Cases[1, 1].Cover = 0;
+                    Cases[2, 1].Cover = 0;
+                    Cases[3, 1].Cover = 0;
+                    Cases[4, 1].Cover = 2;
+                    Cases[5, 1].Cover = 2;
+                    Cases[6, 1].Cover = 2;
+                    Cases[7, 1].Cover = 1;
+                    Cases[8, 1].Cover = 1;
+                    Cases[9, 1].Cover = 0;
+                    Cases[0, 2].Cover = 0;
+                    Cases[1, 2].Cover = 1;
+                    Cases[2, 2].Cover = 0;
+                    Cases[3, 2].Cover = 0;
+                    Cases[4, 2].Cover = 0;
+                    Cases[5, 2].Cover = 0;
+                    Cases[6, 2].Cover = 2;
+                    Cases[7, 2].Cover = 0;
+                    Cases[8, 2].Cover = 1;
+                    Cases[9, 2].Cover = 0;
+                    Cases[0, 3].Cover = 0;
+                    Cases[1, 3].Cover = 1;
+                    Cases[2, 3].Cover = 1;
+                    Cases[3, 3].Cover = 1;
+                    Cases[4, 3].Cover = 0;
+                    Cases[5, 3].Cover = 0;
+                    Cases[6, 3].Cover = 0;
+                    Cases[7, 3].Cover = 2;
+                    Cases[8, 3].Cover = 1;
+                    Cases[9, 3].Cover = 0;
+                    Cases[0, 4].Cover = 0;
+                    Cases[1, 4].Cover = 0;
+                    Cases[2, 4].Cover = 0;
+                    Cases[3, 4].Cover = 2;
+                    Cases[4, 4].Cover = 1;
+                    Cases[5, 4].Cover = 0;
+                    Cases[6, 4].Cover = 0;
+                    Cases[7, 4].Cover = 0;
+                    Cases[8, 4].Cover = 1;
+                    Cases[9, 4].Cover = 0;
+                    Cases[0, 5].Cover = 0;
+                    Cases[1, 5].Cover = 0;
+                    Cases[2, 5].Cover = 0;
+                    Cases[3, 5].Cover = 0;
+                    Cases[4, 5].Cover = 2;
+                    Cases[5, 5].Cover = 1;
+                    Cases[6, 5].Cover = 0;
+                    Cases[7, 5].Cover = 0;
+                    Cases[8, 5].Cover = 0;
+                    Cases[9, 5].Cover = 0;
+                    Cases[0, 6].Cover = 0;
+                    Cases[1, 6].Cover = 0;
+                    Cases[2, 6].Cover = 0;
+                    Cases[3, 6].Cover = 0;
+                    Cases[4, 6].Cover = 2;
+                    Cases[5, 6].Cover = 2;
+                    Cases[6, 6].Cover = 0;
+                    Cases[7, 6].Cover = 0;
+                    Cases[8, 6].Cover = 1;
+                    Cases[9, 6].Cover = 0;
+                    Cases[0, 7].Cover = 1;
+                    Cases[1, 7].Cover = 1;
+                    Cases[2, 7].Cover = 0;
+                    Cases[3, 7].Cover = 0;
+                    Cases[4, 7].Cover = 0;
+                    Cases[5, 7].Cover = 2;
+                    Cases[6, 7].Cover = 0;
+                    Cases[7, 7].Cover = 1;
+                    Cases[8, 7].Cover = 0;
+                    Cases[9, 7].Cover = 0;
+                    Cases[0, 8].Cover = 1;
+                    Cases[1, 8].Cover = 2;
+                    Cases[2, 8].Cover = 0;
+                    Cases[3, 8].Cover = 0;
+                    Cases[4, 8].Cover = 0;
+                    Cases[5, 8].Cover = 1;
+                    Cases[6, 8].Cover = 1;
+                    Cases[7, 8].Cover = 0;
+                    Cases[8, 8].Cover = 1;
+                    Cases[9, 8].Cover = 0;
+                    Cases[0, 9].Cover = 0;
+                    Cases[1, 9].Cover = 1;
+                    Cases[2, 9].Cover = 0;
+                    Cases[3, 9].Cover = 0;
+                    Cases[4, 9].Cover = 0;
+                    Cases[5, 9].Cover = 0;
+                    Cases[6, 9].Cover = 1;
+                    Cases[7, 9].Cover = 0;
+                    Cases[8, 9].Cover = 0;
+                    Cases[9, 9].Cover = 0;
+                    break;
+                case 2: // urban map
+                    Cases[0, 0].Cover = 0;
+                    Cases[1, 0].Cover = 0;
+                    Cases[2, 0].Cover = 0;
+                    Cases[3, 0].Cover = 0;
+                    Cases[4, 0].Cover = 2;
+                    Cases[5, 0].Cover = 2;
+                    Cases[6, 0].Cover = 1;
+                    Cases[7, 0].Cover = 2;
+                    Cases[8, 0].Cover = 1;
+                    Cases[9, 0].Cover = 0;
+                    Cases[0, 1].Cover = 0;
+                    Cases[1, 1].Cover = 1;
+                    Cases[2, 1].Cover = 1;
+                    Cases[3, 1].Cover = 1;
+                    Cases[4, 1].Cover = 1;
+                    Cases[5, 1].Cover = 1;
+                    Cases[6, 1].Cover = 1;
+                    Cases[7, 1].Cover = 1;
+                    Cases[8, 1].Cover = 1;
+                    Cases[9, 1].Cover = 0;
+                    Cases[0, 2].Cover = 0;
+                    Cases[1, 2].Cover = 2;
+                    Cases[2, 2].Cover = 1;
+                    Cases[3, 2].Cover = 1;
+                    Cases[4, 2].Cover = 1;
+                    Cases[5, 2].Cover = 0;
+                    Cases[6, 2].Cover = 0;
+                    Cases[7, 2].Cover = 2;
+                    Cases[8, 2].Cover = 1;
+                    Cases[9, 2].Cover = 0;
+                    Cases[0, 3].Cover = 0;
+                    Cases[1, 3].Cover = 0;
+                    Cases[2, 3].Cover = 0;
+                    Cases[3, 3].Cover = 2;
+                    Cases[4, 3].Cover = 0;
+                    Cases[5, 3].Cover = 0;
+                    Cases[6, 3].Cover = 0;
+                    Cases[7, 3].Cover = 1;
+                    Cases[8, 3].Cover = 0;
+                    Cases[9, 3].Cover = 0;
+                    Cases[0, 4].Cover = 0;
+                    Cases[1, 4].Cover = 2;
+                    Cases[2, 4].Cover = 2;
+                    Cases[3, 4].Cover = 1;
+                    Cases[4, 4].Cover = 0;
+                    Cases[5, 4].Cover = 1;
+                    Cases[6, 4].Cover = 1;
+                    Cases[7, 4].Cover = 0;
+                    Cases[8, 4].Cover = 1;
+                    Cases[9, 4].Cover = 0;
+                    Cases[0, 5].Cover = 0;
+                    Cases[1, 5].Cover = 2;
+                    Cases[2, 5].Cover = 1;
+                    Cases[3, 5].Cover = 1;
+                    Cases[4, 5].Cover = 0;
+                    Cases[5, 5].Cover = 1;
+                    Cases[6, 5].Cover = 1;
+                    Cases[7, 5].Cover = 0;
+                    Cases[8, 5].Cover = 1;
+                    Cases[9, 5].Cover = 0;
+                    Cases[0, 6].Cover = 0;
+                    Cases[1, 6].Cover = 0;
+                    Cases[2, 6].Cover = 0;
+                    Cases[3, 6].Cover = 0;
+                    Cases[4, 6].Cover = 0;
+                    Cases[5, 6].Cover = 0;
+                    Cases[6, 6].Cover = 0;
+                    Cases[7, 6].Cover = 0;
+                    Cases[8, 6].Cover = 0;
+                    Cases[9, 6].Cover = 0;
+                    Cases[0, 7].Cover = 0;
+                    Cases[1, 7].Cover = 2;
+                    Cases[2, 7].Cover = 1;
+                    Cases[3, 7].Cover = 1;
+                    Cases[4, 7].Cover = 0;
+                    Cases[5, 7].Cover = 1;
+                    Cases[6, 7].Cover = 1;
+                    Cases[7, 7].Cover = 0;
+                    Cases[8, 7].Cover = 1;
+                    Cases[9, 7].Cover = 0;
+                    Cases[0, 8].Cover = 1;
+                    Cases[1, 8].Cover = 2;
+                    Cases[2, 8].Cover = 1;
+                    Cases[3, 8].Cover = 1;
+                    Cases[4, 8].Cover = 0;
+                    Cases[5, 8].Cover = 1;
+                    Cases[6, 8].Cover = 2;
+                    Cases[7, 8].Cover = 2;
+                    Cases[8, 8].Cover = 1;
+                    Cases[9, 8].Cover = 0;
+                    Cases[0, 9].Cover = 0;
+                    Cases[1, 9].Cover = 0;
+                    Cases[2, 9].Cover = 0;
+                    Cases[3, 9].Cover = 0;
+                    Cases[4, 9].Cover = 0;
+                    Cases[5, 9].Cover = 0;
+                    Cases[6, 9].Cover = 1;
+                    Cases[7, 9].Cover = 2;
+                    Cases[8, 9].Cover = 0;
+                    Cases[9, 9].Cover = 0;
+                    break;
+                default:
+                    MessageBox.Show("ERREUR ! Pas de carte sélectionnée !", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Close();
+                    break;
             }
         }
 
@@ -573,9 +893,34 @@ namespace Nyssen_Simon_XCOM
             Invalidate();
         }
 
+        private void tsfSauvegarder_Click(object sender, EventArgs e) // Sauvegarde de la partie
+        {
+            Sauvegarde();
+        }
+
         private void tsfQuitter_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        public void Sauvegarde()
+        {
+            if (dlgSauvegarder.ShowDialog() == DialogResult.OK)
+            {
+                StreamWriter sw = new StreamWriter(dlgSauvegarder.FileName);
+                sw.WriteLine(Joueur1Joue + ";" + SelectedbtnIndex); // Qui joue et sur quelle map
+                sw.WriteLine("");
+                foreach (Soldat soldier in Soldiers1)
+                {
+                    sw.WriteLine(soldier.classe + ";" + soldier.covered + ";" + soldier.HP + ";" + soldier.alive + ";" + soldier.played + ";" + soldier.position.IndexX + ";" + soldier.position.IndexY);
+                }
+                sw.WriteLine("");
+                foreach (Soldat soldier in Soldiers2)
+                {
+                    sw.WriteLine(soldier.classe + ";" + soldier.covered + ";" + soldier.HP + ";" + soldier.alive + ";" + soldier.played + ";" + soldier.position.IndexX + ";" + soldier.position.IndexY);
+                }
+                sw.Close();
+            }
         }
     }
 }

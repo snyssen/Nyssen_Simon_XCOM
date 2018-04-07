@@ -8,7 +8,8 @@ namespace Nyssen_Simon_XCOM
 {
     class Soldat
     {
-        private int _classe = 4; // Définit la classe du soldat (read only): // 0 -> Fantassin
+        private int _classe = 4; // Définit la classe du soldat (read only avec accesseur): 
+                                 // 0 -> Fantassin
                                  // 1 -> Sniper
                                  // 2 -> Lourd
                                  // 3 -> Léger
@@ -62,6 +63,12 @@ namespace Nyssen_Simon_XCOM
                     break;
             }
         }
+        /*
+        public Soldat(int classe, )
+        {
+
+        }
+        */
 
         #region Accesseurs
         public bool covered
@@ -83,6 +90,8 @@ namespace Nyssen_Simon_XCOM
         { get { return this._alive; } }
         public int damage
         { get { return this._damage; } }
+        public int classe
+        { get { return this._classe; } }
         #endregion
 
         #region Méthodes

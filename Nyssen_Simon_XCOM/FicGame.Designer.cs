@@ -42,6 +42,7 @@
             this.pbCase = new System.Windows.Forms.PictureBox();
             this.pbCarte = new System.Windows.Forms.PictureBox();
             this.ttInfos = new System.Windows.Forms.ToolTip(this.components);
+            this.dlgSauvegarder = new System.Windows.Forms.SaveFileDialog();
             this.statusStrip1.SuspendLayout();
             this.tsBarreOutils.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbCase)).BeginInit();
@@ -103,19 +104,20 @@
             // tsfSauvegarder
             // 
             this.tsfSauvegarder.Name = "tsfSauvegarder";
-            this.tsfSauvegarder.Size = new System.Drawing.Size(139, 22);
+            this.tsfSauvegarder.Size = new System.Drawing.Size(180, 22);
             this.tsfSauvegarder.Text = "Sauvegarder";
+            this.tsfSauvegarder.Click += new System.EventHandler(this.tsfSauvegarder_Click);
             // 
             // tsfCharger
             // 
             this.tsfCharger.Name = "tsfCharger";
-            this.tsfCharger.Size = new System.Drawing.Size(139, 22);
+            this.tsfCharger.Size = new System.Drawing.Size(180, 22);
             this.tsfCharger.Text = "Charger";
             // 
             // tsfQuitter
             // 
             this.tsfQuitter.Name = "tsfQuitter";
-            this.tsfQuitter.Size = new System.Drawing.Size(139, 22);
+            this.tsfQuitter.Size = new System.Drawing.Size(180, 22);
             this.tsfQuitter.Text = "Quitter";
             this.tsfQuitter.Click += new System.EventHandler(this.tsfQuitter_Click);
             // 
@@ -145,6 +147,10 @@
             this.pbCarte.TabStop = false;
             this.pbCarte.Paint += new System.Windows.Forms.PaintEventHandler(this.pbCarte_Paint);
             this.pbCarte.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCarte_MouseMove);
+            // 
+            // dlgSauvegarder
+            // 
+            this.dlgSauvegarder.DefaultExt = "sav";
             // 
             // EcranGame
             // 
@@ -187,5 +193,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsfCharger;
         private System.Windows.Forms.ToolStripMenuItem tsfQuitter;
         private System.Windows.Forms.ToolTip ttInfos;
+        private System.Windows.Forms.SaveFileDialog dlgSauvegarder;
     }
 }

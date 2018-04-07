@@ -14,12 +14,11 @@ namespace Nyssen_Simon_XCOM
     class Case_Echiquier
     {
         private int _posX, _posY, _Xmax, _Ymax, _IndexX, _IndexY;
-        //public int Cover = 3; // Déclaré par défaut à 3, représente une valeur indéfinie => provoque une erreur si laissée telle quelle
-                                // 0 = aucune
-                                // 1 = moyenne
-                                // 2 = élevée
-        public int Cover = 2; // Debug
-        public Soldat soldier = null;
+        public int Cover = 3; // Déclaré par défaut à 3, représente une valeur indéfinie => provoque une erreur si laissée telle quelle
+                              // 0 = aucune
+                              // 1 = moyenne
+                              // 2 = élevée
+        public Soldat soldier = null; 
 
         public Case_Echiquier(int posX, int posY, int XMax, int YMax, int IndexX, int IndexY)
         {
@@ -29,6 +28,18 @@ namespace Nyssen_Simon_XCOM
             this._Ymax = YMax;
             this._IndexX = IndexX;
             this._IndexY = IndexY;
+            this.Cover = 3;
+        }
+
+        public Case_Echiquier(int posX, int posY, int XMax, int YMax, int IndexX, int IndexY, int cover)
+        {
+            this._posX = posX;
+            this._posY = posY;
+            this._Xmax = XMax;
+            this._Ymax = YMax;
+            this._IndexX = IndexX;
+            this._IndexY = IndexY;
+            this.Cover = cover;
         }
 
         public int posX
