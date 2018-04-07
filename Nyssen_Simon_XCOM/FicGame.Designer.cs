@@ -113,6 +113,7 @@
             this.tsfCharger.Name = "tsfCharger";
             this.tsfCharger.Size = new System.Drawing.Size(180, 22);
             this.tsfCharger.Text = "Charger";
+            this.tsfCharger.Click += new System.EventHandler(this.tsfCharger_Click);
             // 
             // tsfQuitter
             // 
@@ -166,6 +167,7 @@
             this.Name = "EcranGame";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Partie en cours";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EcranGame_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.EcranGame_FormClosed);
             this.Resize += new System.EventHandler(this.EcranGame_Resize);
             this.statusStrip1.ResumeLayout(false);

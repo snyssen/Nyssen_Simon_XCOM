@@ -63,12 +63,46 @@ namespace Nyssen_Simon_XCOM
                     break;
             }
         }
-        /*
-        public Soldat(int classe, )
-        {
 
+        public Soldat(int classe, bool covered, int HP, bool alive, bool played)
+        {
+            this._classe = classe;
+            switch (_classe)
+            {
+                case 0: // Fantassin
+                    this._damage = 5;
+                    this._precision = 5;
+                    this._evasion = 4;
+                    this._mobility = 5;
+                    break;
+                case 1: // Sniper
+                    this._damage = 6;
+                    this._precision = 7;
+                    this._evasion = 5;
+                    this._mobility = 4;
+                    break;
+                case 2: // Lourd
+                    this._damage = 4;
+                    this._precision = 3;
+                    this._evasion = 2;
+                    this._mobility = 3;
+                    break;
+                case 3: // Leger
+                    this._damage = 4;
+                    this._precision = 4;
+                    this._evasion = 8;
+                    this._mobility = 8;
+                    break;
+                default: // Erreur -> Pas de classe assignée
+                    error = true;
+                    break;
+            }
+
+            this._covered = covered;
+            this._HP = HP;
+            this._alive = alive;
+            this.played = played;
         }
-        */
 
         #region Accesseurs
         public bool covered
@@ -83,7 +117,10 @@ namespace Nyssen_Simon_XCOM
                 if (this._HP - value > 0)
                     this._HP -= value;
                 else
+                {
                     this._alive = false;
+                    this.position.soldier = null;
+                }
             }
         }
         public bool alive

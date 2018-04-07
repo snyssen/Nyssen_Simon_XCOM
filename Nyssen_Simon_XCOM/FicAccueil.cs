@@ -18,7 +18,7 @@ namespace Nyssen_Simon_XCOM
         public EcranSetup setup;
 
         public bool Joueur1Joue;
-        public int SelectedbtnIndex;
+        public short SelectedbtnIndex;
 
         public List<int> classes_J1;
         public List<bool> covered_J1;
@@ -57,13 +57,8 @@ namespace Nyssen_Simon_XCOM
             {
                 Close();
                 GameLaunch = true;
+                Setup = true;
             }
-
-            /*
-            GameLaunch = true;
-            Setup = true;
-            Close();
-            */
         }
 
         private void btnLoadGame_Click(object sender, EventArgs e)
@@ -99,7 +94,7 @@ namespace Nyssen_Simon_XCOM
                         Joueur1Joue = true;
                     else
                         Joueur1Joue = false;
-                    SelectedbtnIndex = int.Parse(tab[1]);
+                    SelectedbtnIndex = short.Parse(tab[1]);
                 }
                 while ((lecture = sr.ReadLine()) != "") // Soldats du joueur 1
                 {

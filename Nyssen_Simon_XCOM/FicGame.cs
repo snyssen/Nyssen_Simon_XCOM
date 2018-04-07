@@ -28,8 +28,8 @@ namespace Nyssen_Simon_XCOM
         int IndexX, IndexY; // Contient la position (l'index) de la case sur laquelle on travaille
         List<PictureBox> SoldiersIcons1 = new List<PictureBox>(); // Icônes des soldats du joueur 1
         List<PictureBox> SoldiersIcons2 = new List<PictureBox>(); // Icônes des soldats du joueur 2
-        List<Soldat> Soldiers1 = new List<Soldat>(); // Soldats du joueur 1
-        List<Soldat> Soldiers2 = new List<Soldat>(); // Soldats du joueur 2
+        List<Soldat> Soldiers1 = new List<Soldat>(); // Soldats du joueur 1 ENCORE EN VIE
+        List<Soldat> Soldiers2 = new List<Soldat>(); // Soldats du joueur 2 ENCORE EN VIE
         private bool First = true; // Premier lancement
         private bool ActionEnCours = false; // Une action est-elle en cours (déplacement ou tir)
         private bool HasClicked = false; // Case sélectionnée durant une action => On veut désactiver le FindLocation() de l'event pbCarte_MouseMove()
@@ -39,8 +39,7 @@ namespace Nyssen_Simon_XCOM
         public EcranGame(short Index, int NbrFant, int NbrSnip, int NbrLd, int NbrLg)
         {
             InitializeComponent();
-            tsInfo.Text = "";
-            dlgSauvegarder.Filter = "Fichier de sauvegarde|*.sav|Tous fichiers|*.*";
+
             this.SelectedbtnIndex = Index;
             this.NbrFantassins = NbrFant;
             this.NbrSnipers = NbrSnip;
@@ -50,48 +49,10 @@ namespace Nyssen_Simon_XCOM
             this.NbrSoldatsJ1 = this.NbrSoldatsJ2 = this.NbrSoldats;
             this.NbrSoldatsJoues = 0;
 
-            pbCase.Parent = pbCarte;
-
-            tsAvancement.Maximum = NbrSoldats;
-            tsAvancement.Alignment = ToolStripItemAlignment.Right;
-            tsNbrSoldatsJoue.Alignment = ToolStripItemAlignment.Right;
-            tsNbrSoldatsJoue.Text = "0/" + NbrSoldats.ToString();
-
-            switch (SelectedbtnIndex)
-            {
-                case 0:
-                    pbCarte.BackgroundImage = Properties.Resources.desert_road;
-                    break;
-                case 1:
-                    pbCarte.BackgroundImage = Properties.Resources.Snowy_Pass;
-                    break;
-                case 2:
-                    pbCarte.BackgroundImage = Properties.Resources.Urban_Parking;
-                    break;
-                default:
-                    MessageBox.Show("ERREUR ! Pas de carte sélectionnée !", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    error = true;
-                    break;
-            }
+            CreationPartie();
 
             if (!error)
             {
-                RemplirTabCases();
-                
-                for (int i = 0; i < NbrSoldats; i++) // Liste d'icônes des soldats du joueur 1
-                {
-                    SoldiersIcons1.Add(new PictureBox { Size = new Size(Cases[0, 0].Xmax - Cases[0, 0].posX, Cases[0, 0].Ymax - Cases[0, 0].posY), Parent = pbCarte, SizeMode = PictureBoxSizeMode.StretchImage, BackColor = Color.Transparent });
-                    this.Controls.Add(SoldiersIcons1[i]);
-                    SoldiersIcons1[i].Click += new EventHandler(SoldiersIcons1_Click);
-                    SoldiersIcons1[i].Name = "SoldiersIcons1_" + i;
-                }
-                for (int i = 0; i < NbrSoldats; i++) // Liste d'icônes des soldats du joueur 2
-                {
-                    SoldiersIcons2.Add(new PictureBox { Size = new Size(Cases[0, 0].Xmax - Cases[0, 0].posX, Cases[0, 0].Ymax - Cases[0, 0].posY), Parent = pbCarte, SizeMode = PictureBoxSizeMode.StretchImage, BackColor = Color.Transparent });
-                    this.Controls.Add(SoldiersIcons2[i]);
-                    SoldiersIcons2[i].Click += new EventHandler(SoldiersIcons2_Click);
-                    SoldiersIcons2[i].Name = "SoldiersIcons2_" + i;
-                }
 
                 // Listes des soldats
                 int j = 0; // Compte total des boucles, nécessaire pour connaître la place du soldat actuellement créé dans la liste globvale de soldats de chaque joueur
@@ -158,6 +119,168 @@ namespace Nyssen_Simon_XCOM
                     ttInfos.SetToolTip(SoldiersIcons1[i + NbrFantassins + NbrSnipers + NbrLourds], Soldiers1[j].AfficherStats());
                     ttInfos.SetToolTip(SoldiersIcons2[i + NbrFantassins + NbrSnipers + NbrLourds], Soldiers2[j].AfficherStats());
                     j++;
+                }
+            }
+
+            else
+                Close();
+        }
+
+        public EcranGame(short Index, bool TourJoueur, 
+            List<int> classes_J1, List<bool> covered_J1, List<int> HP_J1, List<bool> alive_J1, List<bool> played_J1, List<int> IndexX_J1, List<int> IndexY_J1, 
+            List<int> classes_J2, List<bool> covered_J2, List<int> HP_J2, List<bool> alive_J2, List<bool> played_J2, List<int> IndexX_J2, List<int> IndexY_J2)
+        {
+            InitializeComponent();
+
+            this.SelectedbtnIndex = Index;
+            this.Joueur1Joue = TourJoueur;
+
+            this.NbrSoldats = classes_J1.Count;
+            this.NbrFantassins = this.NbrSnipers = this.NbrLourds = this.NbrLegers = this.NbrSoldatsJ1 = this.NbrSoldatsJ2 = this.NbrSoldatsJoues = 0;
+            foreach (int classe in classes_J1) // Compte des classes
+            {
+                switch (classe)
+                {
+                    case 0: // Fantassin
+                        this.NbrFantassins++;
+                        break;
+                    case 1: // Sniper
+                        this.NbrSnipers++;
+                        break;
+                    case 2: // Lourd
+                        this.NbrLourds++;
+                        break;
+                    case 3: // Léger
+                        this.NbrLegers++;
+                        break;
+                    default: // Indéfini => Erreur !
+                        this.error = true;
+                        break;
+                }
+            }
+            foreach (bool alive in alive_J1) // Compte des soldats en vie du joueur 1
+            {
+                if (alive)
+                    this.NbrSoldatsJ1++;
+            }
+            foreach (bool alive in alive_J2) // Compte des soldats en vie du joueur 2
+            {
+                if (alive)
+                    this.NbrSoldatsJ2++;
+            }
+            foreach (bool played in (this.Joueur1Joue ? played_J1 : played_J2)) // Compte du nombre de soldats ayant joués
+            {
+                if (played)
+                    NbrSoldatsJoues++;
+            }
+
+            CreationPartie();
+
+            if (!error)
+            {
+                for (int i = 0; i < NbrSoldats; i++)
+                {
+                    // On créée les soldats
+                    Soldiers1.Add(new Soldat(classes_J1[i], covered_J1[i], HP_J1[i], alive_J1[i], played_J1[i]));
+                    Soldiers2.Add(new Soldat(classes_J2[i], covered_J2[i], HP_J2[i], alive_J2[i], played_J2[i]));
+                    // On leur assigne leur position
+                    Soldiers1[i].position = Cases[IndexX_J1[i], IndexY_J1[i]];
+                    Soldiers2[i].position = Cases[IndexX_J2[i], IndexY_J2[i]];
+                    // Et on prévient cette position qu'elle a un soldat dessus
+                    Cases[IndexX_J1[i], IndexY_J1[i]].soldier = Soldiers1[i];
+                    Cases[IndexX_J2[i], IndexY_J2[i]].soldier = Soldiers2[i];
+                    // On définit les icônes
+                    switch (classes_J1[i]) // On sait que les classes sont toujours ordonnées dans le même ordre, et que les 2 joueurs ont le même nombre de chaque => Pas besoin d'utiliser 2 switch blocks
+                    {
+                        case 0: // Fantassin
+                            SoldiersIcons1[i].Image = Properties.Resources.Fantassin;
+                            SoldiersIcons2[i].Image = Properties.Resources.Fantassin;
+                            break;
+                        case 1: // Sniper
+                            SoldiersIcons1[i].Image = Properties.Resources.Sniper;
+                            SoldiersIcons2[i].Image = Properties.Resources.Sniper;
+                            break;
+                        case 2: // Lourd
+                            SoldiersIcons1[i].Image = Properties.Resources.Lourd;
+                            SoldiersIcons2[i].Image = Properties.Resources.Lourd;
+                            break;
+                        case 3: // Leger
+                            SoldiersIcons1[i].Image = Properties.Resources.Leger;
+                            SoldiersIcons2[i].Image = Properties.Resources.Leger;
+                            break;
+                        default: // Indéfini => Erreur
+                            error = true;
+                            break;
+                    }
+                    SoldiersIcons1[i].Parent = pbCarte;
+                    SoldiersIcons2[i].Parent = pbCarte;
+                    SoldiersIcons1[i].Location = Cases[IndexX_J1[i], IndexY_J1[i]].Origin;
+                    SoldiersIcons2[i].Location = Cases[IndexX_J2[i], IndexY_J2[i]].Origin;
+                    ttInfos.SetToolTip(SoldiersIcons1[i], Soldiers1[i].AfficherStats());
+                    ttInfos.SetToolTip(SoldiersIcons2[i], Soldiers2[i].AfficherStats());
+
+                    // On élimine les picturebox des soldats morts
+                    if (!Soldiers1[i].alive)
+                    {
+                        SoldiersIcons1[i].Enabled = false;
+                        SoldiersIcons1[i].Dispose();
+                        Controls.Remove(SoldiersIcons1[i]);
+                    }
+                    if (!Soldiers2[i].alive)
+                    {
+                        SoldiersIcons2[i].Enabled = false;
+                        SoldiersIcons2[i].Dispose();
+                        Controls.Remove(SoldiersIcons2[i]);
+                    }
+                }
+            }
+        }
+
+        private void CreationPartie()
+        {
+            tsInfo.Text = "";
+            dlgSauvegarder.Filter = "Fichier de sauvegarde|*.sav|Tous fichiers|*.*";
+            pbCase.Parent = pbCarte;
+
+            tsAvancement.Maximum = NbrSoldats;
+            tsAvancement.Alignment = ToolStripItemAlignment.Right;
+            tsNbrSoldatsJoue.Alignment = ToolStripItemAlignment.Right;
+            tsNbrSoldatsJoue.Text = "0/" + NbrSoldats.ToString();
+
+            switch (SelectedbtnIndex)
+            {
+                case 0:
+                    pbCarte.BackgroundImage = Properties.Resources.desert_road;
+                    break;
+                case 1:
+                    pbCarte.BackgroundImage = Properties.Resources.Snowy_Pass;
+                    break;
+                case 2:
+                    pbCarte.BackgroundImage = Properties.Resources.Urban_Parking;
+                    break;
+                default:
+                    MessageBox.Show("ERREUR ! Pas de carte sélectionnée !", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    error = true;
+                    break;
+            }
+
+            if (!error)
+            {
+                RemplirTabCases();
+
+                for (int i = 0; i < NbrSoldats; i++) // Liste d'icônes des soldats du joueur 1
+                {
+                    SoldiersIcons1.Add(new PictureBox { Size = new Size(Cases[0, 0].Xmax - Cases[0, 0].posX, Cases[0, 0].Ymax - Cases[0, 0].posY), Parent = pbCarte, SizeMode = PictureBoxSizeMode.StretchImage, BackColor = Color.Transparent });
+                    this.Controls.Add(SoldiersIcons1[i]);
+                    SoldiersIcons1[i].Click += new EventHandler(SoldiersIcons1_Click);
+                    SoldiersIcons1[i].Name = "SoldiersIcons1_" + i;
+                }
+                for (int i = 0; i < NbrSoldats; i++) // Liste d'icônes des soldats du joueur 2
+                {
+                    SoldiersIcons2.Add(new PictureBox { Size = new Size(Cases[0, 0].Xmax - Cases[0, 0].posX, Cases[0, 0].Ymax - Cases[0, 0].posY), Parent = pbCarte, SizeMode = PictureBoxSizeMode.StretchImage, BackColor = Color.Transparent });
+                    this.Controls.Add(SoldiersIcons2[i]);
+                    SoldiersIcons2[i].Click += new EventHandler(SoldiersIcons2_Click);
+                    SoldiersIcons2[i].Name = "SoldiersIcons2_" + i;
                 }
 
                 First = false;
@@ -312,6 +435,7 @@ namespace Nyssen_Simon_XCOM
                 pbCase.Visible = true;
             }
         }
+
         private void LoadCover()
         {
             switch (SelectedbtnIndex)
@@ -750,6 +874,7 @@ namespace Nyssen_Simon_XCOM
                                                     Console.WriteLine("PictureBox du soldat tué trouvée !");
                                                     pb.Enabled = false;
                                                     pb.Dispose();
+                                                    Controls.Remove(pb);
                                                     break;
                                                 }
                                             }
@@ -901,6 +1026,19 @@ namespace Nyssen_Simon_XCOM
         private void tsfQuitter_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void EcranGame_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!error)
+            {
+
+            }
+        }
+
+        private void tsfCharger_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Fonction non implémentée...");
         }
 
         public void Sauvegarde()

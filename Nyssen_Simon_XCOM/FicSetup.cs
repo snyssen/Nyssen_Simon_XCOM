@@ -127,7 +127,6 @@ namespace Nyssen_Simon_XCOM
 
         private void btnLancer_Click(object sender, EventArgs e)
         {
-            /*
             if (SelectedbtnIndex == 3 || cbFantassin.SelectedItem == null || cbSniper.SelectedItem == null || cbLourd.SelectedItem == null || cbLeger.SelectedItem == null || NbrSoldats - NbrSoldatsSelect != 0)
             {
                 if (SelectedbtnIndex == 3)
@@ -139,11 +138,12 @@ namespace Nyssen_Simon_XCOM
                     MessageBox.Show("Vous n'avez pas fini d'assigner les rôles des soldats de votre escouade ! ");
                 }
             }
-            */
 
             // DEBUG
+            /*
             if (SelectedbtnIndex == 3)
                 MessageBox.Show("Vous devez sélectionner un champs de bataille !");
+            */
 
             else
             {
