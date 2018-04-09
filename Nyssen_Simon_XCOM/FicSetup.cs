@@ -31,7 +31,6 @@ namespace Nyssen_Simon_XCOM
             InitializeComponent();
             tbNbrSoldats_Scroll(null, null);
 
-            // DEBUG
             cbFantassin.SelectedIndex = 1;
             cbSniper.SelectedIndex = 1;
             cbLourd.SelectedIndex = 1;

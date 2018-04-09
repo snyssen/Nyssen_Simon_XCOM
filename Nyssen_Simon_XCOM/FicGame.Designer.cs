@@ -43,6 +43,7 @@
             this.pbCarte = new System.Windows.Forms.PictureBox();
             this.ttInfos = new System.Windows.Forms.ToolTip(this.components);
             this.dlgSauvegarder = new System.Windows.Forms.SaveFileDialog();
+            this.tsTour = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1.SuspendLayout();
             this.tsBarreOutils.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbCase)).BeginInit();
@@ -54,7 +55,8 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsInfo,
             this.tsNbrSoldatsJoue,
-            this.tsAvancement});
+            this.tsAvancement,
+            this.tsTour});
             this.statusStrip1.Location = new System.Drawing.Point(0, 531);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(500, 22);
@@ -104,21 +106,21 @@
             // tsfSauvegarder
             // 
             this.tsfSauvegarder.Name = "tsfSauvegarder";
-            this.tsfSauvegarder.Size = new System.Drawing.Size(180, 22);
+            this.tsfSauvegarder.Size = new System.Drawing.Size(139, 22);
             this.tsfSauvegarder.Text = "Sauvegarder";
             this.tsfSauvegarder.Click += new System.EventHandler(this.tsfSauvegarder_Click);
             // 
             // tsfCharger
             // 
             this.tsfCharger.Name = "tsfCharger";
-            this.tsfCharger.Size = new System.Drawing.Size(180, 22);
+            this.tsfCharger.Size = new System.Drawing.Size(139, 22);
             this.tsfCharger.Text = "Charger";
             this.tsfCharger.Click += new System.EventHandler(this.tsfCharger_Click);
             // 
             // tsfQuitter
             // 
             this.tsfQuitter.Name = "tsfQuitter";
-            this.tsfQuitter.Size = new System.Drawing.Size(180, 22);
+            this.tsfQuitter.Size = new System.Drawing.Size(139, 22);
             this.tsfQuitter.Text = "Quitter";
             this.tsfQuitter.Click += new System.EventHandler(this.tsfQuitter_Click);
             // 
@@ -152,6 +154,12 @@
             // dlgSauvegarder
             // 
             this.dlgSauvegarder.DefaultExt = "sav";
+            // 
+            // tsTour
+            // 
+            this.tsTour.Name = "tsTour";
+            this.tsTour.Size = new System.Drawing.Size(118, 17);
+            this.tsTour.Text = "toolStripStatusLabel1";
             // 
             // EcranGame
             // 
@@ -196,5 +204,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsfQuitter;
         private System.Windows.Forms.ToolTip ttInfos;
         private System.Windows.Forms.SaveFileDialog dlgSauvegarder;
+        private System.Windows.Forms.ToolStripStatusLabel tsTour;
     }
 }

@@ -33,9 +33,6 @@
             this.tbNbrSoldats = new System.Windows.Forms.TrackBar();
             this.btnLancer = new System.Windows.Forms.Button();
             this.gbChoixCarte = new System.Windows.Forms.GroupBox();
-            this.btnUrban = new System.Windows.Forms.Button();
-            this.btnSnowy = new System.Windows.Forms.Button();
-            this.btnDesert = new System.Windows.Forms.Button();
             this.gbNbrSoldats = new System.Windows.Forms.GroupBox();
             this.gbCompo = new System.Windows.Forms.GroupBox();
             this.cbSniper = new System.Windows.Forms.ComboBox();
@@ -44,6 +41,9 @@
             this.cbFantassin = new System.Windows.Forms.ComboBox();
             this.lblTypeSoldat = new System.Windows.Forms.Label();
             this.ttDescription = new System.Windows.Forms.ToolTip(this.components);
+            this.btnUrban = new System.Windows.Forms.Button();
+            this.btnSnowy = new System.Windows.Forms.Button();
+            this.btnDesert = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.tbNbrSoldats)).BeginInit();
             this.gbChoixCarte.SuspendLayout();
             this.gbNbrSoldats.SuspendLayout();
@@ -85,53 +85,6 @@
             this.gbChoixCarte.TabIndex = 2;
             this.gbChoixCarte.TabStop = false;
             this.gbChoixCarte.Text = "Choix du champs de bataille";
-            // 
-            // btnUrban
-            // 
-            this.btnUrban.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnUrban.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnUrban.Font = new System.Drawing.Font("Modern No. 20", 15.75F, System.Drawing.FontStyle.Bold);
-            this.btnUrban.ForeColor = System.Drawing.Color.Aqua;
-            this.btnUrban.Image = global::Nyssen_Simon_XCOM.Properties.Resources.Urban_Parking;
-            this.btnUrban.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnUrban.Location = new System.Drawing.Point(6, 174);
-            this.btnUrban.Name = "btnUrban";
-            this.btnUrban.Size = new System.Drawing.Size(215, 57);
-            this.btnUrban.TabIndex = 2;
-            this.ttDescription.SetToolTip(this.btnUrban, "Terrain urbain");
-            this.btnUrban.UseVisualStyleBackColor = true;
-            this.btnUrban.Click += new System.EventHandler(this.btnUrban_Click);
-            // 
-            // btnSnowy
-            // 
-            this.btnSnowy.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnSnowy.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnSnowy.Font = new System.Drawing.Font("Modern No. 20", 15.75F, System.Drawing.FontStyle.Bold);
-            this.btnSnowy.ForeColor = System.Drawing.Color.Aqua;
-            this.btnSnowy.Image = global::Nyssen_Simon_XCOM.Properties.Resources.Snowy_Pass;
-            this.btnSnowy.Location = new System.Drawing.Point(6, 95);
-            this.btnSnowy.Name = "btnSnowy";
-            this.btnSnowy.Size = new System.Drawing.Size(215, 57);
-            this.btnSnowy.TabIndex = 1;
-            this.ttDescription.SetToolTip(this.btnSnowy, "Terrain enneigé");
-            this.btnSnowy.UseVisualStyleBackColor = true;
-            this.btnSnowy.Click += new System.EventHandler(this.btnSnowy_Click);
-            // 
-            // btnDesert
-            // 
-            this.btnDesert.BackColor = System.Drawing.Color.Aqua;
-            this.btnDesert.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnDesert.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnDesert.Font = new System.Drawing.Font("Modern No. 20", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDesert.ForeColor = System.Drawing.Color.Aqua;
-            this.btnDesert.Image = global::Nyssen_Simon_XCOM.Properties.Resources.desert_road;
-            this.btnDesert.Location = new System.Drawing.Point(6, 19);
-            this.btnDesert.Name = "btnDesert";
-            this.btnDesert.Size = new System.Drawing.Size(215, 57);
-            this.btnDesert.TabIndex = 0;
-            this.ttDescription.SetToolTip(this.btnDesert, "Terrain désertique");
-            this.btnDesert.UseVisualStyleBackColor = false;
-            this.btnDesert.Click += new System.EventHandler(this.btnDesert_Click);
             // 
             // gbNbrSoldats
             // 
@@ -217,6 +170,53 @@
             // ttDescription
             // 
             this.ttDescription.Tag = "";
+            // 
+            // btnUrban
+            // 
+            this.btnUrban.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnUrban.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnUrban.Font = new System.Drawing.Font("Modern No. 20", 15.75F, System.Drawing.FontStyle.Bold);
+            this.btnUrban.ForeColor = System.Drawing.Color.Aqua;
+            this.btnUrban.Image = global::Nyssen_Simon_XCOM.Properties.Resources.Urban_Parking;
+            this.btnUrban.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnUrban.Location = new System.Drawing.Point(6, 174);
+            this.btnUrban.Name = "btnUrban";
+            this.btnUrban.Size = new System.Drawing.Size(215, 57);
+            this.btnUrban.TabIndex = 2;
+            this.ttDescription.SetToolTip(this.btnUrban, "Terrain urbain\r\nCette carte dispose de beaucoup d\'emplacement à couvert");
+            this.btnUrban.UseVisualStyleBackColor = true;
+            this.btnUrban.Click += new System.EventHandler(this.btnUrban_Click);
+            // 
+            // btnSnowy
+            // 
+            this.btnSnowy.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSnowy.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnSnowy.Font = new System.Drawing.Font("Modern No. 20", 15.75F, System.Drawing.FontStyle.Bold);
+            this.btnSnowy.ForeColor = System.Drawing.Color.Aqua;
+            this.btnSnowy.Image = global::Nyssen_Simon_XCOM.Properties.Resources.Snowy_Pass;
+            this.btnSnowy.Location = new System.Drawing.Point(6, 95);
+            this.btnSnowy.Name = "btnSnowy";
+            this.btnSnowy.Size = new System.Drawing.Size(215, 57);
+            this.btnSnowy.TabIndex = 1;
+            this.ttDescription.SetToolTip(this.btnSnowy, "Terrain enneigé\r\nCette carte dispose d\'un nombre normal d\'emplacements à couvert");
+            this.btnSnowy.UseVisualStyleBackColor = true;
+            this.btnSnowy.Click += new System.EventHandler(this.btnSnowy_Click);
+            // 
+            // btnDesert
+            // 
+            this.btnDesert.BackColor = System.Drawing.Color.Aqua;
+            this.btnDesert.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnDesert.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnDesert.Font = new System.Drawing.Font("Modern No. 20", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDesert.ForeColor = System.Drawing.Color.Aqua;
+            this.btnDesert.Image = global::Nyssen_Simon_XCOM.Properties.Resources.desert_road;
+            this.btnDesert.Location = new System.Drawing.Point(6, 19);
+            this.btnDesert.Name = "btnDesert";
+            this.btnDesert.Size = new System.Drawing.Size(215, 57);
+            this.btnDesert.TabIndex = 0;
+            this.ttDescription.SetToolTip(this.btnDesert, "Terrain désertique\r\nCette carte dispose de peu d\'emplacements à couvert");
+            this.btnDesert.UseVisualStyleBackColor = false;
+            this.btnDesert.Click += new System.EventHandler(this.btnDesert_Click);
             // 
             // EcranSetup
             // 

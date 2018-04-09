@@ -35,6 +35,7 @@ namespace Nyssen_Simon_XCOM
         private bool HasClicked = false; // Case sélectionnée durant une action => On veut désactiver le FindLocation() de l'event pbCarte_MouseMove()
         private bool Joueur1Joue = true; // Indique quel joueur joue -> si vrai, c'est le joueur 1, si faux c'est le joueur 2
         private short FinPartie = 0; // Indique 0 si la partie est toujours en cours, 1 si le joueur 1 a gagné et 2 si le joueur 2 a gagné
+        private bool saved = false; // Vraie si la partie a été sauvegardée et qu'il n'y a pas eu de modif depuis, sinon fausse.
 
         public EcranGame(short Index, int NbrFant, int NbrSnip, int NbrLd, int NbrLg)
         {
@@ -239,6 +240,7 @@ namespace Nyssen_Simon_XCOM
         private void CreationPartie()
         {
             tsInfo.Text = "";
+            tsTour.Text = "Tour du joueur 1";
             dlgSauvegarder.Filter = "Fichier de sauvegarde|*.sav|Tous fichiers|*.*";
             pbCase.Parent = pbCarte;
 
@@ -361,6 +363,7 @@ namespace Nyssen_Simon_XCOM
                 foreach (Soldat soldier in Soldiers1)
                     soldier.covered = false;
             Joueur1Joue = !Joueur1Joue;
+            tsTour.Text = Joueur1Joue ? "Tour du joueur 1" : "Tour du joueur 2";
         }
 
         private void Gagne() // Détermine si la partie est terminée ou non
@@ -865,6 +868,7 @@ namespace Nyssen_Simon_XCOM
                                         else
                                         {
                                             MessageBox.Show("Le tir tir a touché ! Le soldat visé a reçu " + Soldiers[Index].damage + " points de dégâts, ce qui a achevé le soldat !");
+                                            Cases[IndexX, IndexY].soldier = null;
                                             List<PictureBox> Icons = (SoldiersIcons == SoldiersIcons1 ? SoldiersIcons2 : SoldiersIcons1);
                                             foreach (PictureBox pb in Icons)
                                             {
@@ -933,21 +937,23 @@ namespace Nyssen_Simon_XCOM
                 MessageBox.Show("Le joueur " + (FinPartie == 1 ? "1 " : "2 ") + "gagne la partie !", "Fin de la partie", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 this.Close();
             }
-
-            if ((Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2) - NbrSoldatsJoues == 0) // Tous les soldats de l'escouade ont joué => Changement de joueur
+            else
             {
-                MessageBox.Show("Tour du joueur " + (Joueur1Joue ? "1 " : "2 ") + "terminé.\nAppuyez sur OK pour continuer", "Fin du tour", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                ChangeTour();
-                NbrSoldatsJoues = 0;
-                tsAvancement.Value = 0;
-                tsAvancement.Maximum = (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
-                tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
-                int i = 0;
-                foreach (Soldat soldier in Soldiers)
+                if ((Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2) - NbrSoldatsJoues == 0) // Tous les soldats de l'escouade ont joué => Changement de joueur
                 {
-                    soldier.played = false;
-                    ttInfos.SetToolTip(SoldiersIcons[i], soldier.AfficherStats());
-                    i++;
+                    MessageBox.Show("Tour du joueur " + (Joueur1Joue ? "1 " : "2 ") + "terminé.\nAppuyez sur OK pour continuer", "Fin du tour", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ChangeTour();
+                    NbrSoldatsJoues = 0;
+                    tsAvancement.Value = 0;
+                    tsAvancement.Maximum = (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
+                    tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
+                    int i = 0;
+                    foreach (Soldat soldier in Soldiers)
+                    {
+                        soldier.played = false;
+                        ttInfos.SetToolTip(SoldiersIcons[i], soldier.AfficherStats());
+                        i++;
+                    }
                 }
             }
         }
@@ -957,6 +963,39 @@ namespace Nyssen_Simon_XCOM
             foreach (Case_Echiquier c in Cases)
             {
                 c.DessinerCase(pbCarte.Handle);
+            }
+        }
+
+        public void DessinerEtats()
+        {
+            for (int i = 0; i < SoldiersIcons1.Count; i++)
+            {
+                if (Soldiers1[i].alive)
+                {
+                    Graphics grS1 = Graphics.FromHwnd(SoldiersIcons1[i].Handle);
+                    grS1.FillEllipse(new SolidBrush(Color.Yellow), SoldiersIcons1[i].Width / 10, SoldiersIcons1[i].Height / 10, SoldiersIcons1[i].Width / 10, SoldiersIcons1[i].Height / 10);
+                    if (Soldiers1[i].played)
+                    {
+                        grS1.FillEllipse(new SolidBrush(Color.Red), 9 * SoldiersIcons1[i].Width / 10, SoldiersIcons1[i].Height / 10, SoldiersIcons1[i].Width / 10, SoldiersIcons1[i].Height / 10);
+                    }
+                    else
+                    {
+                        grS1.FillEllipse(new SolidBrush(Color.Green), 9 * SoldiersIcons1[i].Width / 10, SoldiersIcons1[i].Height / 10, SoldiersIcons1[i].Width / 10, SoldiersIcons1[i].Height / 10);
+                    }
+                }
+                if (Soldiers2[i].alive)
+                {
+                    Graphics grS1 = Graphics.FromHwnd(SoldiersIcons2[i].Handle);
+                    grS1.FillEllipse(new SolidBrush(Color.Violet), SoldiersIcons2[i].Width / 10, SoldiersIcons2[i].Height / 10, SoldiersIcons2[i].Width / 10, SoldiersIcons2[i].Height / 10);
+                    if (Soldiers2[i].played)
+                    {
+                        grS1.FillEllipse(new SolidBrush(Color.Red), 9 * SoldiersIcons2[i].Width / 10, SoldiersIcons2[i].Height / 10, SoldiersIcons2[i].Width / 10, SoldiersIcons2[i].Height / 10);
+                    }
+                    else
+                    {
+                        grS1.FillEllipse(new SolidBrush(Color.Green), 9 * SoldiersIcons2[i].Width / 10, SoldiersIcons2[i].Height / 10, SoldiersIcons2[i].Width / 10, SoldiersIcons2[i].Height / 10);
+                    }
+                }
             }
         }
 
@@ -1010,6 +1049,7 @@ namespace Nyssen_Simon_XCOM
         private void pbCarte_Paint(object sender, PaintEventArgs e)
         {
             DessinerEchiquier();
+            DessinerEtats();
         }
 
         private void EcranGame_Resize(object sender, EventArgs e)
@@ -1032,7 +1072,17 @@ namespace Nyssen_Simon_XCOM
         {
             if (!error)
             {
-
+                if (!saved)
+                {
+                    DialogResult message = MessageBox.Show("Voulez vous sauvegarder la partie avant de quitter ?", "Confirmer", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                    if (message == DialogResult.Yes)
+                        Sauvegarde();
+                    else
+                    {
+                        if (message == DialogResult.Cancel)
+                            e.Cancel = true;
+                    }
+                }
             }
         }
 
@@ -1058,6 +1108,7 @@ namespace Nyssen_Simon_XCOM
                     sw.WriteLine(soldier.classe + ";" + soldier.covered + ";" + soldier.HP + ";" + soldier.alive + ";" + soldier.played + ";" + soldier.position.IndexX + ";" + soldier.position.IndexY);
                 }
                 sw.Close();
+                saved = true;
             }
         }
     }

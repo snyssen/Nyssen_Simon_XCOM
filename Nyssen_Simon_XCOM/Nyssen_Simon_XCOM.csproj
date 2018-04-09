@@ -169,7 +169,9 @@
   <ItemGroup>
     <None Include="Resources\Soldiers\Sniper.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\Aide\Actions.png" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Actions\Covering.png" />
   </ItemGroup>
@@ -178,6 +180,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Actions\Moving.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Aide\Plateau de jeu - Edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Aide\Statistiques de soldat.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Aide\Cover.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

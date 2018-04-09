@@ -63,6 +63,26 @@ namespace Nyssen_Simon_XCOM.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Actions {
+            get {
+                object obj = ResourceManager.GetObject("Actions", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Cover {
+            get {
+                object obj = ResourceManager.GetObject("Cover", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Covering {
             get {
                 object obj = ResourceManager.GetObject("Covering", resourceCulture);
@@ -153,9 +173,9 @@ namespace Nyssen_Simon_XCOM.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Shield_Empty {
+        internal static System.Drawing.Bitmap Plateau_de_jeu___Edit {
             get {
-                object obj = ResourceManager.GetObject("Shield_Empty", resourceCulture);
+                object obj = ResourceManager.GetObject("Plateau_de_jeu___Edit", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -163,9 +183,9 @@ namespace Nyssen_Simon_XCOM.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Shield_Empty1 {
+        internal static System.Drawing.Bitmap Shield_Empty {
             get {
-                object obj = ResourceManager.GetObject("Shield_Empty1", resourceCulture);
+                object obj = ResourceManager.GetObject("Shield_Empty", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -206,6 +226,16 @@ namespace Nyssen_Simon_XCOM.Properties {
         internal static System.Drawing.Bitmap Snowy_Pass {
             get {
                 object obj = ResourceManager.GetObject("Snowy_Pass", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Statistiques_de_soldat {
+            get {
+                object obj = ResourceManager.GetObject("Statistiques_de_soldat", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

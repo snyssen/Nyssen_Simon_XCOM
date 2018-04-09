@@ -118,8 +118,9 @@ namespace Nyssen_Simon_XCOM
                     this._HP -= value;
                 else
                 {
+                    this._HP = 0;
                     this._alive = false;
-                    this.position.soldier = null;
+                    //this.position.soldier = null;
                 }
             }
         }
