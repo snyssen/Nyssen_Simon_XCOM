@@ -36,6 +36,7 @@
             this.dlgLoadGame = new System.Windows.Forms.OpenFileDialog();
             this.llblCopyright = new System.Windows.Forms.LinkLabel();
             this.btnAide = new System.Windows.Forms.Button();
+            this.btnAudio = new System.Windows.Forms.Button();
             this.pAccueil.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -85,7 +86,7 @@
             // 
             // dlgLoadGame
             // 
-            this.dlgLoadGame.FileName = "openFileDialog1";
+            this.dlgLoadGame.FileName = "save1";
             // 
             // llblCopyright
             // 
@@ -110,11 +111,23 @@
             this.btnAide.UseVisualStyleBackColor = true;
             this.btnAide.Click += new System.EventHandler(this.btnAide_Click);
             // 
+            // btnAudio
+            // 
+            this.btnAudio.BackgroundImage = global::Nyssen_Simon_XCOM.Properties.Resources.audio_on;
+            this.btnAudio.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnAudio.Location = new System.Drawing.Point(256, 228);
+            this.btnAudio.Name = "btnAudio";
+            this.btnAudio.Size = new System.Drawing.Size(24, 24);
+            this.btnAudio.TabIndex = 3;
+            this.btnAudio.UseVisualStyleBackColor = true;
+            this.btnAudio.Click += new System.EventHandler(this.btnAudio_Click);
+            // 
             // EcranAccueil
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(384, 261);
+            this.Controls.Add(this.btnAudio);
             this.Controls.Add(this.btnAide);
             this.Controls.Add(this.llblCopyright);
             this.Controls.Add(this.pAccueil);
@@ -125,6 +138,7 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "XCOM";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EcranAccueil_FormClosing);
             this.pAccueil.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -140,5 +154,6 @@
         private System.Windows.Forms.OpenFileDialog dlgLoadGame;
         private System.Windows.Forms.LinkLabel llblCopyright;
         private System.Windows.Forms.Button btnAide;
+        private System.Windows.Forms.Button btnAudio;
     }
 }

@@ -178,4 +178,34 @@
   <data name="Cover" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\aide\cover.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="_01_XCOM2_Lazarus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\accueil\01_xcom2_lazarus.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="_02_XCOM2_First_Flight" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\setup\02_xcom2_first_flight.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="_04_XCOM2_Infiltrator" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\combat\04_xcom2_infiltrator.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="_08_XCOM2_Squad_Loadout" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\setup\08_xcom2_squad_loadout.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="_14_XCOM2_Weapons_of_Choice" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\combat\14_xcom2_weapons_of_choice.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="_21_XCOM2_New_World_Order" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\combat\21_xcom2_new_world_order.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="_27_XCOM2_Ambush" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\combat\27_xcom2_ambush.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="audio_off" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\audio_off.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="audio_on" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\audio_on.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="audio_play" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\audio_play.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

@@ -190,5 +190,17 @@
   <ItemGroup>
     <None Include="Resources\Aide\Cover.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Accueil\01_XCOM2_Lazarus.wav" />
+    <None Include="Resources\audio_play.png" />
+    <None Include="Resources\audio_on.png" />
+    <None Include="Resources\audio_off.png" />
+    <Content Include="Resources\Combat\04_XCOM2_Infiltrator.wav" />
+    <Content Include="Resources\Combat\14_XCOM2_Weapons_of_Choice.wav" />
+    <Content Include="Resources\Combat\21_XCOM2_New_World_Order.wav" />
+    <Content Include="Resources\Combat\27_XCOM2_Ambush.wav" />
+    <Content Include="Resources\Setup\02_XCOM2_First_Flight.wav" />
+    <Content Include="Resources\Setup\08_XCOM2_Squad_Loadout.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

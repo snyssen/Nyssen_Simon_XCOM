@@ -61,11 +61,104 @@ namespace Nyssen_Simon_XCOM.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream _01_XCOM2_Lazarus {
+            get {
+                return ResourceManager.GetStream("_01_XCOM2_Lazarus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream _02_XCOM2_First_Flight {
+            get {
+                return ResourceManager.GetStream("_02_XCOM2_First_Flight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream _04_XCOM2_Infiltrator {
+            get {
+                return ResourceManager.GetStream("_04_XCOM2_Infiltrator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream _08_XCOM2_Squad_Loadout {
+            get {
+                return ResourceManager.GetStream("_08_XCOM2_Squad_Loadout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream _14_XCOM2_Weapons_of_Choice {
+            get {
+                return ResourceManager.GetStream("_14_XCOM2_Weapons_of_Choice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream _21_XCOM2_New_World_Order {
+            get {
+                return ResourceManager.GetStream("_21_XCOM2_New_World_Order", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream _27_XCOM2_Ambush {
+            get {
+                return ResourceManager.GetStream("_27_XCOM2_Ambush", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Actions {
             get {
                 object obj = ResourceManager.GetObject("Actions", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap audio_off {
+            get {
+                object obj = ResourceManager.GetObject("audio_off", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap audio_on {
+            get {
+                object obj = ResourceManager.GetObject("audio_on", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap audio_play {
+            get {
+                object obj = ResourceManager.GetObject("audio_play", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

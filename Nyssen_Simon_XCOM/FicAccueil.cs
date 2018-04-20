@@ -8,13 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Media;
 
 namespace Nyssen_Simon_XCOM
 {
     public partial class EcranAccueil : Form
     {
-        public Boolean GameLaunch = false; // Si true, on veut lancer une partie (peu importe que ce soit une nouvelle ou une ancienne); sinon on veut quitter le programme
-        public Boolean Setup = false;      // Si true, on veut lancer une NOUVELLE partie; sinon on veut reprendre une en cours (dépendant dans les deux cas de GameLaunch)
+        public bool GameLaunch = false; // Si true, on veut lancer une partie (peu importe que ce soit une nouvelle ou une ancienne); sinon on veut quitter le programme
+        public bool Setup = false;      // Si true, on veut lancer une NOUVELLE partie; sinon on veut reprendre une en cours (dépendant dans les deux cas de GameLaunch)
+        public bool AudioOn; // true si audio on
+        private SoundPlayer music = new SoundPlayer(Properties.Resources._01_XCOM2_Lazarus);
         public EcranSetup setup;
 
         public bool Joueur1Joue;
@@ -40,7 +43,12 @@ namespace Nyssen_Simon_XCOM
         {
             InitializeComponent();
             dlgLoadGame.Filter = "Fichier de sauvegarde|*.sav|Tous fichiers|*.*";
+
+            music.PlayLooping();
+            AudioOn = true;
+            btnAudio.BackgroundImage = Properties.Resources.audio_on;
         }
+
 
         private void btnExit_Click(object sender, EventArgs e)
         {
@@ -51,7 +59,8 @@ namespace Nyssen_Simon_XCOM
 
         private void btnNewGame_Click(object sender, EventArgs e)
         {
-            setup = new EcranSetup();
+            music.Stop();
+            setup = new EcranSetup(AudioOn);
             setup.ShowDialog();
             if (setup.begin)
             {
@@ -59,6 +68,8 @@ namespace Nyssen_Simon_XCOM
                 GameLaunch = true;
                 Setup = true;
             }
+            else
+                music.PlayLooping();
         }
 
         private void btnLoadGame_Click(object sender, EventArgs e)
@@ -142,6 +153,28 @@ namespace Nyssen_Simon_XCOM
         {
             EcranAide aide = new EcranAide();
             aide.ShowDialog();
+        }
+
+        private void btnAudio_Click(object sender, EventArgs e)
+        {
+            if (AudioOn)
+            {
+                music.Stop();
+                btnAudio.BackgroundImage = Properties.Resources.audio_off;
+                AudioOn = false;
+            }
+            else
+            {
+                music.PlayLooping();
+                btnAudio.BackgroundImage = Properties.Resources.audio_on;
+                AudioOn = true;
+            }
+        }
+
+        private void EcranAccueil_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            music.Stop();
+            music.Dispose();
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Media;
 
 namespace Nyssen_Simon_XCOM
 {
@@ -38,11 +39,19 @@ namespace Nyssen_Simon_XCOM
         private short FinPartie = 0; // Indique 0 si la partie est toujours en cours, 1 si le joueur 1 a gagné et 2 si le joueur 2 a gagné
         private bool saved = false; // Vraie si la partie a été sauvegardée et qu'il n'y a pas eu de modif depuis, sinon fausse.
         public bool Relaunch = false; // Mis à vrai si on veut relancer une nouvelle partie (ou en charger une précédente) = > Renvoie au menu principal.
+        private bool AudioOn; // vrai si audio actif
+        private SoundPlayer music = new SoundPlayer(Properties.Resources._04_XCOM2_Infiltrator); // Musique de fond
+        //private SoundPlayer sounds = new SoundPlayer(); // Sons divers
+        private short selectedbtnMusic = 0; // Index de la musique -> 0 = infiltrator
+                                            //                     -> 1 = Weapons of Choice
+                                            //                     -> 2 = New World Order
+                                            //                     -> 3 = Ambush
 
-        public EcranGame(short Index, int NbrFant, int NbrSnip, int NbrLd, int NbrLg) // Constructeur pour une nouvelle partie
+        public EcranGame(bool _audio, short Index, int NbrFant, int NbrSnip, int NbrLd, int NbrLg) // Constructeur pour une nouvelle partie
         {
             InitializeComponent();
 
+            this.AudioOn = _audio;
             this.SelectedbtnIndex = Index;
             this.NbrFantassins = NbrFant;
             this.NbrSnipers = NbrSnip;
@@ -130,12 +139,13 @@ namespace Nyssen_Simon_XCOM
                 Close();
         }
 
-        public EcranGame(short Index, bool TourJoueur, 
+        public EcranGame(bool _audio, short Index, bool TourJoueur, 
             List<int> classes_J1, List<bool> covered_J1, List<int> HP_J1, List<bool> alive_J1, List<bool> played_J1, List<int> IndexX_J1, List<int> IndexY_J1, 
             List<int> classes_J2, List<bool> covered_J2, List<int> HP_J2, List<bool> alive_J2, List<bool> played_J2, List<int> IndexX_J2, List<int> IndexY_J2) // Constructeur pour charger une partie
         {
             InitializeComponent();
 
+            this.AudioOn = _audio;
             this.SelectedbtnIndex = Index;
             this.Joueur1Joue = TourJoueur;
             this.FirstTurn = false;
@@ -288,6 +298,8 @@ namespace Nyssen_Simon_XCOM
                     SoldiersIcons2[i].Click += new EventHandler(SoldiersIcons2_Click);
                     SoldiersIcons2[i].Name = "SoldiersIcons2_" + i;
                 }
+
+                music.PlayLooping();
 
                 First = false;
             }
@@ -1098,6 +1110,8 @@ namespace Nyssen_Simon_XCOM
                             e.Cancel = true;
                     }
                 }
+                music.Stop();
+                music.Dispose();
             }
         }
 
@@ -1105,6 +1119,86 @@ namespace Nyssen_Simon_XCOM
         {
             this.Relaunch = true;
             this.Close();
+        }
+
+        private void tsaMuet_Click(object sender, EventArgs e)
+        {
+            AudioOn = !AudioOn;
+            if (AudioOn)
+            {
+                music.PlayLooping();
+                tsaMuet.Image = Properties.Resources.audio_on;
+                tsaMuet.Text = "audio on";
+            }
+            else
+            {
+                music.Stop();
+                tsaMuet.Image = Properties.Resources.audio_off;
+                tsaMuet.Text = "audio off";
+            }
+        }
+
+        private void musique1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            selectedbtnMusic = 0;
+            ChangeSoundtrack();
+        }
+
+        private void musique2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            selectedbtnMusic = 1;
+            ChangeSoundtrack();
+        }
+
+        private void musique3ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            selectedbtnMusic = 2;
+            ChangeSoundtrack();
+        }
+
+        private void musique4ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            selectedbtnMusic = 3;
+            ChangeSoundtrack();
+        }
+
+        private void ChangeSoundtrack()
+        {
+            music.Stop();
+            switch (selectedbtnMusic)
+            {
+                case 0: // infiltrator
+                    music.Stream = Properties.Resources._04_XCOM2_Infiltrator;
+                    musique1ToolStripMenuItem.Image = Properties.Resources.audio_play;
+                    musique2ToolStripMenuItem.Image = null;
+                    musique3ToolStripMenuItem.Image = null;
+                    musique4ToolStripMenuItem.Image = null;
+                    break;
+                case 1: // Weapons of Choice
+                    music.Stream = Properties.Resources._14_XCOM2_Weapons_of_Choice;
+                    musique1ToolStripMenuItem.Image = null;
+                    musique2ToolStripMenuItem.Image = Properties.Resources.audio_play;
+                    musique3ToolStripMenuItem.Image = null;
+                    musique4ToolStripMenuItem.Image = null;
+                    break;
+                case 2: // New World Order
+                    music.Stream = Properties.Resources._21_XCOM2_New_World_Order;
+                    musique1ToolStripMenuItem.Image = null;
+                    musique2ToolStripMenuItem.Image = null;
+                    musique3ToolStripMenuItem.Image = Properties.Resources.audio_play;
+                    musique4ToolStripMenuItem.Image = null;
+                    break;
+                case 3: // Ambush
+                    music.Stream = Properties.Resources._27_XCOM2_Ambush;
+                    musique1ToolStripMenuItem.Image = null;
+                    musique2ToolStripMenuItem.Image = null;
+                    musique3ToolStripMenuItem.Image = null;
+                    musique4ToolStripMenuItem.Image = Properties.Resources.audio_play;
+                    break;
+            }
+            music.Load();
+            if (AudioOn)
+                music.PlayLooping();
         }
 
         public void Sauvegarde() // Sauvegarde la partie dans un fichier d'extension .sav. Ce fichier est un pseudo CSV, on utilise des ";" pour séparer les variables et des lignes vides pour séparer les classes. Le texte est en clair dans le fichier.

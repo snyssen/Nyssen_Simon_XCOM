@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Media;
 
 namespace Nyssen_Simon_XCOM
 {
@@ -24,9 +25,12 @@ namespace Nyssen_Simon_XCOM
         public int NbrLourds;
         public int NbrLegers;
 
+        private bool AudioOn; // true si le son est activé
+        private SoundPlayer music = new SoundPlayer(Properties.Resources._02_XCOM2_First_Flight);
+        private short SelectedbtnMusic = 0; // Index de la musique -> 0 = First Flight
+                                            //                     -> 1 = Squad Loadout
 
-        
-        public EcranSetup()                
+        public EcranSetup(bool _audio)                
         {                                  
             InitializeComponent();
             tbNbrSoldats_Scroll(null, null);
@@ -35,6 +39,15 @@ namespace Nyssen_Simon_XCOM
             cbSniper.SelectedIndex = 1;
             cbLourd.SelectedIndex = 1;
             cbLeger.SelectedIndex = 1;
+
+            this.AudioOn = _audio;
+            if (AudioOn)
+            {
+                btnAudio.BackgroundImage = Properties.Resources.audio_on;
+                music.PlayLooping();
+            }
+            else
+                btnAudio.BackgroundImage = Properties.Resources.audio_off;
         }
 
         private void tbNbrSoldats_Scroll(object sender, EventArgs e)
@@ -152,6 +165,59 @@ namespace Nyssen_Simon_XCOM
                 else
                     tbNbrSoldats_Scroll(null, null);
             }
+        }
+
+        private void btnAudio_Click(object sender, EventArgs e)
+        {
+            if (AudioOn)
+            {
+                music.Stop();
+                btnAudio.BackgroundImage = Properties.Resources.audio_off;
+                AudioOn = false;
+            }
+            else
+            {
+                music.PlayLooping();
+                btnAudio.BackgroundImage = Properties.Resources.audio_on;
+                AudioOn = true;
+            }
+        }
+
+        private void btnNextMusic_Click(object sender, EventArgs e)
+        {
+            if (SelectedbtnMusic == 0)
+                SelectedbtnMusic = 1;
+            else
+                SelectedbtnMusic = 0;
+            ChangeSoundtrack();
+        }
+
+        private void btnPrevMusic_Click(object sender, EventArgs e)
+        {
+            if (SelectedbtnMusic == 0)
+                SelectedbtnMusic = 1;
+            else
+                SelectedbtnMusic = 0;
+            ChangeSoundtrack();
+        }
+
+        private void ChangeSoundtrack()
+        {
+            music.Stop();
+            switch (SelectedbtnMusic)
+            {
+                case 0:
+                    music.Stream = Properties.Resources._02_XCOM2_First_Flight;
+                    lblMusic.Text = "musique 1";
+                    break;
+                case 1:
+                    music.Stream = Properties.Resources._08_XCOM2_Squad_Loadout;
+                    lblMusic.Text = "musique 2";
+                    break;
+            }
+            music.Load();
+            if (AudioOn)
+                music.PlayLooping();
         }
     }
 }
