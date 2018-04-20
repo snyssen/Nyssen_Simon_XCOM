@@ -138,12 +138,6 @@ namespace Nyssen_Simon_XCOM
                 }
             }
 
-            // DEBUG
-            /*
-            if (SelectedbtnIndex == 3)
-                MessageBox.Show("Vous devez sélectionner un champs de bataille !");
-            */
-
             else
             {
                 if (MessageBox.Show("Voici les paramètres de cette partie :\n Taille de l'escouade : " + tbNbrSoldats.Value + " soldats dont\n   " + cbFantassin.SelectedItem + " fantassins\n   " + cbSniper.SelectedItem + " Tireurs d'élite\n   " + cbLourd.SelectedItem + " Soldats lourds\n   " + cbLeger.SelectedItem + " Soldats léger.\n\nVoulez-vous lancer la partie ?", "Confirmez le lancement de la partie", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)

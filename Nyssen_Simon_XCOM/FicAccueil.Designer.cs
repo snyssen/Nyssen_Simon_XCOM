@@ -52,6 +52,7 @@
             // 
             // btnExit
             // 
+            this.btnExit.Font = new System.Drawing.Font("Gabriola", 15.75F, System.Drawing.FontStyle.Bold);
             this.btnExit.Location = new System.Drawing.Point(4, 134);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(341, 59);
@@ -62,6 +63,7 @@
             // 
             // btnLoadGame
             // 
+            this.btnLoadGame.Font = new System.Drawing.Font("Gabriola", 15.75F, System.Drawing.FontStyle.Bold);
             this.btnLoadGame.Location = new System.Drawing.Point(4, 69);
             this.btnLoadGame.Name = "btnLoadGame";
             this.btnLoadGame.Size = new System.Drawing.Size(341, 59);
@@ -72,6 +74,7 @@
             // 
             // btnNewGame
             // 
+            this.btnNewGame.Font = new System.Drawing.Font("Gabriola", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNewGame.Location = new System.Drawing.Point(4, 4);
             this.btnNewGame.Name = "btnNewGame";
             this.btnNewGame.Size = new System.Drawing.Size(341, 59);
@@ -97,11 +100,13 @@
             // 
             // btnAide
             // 
+            this.btnAide.Font = new System.Drawing.Font("Gabriola", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAide.Location = new System.Drawing.Point(13, 222);
             this.btnAide.Name = "btnAide";
             this.btnAide.Size = new System.Drawing.Size(106, 29);
             this.btnAide.TabIndex = 2;
             this.btnAide.Text = "Comment Jouer";
+            this.btnAide.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnAide.UseVisualStyleBackColor = true;
             this.btnAide.Click += new System.EventHandler(this.btnAide_Click);
             // 

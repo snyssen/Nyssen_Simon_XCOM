@@ -39,7 +39,7 @@ namespace Nyssen_Simon_XCOM
                     break;
                 case 1: // Sniper
                     this._damage = 6;
-                    this._precision = 7;
+                    this._precision = 6;
                     this._HP = 8;
                     this._evasion = 5;
                     this._mobility = 4;
@@ -73,7 +73,7 @@ namespace Nyssen_Simon_XCOM
                     this._damage = 5;
                     this._precision = 5;
                     this._evasion = 4;
-                    this._mobility = 5;
+                    this._mobility = 6;
                     break;
                 case 1: // Sniper
                     this._damage = 6;
@@ -84,7 +84,7 @@ namespace Nyssen_Simon_XCOM
                 case 2: // Lourd
                     this._damage = 4;
                     this._precision = 3;
-                    this._evasion = 2;
+                    this._evasion = 3;
                     this._mobility = 3;
                     break;
                 case 3: // Leger
@@ -138,11 +138,17 @@ namespace Nyssen_Simon_XCOM
         {
             if (target.DefenseCalc() < 0)
                 return (int)target.DefenseCalc();
-            float chance = (this._precision / (DistanceCalc(target.position) * target.DefenseCalc())) * 1000;
-            // DEBUG
-            //float chance = 100;
+            float chance = (this._precision / ((DistanceCalc(target.position) * 2) * target.DefenseCalc())) * 1000;
+
+            //Un seul nombre "aléatoire" ne semblait pas donner de nombres réellement aléatoires, je fais donc une moyenne de 3 jets
+            int tir1 = this.tir.Next(0, 101);
+            int tir2 = this.tir.Next(0, 101);
+            int tir3 = this.tir.Next(0, 101);
+            float tirfinal = (tir1 + tir2 + tir3) / 3;
+
             Console.WriteLine("chance de toucher : " + chance);
-            if (this.tir.Next(0, 101) <= chance)
+            Console.WriteLine("Jet : " + tirfinal);
+            if (tirfinal <= chance)
             {
                 target.HP = this._damage;
                 this.played = true;
@@ -187,13 +193,13 @@ namespace Nyssen_Simon_XCOM
             switch (this.position.Cover)
             {
                 case 0:
-                    defense = (float)(this._evasion * 0.1);
+                    defense = (float)(this._evasion * 0.8);
                     break;
                 case 1:
-                    defense = (float)(this._evasion * 1.5);
+                    defense = (float)(this._evasion * 2);
                     break;
                 case 2:
-                    defense = this._evasion * 2;
+                    defense = this._evasion * 5/2;
                     break;
                 default:
                     defense = -1;
@@ -221,6 +227,8 @@ namespace Nyssen_Simon_XCOM
                            "\n\t- Précision = " + this._precision +
                            "\n\t- Esquive = " + this._evasion +
                            "\n\t- Mobilité = " + this._mobility + " cases";
+            stats += "\nLa case sur laquelle se trouve ce soldat a un niveau de protection ";
+            stats += (this.position.Cover == 0) ? "inexistant." : ((this.position.Cover == 1) ? "moyen." : "élevé.");
             stats += (covered) ? "\nCe soldat a renforcé sa position et dispose d'un bonus à l'esquive." : "";
             stats += (played) ? "\nCe soldat a déjà joué." : "\nCe soldat doit encore jouer.";
             return stats;

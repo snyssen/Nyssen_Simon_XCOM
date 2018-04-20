@@ -13,13 +13,15 @@ namespace Nyssen_Simon_XCOM
     public partial class EcranAction : Form
     {
         public int Choix = 3; // Change selon le choix de l'utilisateur :
-                                                                        // 0 = Déplacement
-                                                                        // 1 = Renforcement de la position
-                                                                        // 2 = Tirer
-                                                                        // 3 = Indéfini => annulation
-        public EcranAction()
+                              // 0 = Déplacement
+                              // 1 = Renforcement de la position
+                              // 2 = Tirer
+                              // 3 = Indéfini => annulation
+        private bool First;
+        public EcranAction(bool _first)
         {
             InitializeComponent();
+            this.First = _first;
         }
 
         private void btnMoving_Click(object sender, EventArgs e)
@@ -36,8 +38,13 @@ namespace Nyssen_Simon_XCOM
 
         private void btnFiring_Click(object sender, EventArgs e)
         {
-            Choix = 2;
-            this.Close();
+            if (this.First)
+                MessageBox.Show("Vous ne pouvez pas tirer au premier tour !");
+            else
+            {
+                Choix = 2;
+                this.Close();
+            }
         }
     }
 }

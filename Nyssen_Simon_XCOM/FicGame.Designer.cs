@@ -34,16 +34,16 @@
             this.tsInfo = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsNbrSoldatsJoue = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsAvancement = new System.Windows.Forms.ToolStripProgressBar();
+            this.tsTour = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsBarreOutils = new System.Windows.Forms.ToolStrip();
             this.tsFichier = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsfSauvegarder = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsfCharger = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsfRetourMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.tsfQuitter = new System.Windows.Forms.ToolStripMenuItem();
             this.pbCase = new System.Windows.Forms.PictureBox();
             this.pbCarte = new System.Windows.Forms.PictureBox();
             this.ttInfos = new System.Windows.Forms.ToolTip(this.components);
             this.dlgSauvegarder = new System.Windows.Forms.SaveFileDialog();
-            this.tsTour = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1.SuspendLayout();
             this.tsBarreOutils.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbCase)).BeginInit();
@@ -81,6 +81,12 @@
             this.tsAvancement.Size = new System.Drawing.Size(100, 16);
             this.tsAvancement.Step = 1;
             // 
+            // tsTour
+            // 
+            this.tsTour.Name = "tsTour";
+            this.tsTour.Size = new System.Drawing.Size(31, 17);
+            this.tsTour.Text = "Tour";
+            // 
             // tsBarreOutils
             // 
             this.tsBarreOutils.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -96,7 +102,7 @@
             this.tsFichier.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.tsFichier.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsfSauvegarder,
-            this.tsfCharger,
+            this.tsfRetourMenu,
             this.tsfQuitter});
             this.tsFichier.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsFichier.Name = "tsFichier";
@@ -106,21 +112,21 @@
             // tsfSauvegarder
             // 
             this.tsfSauvegarder.Name = "tsfSauvegarder";
-            this.tsfSauvegarder.Size = new System.Drawing.Size(139, 22);
+            this.tsfSauvegarder.Size = new System.Drawing.Size(208, 22);
             this.tsfSauvegarder.Text = "Sauvegarder";
             this.tsfSauvegarder.Click += new System.EventHandler(this.tsfSauvegarder_Click);
             // 
-            // tsfCharger
+            // tsfRetourMenu
             // 
-            this.tsfCharger.Name = "tsfCharger";
-            this.tsfCharger.Size = new System.Drawing.Size(139, 22);
-            this.tsfCharger.Text = "Charger";
-            this.tsfCharger.Click += new System.EventHandler(this.tsfCharger_Click);
+            this.tsfRetourMenu.Name = "tsfRetourMenu";
+            this.tsfRetourMenu.Size = new System.Drawing.Size(208, 22);
+            this.tsfRetourMenu.Text = "Retour au menu principal";
+            this.tsfRetourMenu.Click += new System.EventHandler(this.tsfRetourMenu_Click);
             // 
             // tsfQuitter
             // 
             this.tsfQuitter.Name = "tsfQuitter";
-            this.tsfQuitter.Size = new System.Drawing.Size(139, 22);
+            this.tsfQuitter.Size = new System.Drawing.Size(208, 22);
             this.tsfQuitter.Text = "Quitter";
             this.tsfQuitter.Click += new System.EventHandler(this.tsfQuitter_Click);
             // 
@@ -154,12 +160,6 @@
             // dlgSauvegarder
             // 
             this.dlgSauvegarder.DefaultExt = "sav";
-            // 
-            // tsTour
-            // 
-            this.tsTour.Name = "tsTour";
-            this.tsTour.Size = new System.Drawing.Size(118, 17);
-            this.tsTour.Text = "toolStripStatusLabel1";
             // 
             // EcranGame
             // 
@@ -200,7 +200,7 @@
         private System.Windows.Forms.ToolStrip tsBarreOutils;
         private System.Windows.Forms.ToolStripDropDownButton tsFichier;
         private System.Windows.Forms.ToolStripMenuItem tsfSauvegarder;
-        private System.Windows.Forms.ToolStripMenuItem tsfCharger;
+        private System.Windows.Forms.ToolStripMenuItem tsfRetourMenu;
         private System.Windows.Forms.ToolStripMenuItem tsfQuitter;
         private System.Windows.Forms.ToolTip ttInfos;
         private System.Windows.Forms.SaveFileDialog dlgSauvegarder;

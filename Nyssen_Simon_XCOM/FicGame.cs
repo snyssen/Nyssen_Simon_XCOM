@@ -31,13 +31,15 @@ namespace Nyssen_Simon_XCOM
         List<Soldat> Soldiers1 = new List<Soldat>(); // Soldats du joueur 1 ENCORE EN VIE
         List<Soldat> Soldiers2 = new List<Soldat>(); // Soldats du joueur 2 ENCORE EN VIE
         private bool First = true; // Premier lancement
+        private bool FirstTurn; // Premier tour (permet d'attendre que les deux joueurs aient passé leur premier tour avant de pouvoir tirer (lors d'une nouvelle partie))
         private bool ActionEnCours = false; // Une action est-elle en cours (déplacement ou tir)
         private bool HasClicked = false; // Case sélectionnée durant une action => On veut désactiver le FindLocation() de l'event pbCarte_MouseMove()
         private bool Joueur1Joue = true; // Indique quel joueur joue -> si vrai, c'est le joueur 1, si faux c'est le joueur 2
         private short FinPartie = 0; // Indique 0 si la partie est toujours en cours, 1 si le joueur 1 a gagné et 2 si le joueur 2 a gagné
         private bool saved = false; // Vraie si la partie a été sauvegardée et qu'il n'y a pas eu de modif depuis, sinon fausse.
+        public bool Relaunch = false; // Mis à vrai si on veut relancer une nouvelle partie (ou en charger une précédente) = > Renvoie au menu principal.
 
-        public EcranGame(short Index, int NbrFant, int NbrSnip, int NbrLd, int NbrLg)
+        public EcranGame(short Index, int NbrFant, int NbrSnip, int NbrLd, int NbrLg) // Constructeur pour une nouvelle partie
         {
             InitializeComponent();
 
@@ -49,6 +51,7 @@ namespace Nyssen_Simon_XCOM
             this.NbrSoldats = NbrFantassins + NbrSnipers + NbrLourds + NbrLegers;
             this.NbrSoldatsJ1 = this.NbrSoldatsJ2 = this.NbrSoldats;
             this.NbrSoldatsJoues = 0;
+            this.FirstTurn = true;
 
             CreationPartie();
 
@@ -129,12 +132,13 @@ namespace Nyssen_Simon_XCOM
 
         public EcranGame(short Index, bool TourJoueur, 
             List<int> classes_J1, List<bool> covered_J1, List<int> HP_J1, List<bool> alive_J1, List<bool> played_J1, List<int> IndexX_J1, List<int> IndexY_J1, 
-            List<int> classes_J2, List<bool> covered_J2, List<int> HP_J2, List<bool> alive_J2, List<bool> played_J2, List<int> IndexX_J2, List<int> IndexY_J2)
+            List<int> classes_J2, List<bool> covered_J2, List<int> HP_J2, List<bool> alive_J2, List<bool> played_J2, List<int> IndexX_J2, List<int> IndexY_J2) // Constructeur pour charger une partie
         {
             InitializeComponent();
 
             this.SelectedbtnIndex = Index;
             this.Joueur1Joue = TourJoueur;
+            this.FirstTurn = false;
 
             this.NbrSoldats = classes_J1.Count;
             this.NbrFantassins = this.NbrSnipers = this.NbrLourds = this.NbrLegers = this.NbrSoldatsJ1 = this.NbrSoldatsJ2 = this.NbrSoldatsJoues = 0;
@@ -237,9 +241,9 @@ namespace Nyssen_Simon_XCOM
             }
         }
 
-        private void CreationPartie()
+        private void CreationPartie() // Création de la partie, instructions communes aux deux constructeurs
         {
-            tsInfo.Text = "";
+            tsInfo.Text = "Sélectionnez un soldat à jouer";
             tsTour.Text = "Tour du joueur 1";
             dlgSauvegarder.Filter = "Fichier de sauvegarde|*.sav|Tous fichiers|*.*";
             pbCase.Parent = pbCarte;
@@ -292,7 +296,7 @@ namespace Nyssen_Simon_XCOM
                 Close();
         }
 
-        private void RemplirTabCases()
+        private void RemplirTabCases() // Remplis le tableau de case. Est utilisé au lancement de la partie pour initialiser l'échiquier, et est rappelé à chaque fois qu'on change la taille de la fenêtre pour que la taille des cases soit adaptées
         {
             int Longueur = pbCarte.Width;
             int Hauteur = pbCarte.Height;
@@ -354,14 +358,20 @@ namespace Nyssen_Simon_XCOM
             }
         }
 
-        private void ChangeTour()
+        private void ChangeTour() // Change le tour
         {
             if (Joueur1Joue)
+            {
                 foreach (Soldat soldier in Soldiers2)
                     soldier.covered = false;
+            }
             else
+            {
                 foreach (Soldat soldier in Soldiers1)
                     soldier.covered = false;
+                FirstTurn = false;
+            }
+                
             Joueur1Joue = !Joueur1Joue;
             tsTour.Text = Joueur1Joue ? "Tour du joueur 1" : "Tour du joueur 2";
         }
@@ -379,7 +389,7 @@ namespace Nyssen_Simon_XCOM
             }
         }
 
-        private void FindLocation(int posX, int posY) // VERIFIER LIBERATION DE MEMOIRE
+        private void FindLocation(int posX, int posY) // Détermine la case sur laquelle on se trouve à partir de coordonnées posX, posY. Renvoie cette position en changeant IndexX et IndexY
         {
             bool Trouve = false;
             for (int x = 0; x < 10; x++) // Colonnes
@@ -402,6 +412,7 @@ namespace Nyssen_Simon_XCOM
             }
             
             /*
+            // DEBUG
             if (!Trouve)
                 tsInfo.Text = "ERREUR : case non trouvée ! pos souris = " + posX + " " + posY;
             else
@@ -409,7 +420,7 @@ namespace Nyssen_Simon_XCOM
             */
         }
 
-        private void ShowCover(Case_Echiquier caseactu) // VERIFIER LIBERATION DE MEMOIRE
+        private void ShowCover(Case_Echiquier caseactu) // Change l'image de pbCase pour refléter le niveau de couverture de la case entrée en argument et replace cette PB sur la case
         {
             Boolean Error = false;
 
@@ -434,12 +445,12 @@ namespace Nyssen_Simon_XCOM
             {
                 pbCase.Width = Cases[IndexX, IndexY].Xmax - Cases[IndexX, IndexY].posX;
                 pbCase.Height = Cases[IndexX, IndexY].Ymax - Cases[IndexX, IndexY].posY;
-                pbCase.Location = new Point(Cases[IndexX, IndexY].posX, Cases[IndexX, IndexY].posY);
+                pbCase.Location = Cases[IndexX, IndexY].Origin;
                 pbCase.Visible = true;
             }
         }
 
-        private void LoadCover()
+        private void LoadCover() // Génère les niveaux de couvertures de toutes les cases en fonction de la carte qui a été choisie
         {
             switch (SelectedbtnIndex)
             {
@@ -756,7 +767,7 @@ namespace Nyssen_Simon_XCOM
             }
         }
 
-        private void DoAction(List<PictureBox> SoldiersIcons, List<Soldat> Soldiers, object sender)
+        private void DoAction(List<PictureBox> SoldiersIcons, List<Soldat> Soldiers, object sender) // Permet d'effectuer une action. 2 cas principaux : Il n'y a pas d'action en cours => On en choisit une OU il y a déjà une action en cours => on finit cette action
         {
             if (!ActionEnCours) // Pas encore d'action en cours => Sélection du soldat pour en choisir une
             {
@@ -779,7 +790,7 @@ namespace Nyssen_Simon_XCOM
                     if (!Soldiers[Index].played)
                     {
                         ActionEnCours = true;
-                        EcranAction Eaction = new EcranAction();
+                        EcranAction Eaction = new EcranAction(this.FirstTurn);
                         Eaction.ShowDialog();
                         switch (Eaction.Choix)
                         {
@@ -911,6 +922,7 @@ namespace Nyssen_Simon_XCOM
                 else
                     MessageBox.Show("ERREUR : Index négatif ! Impossible de sélectionner le soldat !", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
             else // Action en cours => Sélection du soldat pour lui appliquer une action (lancée par un autre soldat)
             {
                 if (!HasClicked)
@@ -934,7 +946,9 @@ namespace Nyssen_Simon_XCOM
             Gagne();
             if (FinPartie != 0)
             {
-                MessageBox.Show("Le joueur " + (FinPartie == 1 ? "1 " : "2 ") + "gagne la partie !", "Fin de la partie", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                if (MessageBox.Show("Le joueur " + (FinPartie == 1 ? "1 " : "2 ") + "gagne la partie !\n\n Voulez-vous retourner au menu principal ?", "Fin de la partie", MessageBoxButtons.YesNo, MessageBoxIcon.None) == DialogResult.Yes)
+                    this.Relaunch = true;
+                this.saved = true;
                 this.Close();
             }
             else
@@ -956,9 +970,10 @@ namespace Nyssen_Simon_XCOM
                     }
                 }
             }
+            tsInfo.Text = "Sélectionnez un soldat à jouer";
         }
 
-        private void DessinerEchiquier()
+        private void DessinerEchiquier() // Dessine toutes les cases de l'échiquier sur la carte
         {
             foreach (Case_Echiquier c in Cases)
             {
@@ -966,34 +981,34 @@ namespace Nyssen_Simon_XCOM
             }
         }
 
-        public void DessinerEtats()
+        public void DessinerEtats() // Dessine les indicateurs d'états des différents soldats. Etats = 1) appartenance et 2) A déjà joué ou non
         {
             for (int i = 0; i < SoldiersIcons1.Count; i++)
             {
-                if (Soldiers1[i].alive)
+                if (Soldiers1[i].alive) // Soldats du joueurs 1. On ne dessine que sur les soldats encore en vie
                 {
                     Graphics grS1 = Graphics.FromHwnd(SoldiersIcons1[i].Handle);
-                    grS1.FillEllipse(new SolidBrush(Color.Yellow), SoldiersIcons1[i].Width / 10, SoldiersIcons1[i].Height / 10, SoldiersIcons1[i].Width / 10, SoldiersIcons1[i].Height / 10);
+                    grS1.FillEllipse(new SolidBrush(Color.Yellow), SoldiersIcons1[i].Width / 10, SoldiersIcons1[i].Height / 10, SoldiersIcons1[i].Width / 10, SoldiersIcons1[i].Height / 10); // Rond jaune pour indiquer l'appartenance au J1
                     if (Soldiers1[i].played)
                     {
-                        grS1.FillEllipse(new SolidBrush(Color.Red), 9 * SoldiersIcons1[i].Width / 10, SoldiersIcons1[i].Height / 10, SoldiersIcons1[i].Width / 10, SoldiersIcons1[i].Height / 10);
+                        grS1.FillEllipse(new SolidBrush(Color.Red), 9 * SoldiersIcons1[i].Width / 10, SoldiersIcons1[i].Height / 10, SoldiersIcons1[i].Width / 10, SoldiersIcons1[i].Height / 10); // Rond rouge si il a déjà joué
                     }
                     else
                     {
-                        grS1.FillEllipse(new SolidBrush(Color.Green), 9 * SoldiersIcons1[i].Width / 10, SoldiersIcons1[i].Height / 10, SoldiersIcons1[i].Width / 10, SoldiersIcons1[i].Height / 10);
+                        grS1.FillEllipse(new SolidBrush(Color.Green), 9 * SoldiersIcons1[i].Width / 10, SoldiersIcons1[i].Height / 10, SoldiersIcons1[i].Width / 10, SoldiersIcons1[i].Height / 10); // Rond vert si il doit encore jouer
                     }
                 }
-                if (Soldiers2[i].alive)
+                if (Soldiers2[i].alive) // Soldats du joueurs 2
                 {
                     Graphics grS1 = Graphics.FromHwnd(SoldiersIcons2[i].Handle);
-                    grS1.FillEllipse(new SolidBrush(Color.Violet), SoldiersIcons2[i].Width / 10, SoldiersIcons2[i].Height / 10, SoldiersIcons2[i].Width / 10, SoldiersIcons2[i].Height / 10);
+                    grS1.FillEllipse(new SolidBrush(Color.Violet), SoldiersIcons2[i].Width / 10, SoldiersIcons2[i].Height / 10, SoldiersIcons2[i].Width / 10, SoldiersIcons2[i].Height / 10); // Rond violet (apparaît rose à l'écran pour une raison inconnue) pour indiquer l'appartenance au J2
                     if (Soldiers2[i].played)
                     {
-                        grS1.FillEllipse(new SolidBrush(Color.Red), 9 * SoldiersIcons2[i].Width / 10, SoldiersIcons2[i].Height / 10, SoldiersIcons2[i].Width / 10, SoldiersIcons2[i].Height / 10);
+                        grS1.FillEllipse(new SolidBrush(Color.Red), 9 * SoldiersIcons2[i].Width / 10, SoldiersIcons2[i].Height / 10, SoldiersIcons2[i].Width / 10, SoldiersIcons2[i].Height / 10); // Rond rouge si il a déjà joué
                     }
                     else
                     {
-                        grS1.FillEllipse(new SolidBrush(Color.Green), 9 * SoldiersIcons2[i].Width / 10, SoldiersIcons2[i].Height / 10, SoldiersIcons2[i].Width / 10, SoldiersIcons2[i].Height / 10);
+                        grS1.FillEllipse(new SolidBrush(Color.Green), 9 * SoldiersIcons2[i].Width / 10, SoldiersIcons2[i].Height / 10, SoldiersIcons2[i].Width / 10, SoldiersIcons2[i].Height / 10); // Rond vert si il doit encore jouer
                     }
                 }
             }
@@ -1010,7 +1025,7 @@ namespace Nyssen_Simon_XCOM
 
         private void SoldiersIcons1_Click(object sender, EventArgs e) // On clique sur un soldat du joueur 1
         {
-            if (Joueur1Joue || ActionEnCours)
+            if (Joueur1Joue || ActionEnCours) // Joueur 1 joue => On sélectionne le soldat pour lui demander une action OU Joueur 2 joue mais Action en cours => ce soldat est ciblé par un tir ennemi
                 DoAction(SoldiersIcons1, Soldiers1, sender);
             else
                 MessageBox.Show("C'est au tour du joueur 2 de jouer !", "Action impossible", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -1018,15 +1033,15 @@ namespace Nyssen_Simon_XCOM
 
         private void SoldiersIcons2_Click(object sender, EventArgs e) // On clique sur un soldat du joueur 2
         {
-            if (!Joueur1Joue || ActionEnCours) 
+            if (!Joueur1Joue || ActionEnCours)  // Joueur 2 joue => On sélectionne le soldat pour lui demander une action OU Joueur 1 joue mais Action en cours => ce soldat est ciblé par un tir ennemi
                 DoAction(SoldiersIcons2, Soldiers2, sender);
             else
                 MessageBox.Show("C'est au tour du joueur 1 de jouer !", "Action impossible", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
-        private void pbCase_Click(object sender, EventArgs e)
+        private void pbCase_Click(object sender, EventArgs e) // On clique sur une case (qui est alors obscurcie par la pbCase qui affiche son niveau de couverture)
         {
-            if (ActionEnCours)
+            if (ActionEnCours) // Action en cours => On veut se rendre sur une case OU tirer sur un soldat. Dans les deux cas l'événement relève la position, DoAction() choisit ce qu'il en fait
             {
                 try
                 {
@@ -1041,18 +1056,18 @@ namespace Nyssen_Simon_XCOM
             }
         }
 
-        private void EcranGame_FormClosed(object sender, FormClosedEventArgs e)
+        private void EcranGame_FormClosed(object sender, FormClosedEventArgs e) // Juste une assurance que tout est bien supprimé, normalement pas nécessaire
         {
             this.Dispose();
         }
 
-        private void pbCarte_Paint(object sender, PaintEventArgs e)
+        private void pbCarte_Paint(object sender, PaintEventArgs e) // Dessine ce qu'il faut
         {
             DessinerEchiquier();
             DessinerEtats();
         }
 
-        private void EcranGame_Resize(object sender, EventArgs e)
+        private void EcranGame_Resize(object sender, EventArgs e) // On change la taille de la fenêtre => Il faut redéfinir les cases et redessiner
         {
             RemplirTabCases();
             Invalidate();
@@ -1063,46 +1078,47 @@ namespace Nyssen_Simon_XCOM
             Sauvegarde();
         }
 
-        private void tsfQuitter_Click(object sender, EventArgs e)
+        private void tsfQuitter_Click(object sender, EventArgs e) // On appuie sur le bouton "Quitter" => On ferme la fenêtre
         {
             Close();
         }
 
-        private void EcranGame_FormClosing(object sender, FormClosingEventArgs e)
+        private void EcranGame_FormClosing(object sender, FormClosingEventArgs e) // En cas de fermeture sans sauvegarde, on s'assure de ce que veut l'utilisateur
         {
-            if (!error)
+            if (!error) // On ne veut pas interrompre la fermeture de la fenêtre si elle est dûe à une erreur
             {
-                if (!saved)
+                if (!saved) // Si la partie n'est pas sauvegarder on demande à l'utilisateur si il veut : 1) Sauvegarder avant de quitter 2) Quitter sans sauvegarder 3) Annuler => Annule la fermeture et la partie continue
                 {
                     DialogResult message = MessageBox.Show("Voulez vous sauvegarder la partie avant de quitter ?", "Confirmer", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-                    if (message == DialogResult.Yes)
+                    if (message == DialogResult.Yes) // 1) 
                         Sauvegarde();
-                    else
+                    else // 2) ou 3)
                     {
-                        if (message == DialogResult.Cancel)
+                        if (message == DialogResult.Cancel) // 3)
                             e.Cancel = true;
                     }
                 }
             }
         }
 
-        private void tsfCharger_Click(object sender, EventArgs e)
+        private void tsfRetourMenu_Click(object sender, EventArgs e) // Permet de retourner au menu principal
         {
-            MessageBox.Show("Fonction non implémentée...");
+            this.Relaunch = true;
+            this.Close();
         }
 
-        public void Sauvegarde()
+        public void Sauvegarde() // Sauvegarde la partie dans un fichier d'extension .sav. Ce fichier est un pseudo CSV, on utilise des ";" pour séparer les variables et des lignes vides pour séparer les classes. Le texte est en clair dans le fichier.
         {
             if (dlgSauvegarder.ShowDialog() == DialogResult.OK)
             {
                 StreamWriter sw = new StreamWriter(dlgSauvegarder.FileName);
                 sw.WriteLine(Joueur1Joue + ";" + SelectedbtnIndex); // Qui joue et sur quelle map
-                sw.WriteLine("");
+                sw.WriteLine(""); // On sépare avec une ligne vide
                 foreach (Soldat soldier in Soldiers1)
                 {
                     sw.WriteLine(soldier.classe + ";" + soldier.covered + ";" + soldier.HP + ";" + soldier.alive + ";" + soldier.played + ";" + soldier.position.IndexX + ";" + soldier.position.IndexY);
                 }
-                sw.WriteLine("");
+                sw.WriteLine(""); // On sépare avec une ligne vide
                 foreach (Soldat soldier in Soldiers2)
                 {
                     sw.WriteLine(soldier.classe + ";" + soldier.covered + ";" + soldier.HP + ";" + soldier.alive + ";" + soldier.played + ";" + soldier.position.IndexX + ";" + soldier.position.IndexY);
