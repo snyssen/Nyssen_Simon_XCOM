@@ -227,10 +227,13 @@ namespace Nyssen_Simon_XCOM
                            "\n\t- Précision = " + this._precision +
                            "\n\t- Esquive = " + this._evasion +
                            "\n\t- Mobilité = " + this._mobility + " cases";
-            stats += "\nLa case sur laquelle se trouve ce soldat a un niveau de protection ";
-            stats += (this.position.Cover == 0) ? "inexistant." : ((this.position.Cover == 1) ? "moyen." : "élevé.");
-            stats += (covered) ? "\nCe soldat a renforcé sa position et dispose d'un bonus à l'esquive." : "";
-            stats += (played) ? "\nCe soldat a déjà joué." : "\nCe soldat doit encore jouer.";
+            if (position != null)
+            {
+                stats += "\nLa case sur laquelle se trouve ce soldat a un niveau de protection ";
+                stats += (this.position.Cover == 0) ? "inexistant." : ((this.position.Cover == 1) ? "moyen." : "élevé.");
+                stats += (covered) ? "\nCe soldat a renforcé sa position et dispose d'un bonus à l'esquive." : "";
+                stats += (played) ? "\nCe soldat a déjà joué." : "\nCe soldat doit encore jouer.";
+            }
             return stats;
         }
         #endregion

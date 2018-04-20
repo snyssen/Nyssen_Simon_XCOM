@@ -25,7 +25,7 @@ namespace Nyssen_Simon_XCOM
         public int NbrLourds;
         public int NbrLegers;
 
-        private bool AudioOn; // true si le son est activé
+        public bool AudioOn; // true si le son est activé
         private SoundPlayer music = new SoundPlayer(Properties.Resources._02_XCOM2_First_Flight);
         private short SelectedbtnMusic = 0; // Index de la musique -> 0 = First Flight
                                             //                     -> 1 = Squad Loadout

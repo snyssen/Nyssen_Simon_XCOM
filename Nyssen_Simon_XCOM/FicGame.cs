@@ -41,7 +41,6 @@ namespace Nyssen_Simon_XCOM
         public bool Relaunch = false; // Mis à vrai si on veut relancer une nouvelle partie (ou en charger une précédente) = > Renvoie au menu principal.
         private bool AudioOn; // vrai si audio actif
         private SoundPlayer music = new SoundPlayer(Properties.Resources._04_XCOM2_Infiltrator); // Musique de fond
-        //private SoundPlayer sounds = new SoundPlayer(); // Sons divers
         private short selectedbtnMusic = 0; // Index de la musique -> 0 = infiltrator
                                             //                     -> 1 = Weapons of Choice
                                             //                     -> 2 = New World Order
@@ -299,7 +298,13 @@ namespace Nyssen_Simon_XCOM
                     SoldiersIcons2[i].Name = "SoldiersIcons2_" + i;
                 }
 
-                music.PlayLooping();
+                if (AudioOn)
+                {
+                    music.PlayLooping();
+                    tsaMuet.Image = Properties.Resources.audio_on;
+                }
+                else
+                    tsaMuet.Image = Properties.Resources.audio_off;
 
                 First = false;
             }

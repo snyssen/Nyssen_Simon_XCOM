@@ -13,6 +13,7 @@ namespace Nyssen_Simon_XCOM
     public partial class EcranAide : Form
     {
         private short BtnIndex;
+        private Soldat[] example = new Soldat[4] { new Soldat(0, null), new Soldat(1, null), new Soldat(2, null), new Soldat(3, null) };
 
         public EcranAide()
         {
@@ -81,45 +82,29 @@ namespace Nyssen_Simon_XCOM
                     pbImage.SizeMode = PictureBoxSizeMode.CenterImage;
                     pbImage.Image = Properties.Resources.Fantassin;
                     lblInfos.Text = "Le fantassin :\n" +
-                        "Le fantassin est le soldat de base de l'escouade; il dispose de statistiques équilibrées :\n" +
-                        "- Dégâts = 5\n" +
-                        "- Précision = 5\n" +
-                        "- Points de vie = 10\n" +
-                        "- Evasion = 4\n" +
-                        "- Mobilité = 5 cases";
+                        "Le fantassin est le soldat de base de l'escouade, il est paré à n'importe quelle situation. ";
+                    lblInfos.Text += example[0].AfficherStats();
                     break;
                 case 7:
                     pbImage.SizeMode = PictureBoxSizeMode.CenterImage;
                     pbImage.Image = Properties.Resources.Sniper;
                     lblInfos.Text = "Le sniper :\n" +
-                        "Le sniper est un tireur d'élite; Il est très précis et inflige beaucoup de dégâts, mais manque de mobilité, d'évasion et de points de vie :\n" +
-                        "- Dégâts = 6\n" +
-                        "- Précision = 7\n" +
-                        "- Points de vie = 8\n" +
-                        "- Evasion = 5\n" +
-                        "- Mobilité = 4 cases";
+                        "Le sniper est un tireur d'élite; Il est très précis et inflige beaucoup de dégâts, mais manque de mobilité, d'évasion et de points de vie. ";
+                    lblInfos.Text += example[1].AfficherStats();
                     break;
                 case 8:
                     pbImage.SizeMode = PictureBoxSizeMode.CenterImage;
                     pbImage.Image = Properties.Resources.Lourd;
                     lblInfos.Text = "Le soldat lourd :\n" +
-                        "Le soldat lourd est un soldat équipé d'une armure exosquelette qui lui permet d'absorber de gros dégâts; ainsi, il dispose de beaucoup de points de vie, mais souffre d'une mauvaise précision, évasion et mobilité :\n" +
-                        "- Dégâts = 4\n" +
-                        "- Précision = 3\n" +
-                        "- Points de vie = 15\n" +
-                        "- Evasion = 2\n" +
-                        "- Mobilité = 3 cases";
+                        "Le soldat lourd est un soldat équipé d'une armure exosquelette qui lui permet d'absorber de gros dégâts; ainsi, il dispose de beaucoup de points de vie, mais souffre d'une mauvaise précision, évasion et mobilité. ";
+                    lblInfos.Text += example[2].AfficherStats();
                     break;
                 case 9:
                     pbImage.SizeMode = PictureBoxSizeMode.CenterImage;
                     pbImage.Image = Properties.Resources.Leger;
                     lblInfos.Text = "Le soldat léger :\n" +
-                        "Le soldat léger est un soldat équipé d'une armure légère, ce qui lui permet de se déplacer plus librement; en effet, il dispose d'une mobilité et d'une évasion accrue, mais sacrifie ses dégâts et ses points de vie :\n" +
-                        "- Dégâts = 4\n" +
-                        "- Précision = 4\n" +
-                        "- Points de vie = 5\n" +
-                        "- Evasion = 8\n" +
-                        "- Mobilité = 8 cases";
+                        "Le soldat léger est utilise un équipement allégé, ce qui lui permet de se déplacer plus librement; en effet, il dispose d'une mobilité et d'une évasion accrue, mais sacrifie ses dégâts et ses points de vie. ";
+                    lblInfos.Text += example[3].AfficherStats();
                     break;
                 case 10:
                     pbImage.SizeMode = PictureBoxSizeMode.StretchImage;
