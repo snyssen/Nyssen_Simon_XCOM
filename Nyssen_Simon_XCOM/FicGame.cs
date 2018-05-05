@@ -41,6 +41,7 @@ namespace Nyssen_Simon_XCOM
         public bool Relaunch = false; // Mis à vrai si on veut relancer une nouvelle partie (ou en charger une précédente) = > Renvoie au menu principal.
         private bool AudioOn; // vrai si audio actif
         private SoundPlayer music = new SoundPlayer(Properties.Resources._04_XCOM2_Infiltrator); // Musique de fond
+        //private SoundPlayer sounds = new SoundPlayer(); // Sons divers // On ne peut pas utiliser 2 SoundPlayer en même temps !
         private short selectedbtnMusic = 0; // Index de la musique -> 0 = infiltrator
                                             //                     -> 1 = Weapons of Choice
                                             //                     -> 2 = New World Order
@@ -825,6 +826,12 @@ namespace Nyssen_Simon_XCOM
                                     {
                                         case 0:
                                             tsInfo.Text = "Soldat déplacé sur la case [" + IndexX + "," + IndexY + "].";
+                                            //if (AudioOn)
+                                            //{
+                                            //    sounds.Stream = Properties.Resources.moving_sound;
+                                            //    sounds.Load();
+                                            //    sounds.Play();
+                                            //}
                                             SoldiersIcons[Index].Location = Soldiers[Index].position.Origin;
                                             ttInfos.SetToolTip(SoldiersIcons[Index], Soldiers[Index].AfficherStats());
                                             tsAvancement.Increment(1);
@@ -876,6 +883,24 @@ namespace Nyssen_Simon_XCOM
                                     MessageBox.Show("ERREUR : cette case n'a pas de niveau de couverture défini !", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 else
                                 {
+                                    //if (AudioOn)
+                                    //{
+                                    //    switch (Soldiers[Index].classe)
+                                    //    {
+                                    //        case 0: // Fantassin
+                                    //        case 2: // Lourd
+                                    //            sounds.Stream = Properties.Resources.firing_heavy;
+                                    //            break;
+                                    //        case 1: // Sniper
+                                    //            sounds.Stream = Properties.Resources.firing_sniper;
+                                    //            break;
+                                    //        case 3: // Leger
+                                    //            sounds.Stream = Properties.Resources.firing_light;
+                                    //            break;
+                                    //    }
+                                    //    sounds.Load();
+                                    //    sounds.Play();
+                                    //}
                                     if (Error == 0)
                                     {
                                         if (Cases[IndexX, IndexY].soldier.alive)

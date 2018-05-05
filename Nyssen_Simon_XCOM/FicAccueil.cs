@@ -69,10 +69,7 @@ namespace Nyssen_Simon_XCOM
                 Setup = true;
             }
             else
-            {
-                AudioOn = !setup.AudioOn;
-                btnAudio_Click(null, null);
-            }
+                music.PlayLooping();
         }
 
         private void btnLoadGame_Click(object sender, EventArgs e)
