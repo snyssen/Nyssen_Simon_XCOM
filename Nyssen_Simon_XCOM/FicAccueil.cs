@@ -14,6 +14,7 @@ namespace Nyssen_Simon_XCOM
 {
     public partial class EcranAccueil : Form
     {
+        #region Données membres
         public bool GameLaunch = false; // Si true, on veut lancer une partie (peu importe que ce soit une nouvelle ou une ancienne); sinon on veut quitter le programme
         public bool Setup = false;      // Si true, on veut lancer une NOUVELLE partie; sinon on veut reprendre une en cours (dépendant dans les deux cas de GameLaunch)
         public bool AudioOn; // true si audio on
@@ -38,7 +39,7 @@ namespace Nyssen_Simon_XCOM
         public List<bool> played_J2;
         public List<int> IndexX_J2;
         public List<int> IndexY_J2;
-
+        #endregion
         public EcranAccueil()
         {
             InitializeComponent();
@@ -48,7 +49,6 @@ namespace Nyssen_Simon_XCOM
             AudioOn = true;
             btnAudio.BackgroundImage = Properties.Resources.audio_on;
         }
-
 
         private void btnExit_Click(object sender, EventArgs e)
         {
@@ -100,12 +100,11 @@ namespace Nyssen_Simon_XCOM
                 while ((lecture = sr.ReadLine()) != "") // Conditions générales de parties
                 {
                     string[] tab = lecture.Split(';');
-                    //(tab[0] == "True") ? (Joueur1Joue = true) : (Joueur1Joue = false);
-                    if (tab[0] == "True")
+                    if (tab[0] == "True") // Tour du joueur
                         Joueur1Joue = true;
                     else
                         Joueur1Joue = false;
-                    SelectedbtnIndex = short.Parse(tab[1]);
+                    SelectedbtnIndex = short.Parse(tab[1]); // Map de la partie
                 }
                 while ((lecture = sr.ReadLine()) != "") // Soldats du joueur 1
                 {
@@ -130,15 +129,6 @@ namespace Nyssen_Simon_XCOM
                     IndexY_J2.Add(int.Parse(tab[6]));
                 }
                 sr.Close();
-                // DEBUG
-                Console.WriteLine("Donnees generales :\n\tJoueur1Jour : " + Joueur1Joue + "\n\tSelectedbtnIndex : " + SelectedbtnIndex);
-                Console.WriteLine("\nSoldats du joueur 1 : ");
-                for (int i = 0; i < classes_J1.Count; i++)
-                    Console.WriteLine("Soldat " + i + " : \n\tclasse : " + classes_J1[i] + "\n\tcovered : " + covered_J1[i] + "\n\tHP : " + HP_J1[i] + "\n\talive : " + alive_J1[i] + "\n\tplayed : " + played_J1[i] + "\n\tposition : " + IndexX_J1[i] + "," + IndexY_J1[i]);
-                Console.WriteLine("\nSoldats du joueur 2 : ");
-                for (int i = 0; i < classes_J1.Count; i++)
-                    Console.WriteLine("Soldat " + i + " : \n\tclasse : " + classes_J2[i] + "\n\tcovered : " + covered_J2[i] + "\n\tHP : " + HP_J2[i] + "\n\talive : " + alive_J2[i] + "\n\tplayed : " + played_J2[i] + "\n\tposition : " + IndexX_J2[i] + "," + IndexY_J2[i]);
-
                 Close();
             }
         }

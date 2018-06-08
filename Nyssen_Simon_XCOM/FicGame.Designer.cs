@@ -40,17 +40,19 @@
             this.tsfSauvegarder = new System.Windows.Forms.ToolStripMenuItem();
             this.tsfRetourMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.tsfQuitter = new System.Windows.Forms.ToolStripMenuItem();
-            this.ttInfos = new System.Windows.Forms.ToolTip(this.components);
-            this.dlgSauvegarder = new System.Windows.Forms.SaveFileDialog();
             this.tsAudio = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsaMuet = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.musique1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.musique2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.musique3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.musique4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsaMuet = new System.Windows.Forms.ToolStripMenuItem();
+            this.ttInfos = new System.Windows.Forms.ToolTip(this.components);
+            this.dlgSauvegarder = new System.Windows.Forms.SaveFileDialog();
             this.pbCase = new System.Windows.Forms.PictureBox();
             this.pbCarte = new System.Windows.Forms.PictureBox();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsHelp = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1.SuspendLayout();
             this.tsBarreOutils.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbCase)).BeginInit();
@@ -98,7 +100,9 @@
             // 
             this.tsBarreOutils.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsFichier,
-            this.tsAudio});
+            this.tsAudio,
+            this.toolStripSeparator2,
+            this.tsHelp});
             this.tsBarreOutils.Location = new System.Drawing.Point(0, 0);
             this.tsBarreOutils.Name = "tsBarreOutils";
             this.tsBarreOutils.Size = new System.Drawing.Size(500, 25);
@@ -138,10 +142,6 @@
             this.tsfQuitter.Text = "Quitter";
             this.tsfQuitter.Click += new System.EventHandler(this.tsfQuitter_Click);
             // 
-            // dlgSauvegarder
-            // 
-            this.dlgSauvegarder.DefaultExt = "sav";
-            // 
             // tsAudio
             // 
             this.tsAudio.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -156,6 +156,14 @@
             this.tsAudio.Name = "tsAudio";
             this.tsAudio.Size = new System.Drawing.Size(52, 22);
             this.tsAudio.Text = "Audio";
+            // 
+            // tsaMuet
+            // 
+            this.tsaMuet.Image = global::Nyssen_Simon_XCOM.Properties.Resources.audio_on;
+            this.tsaMuet.Name = "tsaMuet";
+            this.tsaMuet.Size = new System.Drawing.Size(180, 22);
+            this.tsaMuet.Text = "audio on";
+            this.tsaMuet.Click += new System.EventHandler(this.tsaMuet_Click);
             // 
             // toolStripSeparator1
             // 
@@ -191,13 +199,9 @@
             this.musique4ToolStripMenuItem.Text = "Musique 4";
             this.musique4ToolStripMenuItem.Click += new System.EventHandler(this.musique4ToolStripMenuItem_Click);
             // 
-            // tsaMuet
+            // dlgSauvegarder
             // 
-            this.tsaMuet.Image = global::Nyssen_Simon_XCOM.Properties.Resources.audio_on;
-            this.tsaMuet.Name = "tsaMuet";
-            this.tsaMuet.Size = new System.Drawing.Size(180, 22);
-            this.tsaMuet.Text = "audio on";
-            this.tsaMuet.Click += new System.EventHandler(this.tsaMuet_Click);
+            this.dlgSauvegarder.DefaultExt = "sav";
             // 
             // pbCase
             // 
@@ -225,6 +229,21 @@
             this.pbCarte.TabStop = false;
             this.pbCarte.Paint += new System.Windows.Forms.PaintEventHandler(this.pbCarte_Paint);
             this.pbCarte.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCarte_MouseMove);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tsHelp
+            // 
+            this.tsHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsHelp.Image = ((System.Drawing.Image)(resources.GetObject("tsHelp.Image")));
+            this.tsHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsHelp.Name = "tsHelp";
+            this.tsHelp.Size = new System.Drawing.Size(23, 22);
+            this.tsHelp.ToolTipText = "Aide";
+            this.tsHelp.Click += new System.EventHandler(this.tsHelp_Click);
             // 
             // EcranGame
             // 
@@ -277,5 +296,7 @@
         private System.Windows.Forms.ToolStripMenuItem musique2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem musique3ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem musique4ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton tsHelp;
     }
 }
