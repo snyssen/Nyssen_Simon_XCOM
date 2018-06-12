@@ -65,6 +65,8 @@ namespace Nyssen_Simon_XCOM
             this.NbrSoldatsJoues = 0;
             this.FirstTurn = true;
 
+            tsTour.Text = "Tour du joueur 1";
+
             CreationPartie();
 
             if (!error)
@@ -192,6 +194,8 @@ namespace Nyssen_Simon_XCOM
                     NbrSoldatsJoues++;
             }
 
+            tsTour.Text = Joueur1Joue ? "Tour du joueur 1" : "Tour du joueur 2";
+
             CreationPartie();
 
             if (!error)
@@ -257,7 +261,6 @@ namespace Nyssen_Simon_XCOM
         private void CreationPartie() // Création de la partie, instructions communes aux deux constructeurs
         {
             tsInfo.Text = "Sélectionnez un soldat à jouer";
-            tsTour.Text = "Tour du joueur 1";
             dlgSauvegarder.Filter = "Fichier de sauvegarde|*.sav|Tous fichiers|*.*";
             pbCase.Parent = pbCarte;
 
