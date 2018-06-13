@@ -47,7 +47,8 @@ namespace Nyssen_Simon_XCOM
                                             //                     -> 1 = Weapons of Choice
                                             //                     -> 2 = New World Order
                                             //                     -> 3 = Ambush
-        private int TimePlayed = 0; // Stocke la durée de la partie (en secondes)
+        private int TimePlayedJ1 = 0; // Temps Joué par le joueur 1
+        private int TimePlayedJ2 = 0; // Temps Joué par le joueur 2
         private int NbrTourJoues = 0; // Nbr de tous joués (1 tour = tous les soldats d'un joueur ont joué)
         private int NbrSoldatsJouesJ1 = 0;
         private int NbrSoldatsJouesJ2 = 0;
@@ -150,7 +151,7 @@ namespace Nyssen_Simon_XCOM
                 Close();
         }
 
-        public EcranGame(bool _audio, short Index, bool TourJoueur, int _TimePlayed, int _NbrTourJoues,
+        public EcranGame(bool _audio, short Index, bool TourJoueur, int _TimePlayedJ1, int _TimePlayedJ2, int _NbrTourJoues,
             List<int> classes_J1, List<bool> covered_J1, List<int> HP_J1, List<bool> alive_J1, List<bool> played_J1, List<int> IndexX_J1, List<int> IndexY_J1,
             List<int> classes_J2, List<bool> covered_J2, List<int> HP_J2, List<bool> alive_J2, List<bool> played_J2, List<int> IndexX_J2, List<int> IndexY_J2) // Constructeur pour charger une partie
         {
@@ -159,7 +160,8 @@ namespace Nyssen_Simon_XCOM
             this.AudioOn = _audio;
             this.SelectedbtnIndex = Index;
             this.Joueur1Joue = TourJoueur;
-            this.TimePlayed = _TimePlayed;
+            this.TimePlayedJ1 = _TimePlayedJ1;
+            this.TimePlayedJ2 = _TimePlayedJ2;
             this.NbrTourJoues = _NbrTourJoues;
             this.FirstTurn = (NbrTourJoues > 1 ? false : true);
 
@@ -1166,7 +1168,7 @@ namespace Nyssen_Simon_XCOM
             if (dlgSauvegarder.ShowDialog() == DialogResult.OK)
             {
                 StreamWriter sw = new StreamWriter(dlgSauvegarder.FileName);
-                sw.WriteLine(Joueur1Joue + ";" + SelectedbtnIndex + ";" + TimePlayed + ";" + NbrTourJoues); // Qui joue et sur quelle map + duree partie + NbrTourJoues
+                sw.WriteLine(Joueur1Joue + ";" + SelectedbtnIndex + ";" + TimePlayedJ1 + ";" + TimePlayedJ2 + ";" + NbrTourJoues); // Qui joue et sur quelle map + duree partie + NbrTourJoues
                 sw.WriteLine(""); // On sépare avec une ligne vide
                 foreach (Soldat soldier in Soldiers1)
                 {
@@ -1305,27 +1307,54 @@ namespace Nyssen_Simon_XCOM
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            TimePlayed++;
-            int TmpTimePlayed = TimePlayed;
-            int Hours = 0, Minutes = 0;
-            if (TmpTimePlayed >= 3600) // Plus d'1 heure
+            if (Joueur1Joue)
             {
-                while (TmpTimePlayed / 3600 >= 1)
+                TimePlayedJ1++;
+                int TmpTimePlayed = TimePlayedJ1;
+                int Hours = 0, Minutes = 0;
+                if (TmpTimePlayed >= 3600) // Plus d'1 heure
                 {
-                    Hours++;
-                    TmpTimePlayed -= 3600;
+                    while (TmpTimePlayed / 3600 >= 1)
+                    {
+                        Hours++;
+                        TmpTimePlayed -= 3600;
+                    }
                 }
-            }
-            if (TmpTimePlayed >= 60) // Plus d'1 minute
-            {
-                while(TmpTimePlayed / 60 >= 1)
+                if (TmpTimePlayed >= 60) // Plus d'1 minute
                 {
-                    Minutes++;
-                    TmpTimePlayed -= 60;
+                    while (TmpTimePlayed / 60 >= 1)
+                    {
+                        Minutes++;
+                        TmpTimePlayed -= 60;
+                    }
                 }
-            }
 
-            tsTimer.Text = String.Format("{0:00}", Hours) + ":" + String.Format("{0:00}", Minutes) + ":" + String.Format("{0:00}", TmpTimePlayed);
+                tsTimer.Text = String.Format("{0:00}", Hours) + ":" + String.Format("{0:00}", Minutes) + ":" + String.Format("{0:00}", TmpTimePlayed);
+            }
+            else
+            {
+                TimePlayedJ2++;
+                int TmpTimePlayed = TimePlayedJ2;
+                int Hours = 0, Minutes = 0;
+                if (TmpTimePlayed >= 3600) // Plus d'1 heure
+                {
+                    while (TmpTimePlayed / 3600 >= 1)
+                    {
+                        Hours++;
+                        TmpTimePlayed -= 3600;
+                    }
+                }
+                if (TmpTimePlayed >= 60) // Plus d'1 minute
+                {
+                    while (TmpTimePlayed / 60 >= 1)
+                    {
+                        Minutes++;
+                        TmpTimePlayed -= 60;
+                    }
+                }
+
+                tsTimer.Text = String.Format("{0:00}", Hours) + ":" + String.Format("{0:00}", Minutes) + ":" + String.Format("{0:00}", TmpTimePlayed);
+            }
         }
 
         private void tsHelp_Click(object sender, EventArgs e)

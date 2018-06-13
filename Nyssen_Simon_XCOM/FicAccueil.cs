@@ -23,7 +23,8 @@ namespace Nyssen_Simon_XCOM
 
         public bool Joueur1Joue;
         public short SelectedbtnIndex;
-        public int TimePlayed;
+        public int TimePlayedJ1;
+        public int TimePlayedJ2;
         public int NbrTourJoues;
 
         public List<int> classes_J1;
@@ -107,8 +108,9 @@ namespace Nyssen_Simon_XCOM
                     else
                         Joueur1Joue = false;
                     SelectedbtnIndex = short.Parse(tab[1]); // Map de la partie
-                    TimePlayed = int.Parse(tab[2]);// Duree de la partie
-                    NbrTourJoues = int.Parse(tab[3]);
+                    TimePlayedJ1 = int.Parse(tab[2]);
+                    TimePlayedJ2 = int.Parse(tab[3]);
+                    NbrTourJoues = int.Parse(tab[4]);
                 }
                 while ((lecture = sr.ReadLine()) != "") // Soldats du joueur 1
                 {
