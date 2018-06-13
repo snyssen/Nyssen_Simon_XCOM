@@ -47,7 +47,6 @@ namespace Nyssen_Simon_XCOM
                                             //                     -> 1 = Weapons of Choice
                                             //                     -> 2 = New World Order
                                             //                     -> 3 = Ambush
-        private int TimePlayed = 0; // Stocke la durée de la partie (en secondes)
 
         #endregion
         #region Constructeurs
@@ -65,6 +64,8 @@ namespace Nyssen_Simon_XCOM
             this.NbrSoldatsJ1 = this.NbrSoldatsJ2 = this.NbrSoldats;
             this.NbrSoldatsJoues = 0;
             this.FirstTurn = true;
+
+            tsTour.Text = "Tour du joueur 1";
 
             CreationPartie();
 
@@ -137,10 +138,6 @@ namespace Nyssen_Simon_XCOM
                     ttInfos.SetToolTip(SoldiersIcons2[i + NbrFantassins + NbrSnipers + NbrLourds], Soldiers2[j].AfficherStats());
                     j++;
                 }
-
-                Random rand = new Random();
-                Joueur1Joue = rand.Next(1, 3) == 1 ? true : false;
-                tsTour.Text = Joueur1Joue ? "Tour du joueur 1" : "Tour du joueur 2";
             }
 
             else
@@ -263,7 +260,6 @@ namespace Nyssen_Simon_XCOM
 
         private void CreationPartie() // Création de la partie, instructions communes aux deux constructeurs
         {
-            timer1.Start();
             tsInfo.Text = "Sélectionnez un soldat à jouer";
             dlgSauvegarder.Filter = "Fichier de sauvegarde|*.sav|Tous fichiers|*.*";
             pbCase.Parent = pbCarte;
@@ -1254,32 +1250,6 @@ namespace Nyssen_Simon_XCOM
             this.Relaunch = true;
             this.Close();
         }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            TimePlayed++;
-            int TmpTimePlayed = TimePlayed;
-            int Hours = 0, Minutes = 0;
-            if (TmpTimePlayed >= 3600) // Plus d'1 heure
-            {
-                while (TmpTimePlayed / 3600 >= 1)
-                {
-                    Hours++;
-                    TmpTimePlayed -= 3600;
-                }
-            }
-            if (TmpTimePlayed >= 60) // Plus d'1 minute
-            {
-                while(TmpTimePlayed / 60 >= 1)
-                {
-                    Minutes++;
-                    TmpTimePlayed -= 60;
-                }
-            }
-
-            tsTimer.Text = String.Format("{0:00}", Hours) + ":" + String.Format("{0:00}", Minutes) + ":" + String.Format("{0:00}", TmpTimePlayed);
-        }
-
         private void tsHelp_Click(object sender, EventArgs e)
         {
             EcranAide aide = new EcranAide();

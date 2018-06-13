@@ -47,12 +47,14 @@
             this.musique2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.musique3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.musique4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsHelp = new System.Windows.Forms.ToolStripButton();
             this.ttInfos = new System.Windows.Forms.ToolTip(this.components);
             this.dlgSauvegarder = new System.Windows.Forms.SaveFileDialog();
             this.pbCase = new System.Windows.Forms.PictureBox();
             this.pbCarte = new System.Windows.Forms.PictureBox();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsHelp = new System.Windows.Forms.ToolStripButton();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.tsTimer = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1.SuspendLayout();
             this.tsBarreOutils.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbCase)).BeginInit();
@@ -65,7 +67,8 @@
             this.tsInfo,
             this.tsNbrSoldatsJoue,
             this.tsAvancement,
-            this.tsTour});
+            this.tsTour,
+            this.tsTimer});
             this.statusStrip1.Location = new System.Drawing.Point(0, 531);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(500, 22);
@@ -161,43 +164,58 @@
             // 
             this.tsaMuet.Image = global::Nyssen_Simon_XCOM.Properties.Resources.audio_on;
             this.tsaMuet.Name = "tsaMuet";
-            this.tsaMuet.Size = new System.Drawing.Size(180, 22);
+            this.tsaMuet.Size = new System.Drawing.Size(129, 22);
             this.tsaMuet.Text = "audio on";
             this.tsaMuet.Click += new System.EventHandler(this.tsaMuet_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(126, 6);
             // 
             // musique1ToolStripMenuItem
             // 
             this.musique1ToolStripMenuItem.Image = global::Nyssen_Simon_XCOM.Properties.Resources.audio_play;
             this.musique1ToolStripMenuItem.Name = "musique1ToolStripMenuItem";
-            this.musique1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.musique1ToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
             this.musique1ToolStripMenuItem.Text = "Musique 1";
             this.musique1ToolStripMenuItem.Click += new System.EventHandler(this.musique1ToolStripMenuItem_Click);
             // 
             // musique2ToolStripMenuItem
             // 
             this.musique2ToolStripMenuItem.Name = "musique2ToolStripMenuItem";
-            this.musique2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.musique2ToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
             this.musique2ToolStripMenuItem.Text = "Musique 2";
             this.musique2ToolStripMenuItem.Click += new System.EventHandler(this.musique2ToolStripMenuItem_Click);
             // 
             // musique3ToolStripMenuItem
             // 
             this.musique3ToolStripMenuItem.Name = "musique3ToolStripMenuItem";
-            this.musique3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.musique3ToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
             this.musique3ToolStripMenuItem.Text = "Musique 3";
             this.musique3ToolStripMenuItem.Click += new System.EventHandler(this.musique3ToolStripMenuItem_Click);
             // 
             // musique4ToolStripMenuItem
             // 
             this.musique4ToolStripMenuItem.Name = "musique4ToolStripMenuItem";
-            this.musique4ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.musique4ToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
             this.musique4ToolStripMenuItem.Text = "Musique 4";
             this.musique4ToolStripMenuItem.Click += new System.EventHandler(this.musique4ToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tsHelp
+            // 
+            this.tsHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsHelp.Image = ((System.Drawing.Image)(resources.GetObject("tsHelp.Image")));
+            this.tsHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsHelp.Name = "tsHelp";
+            this.tsHelp.Size = new System.Drawing.Size(23, 22);
+            this.tsHelp.ToolTipText = "Aide";
+            this.tsHelp.Click += new System.EventHandler(this.tsHelp_Click);
             // 
             // dlgSauvegarder
             // 
@@ -230,20 +248,16 @@
             this.pbCarte.Paint += new System.Windows.Forms.PaintEventHandler(this.pbCarte_Paint);
             this.pbCarte.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCarte_MouseMove);
             // 
-            // toolStripSeparator2
+            // timer1
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // tsHelp
+            // tsTimer
             // 
-            this.tsHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsHelp.Image = ((System.Drawing.Image)(resources.GetObject("tsHelp.Image")));
-            this.tsHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsHelp.Name = "tsHelp";
-            this.tsHelp.Size = new System.Drawing.Size(23, 22);
-            this.tsHelp.ToolTipText = "Aide";
-            this.tsHelp.Click += new System.EventHandler(this.tsHelp_Click);
+            this.tsTimer.Name = "tsTimer";
+            this.tsTimer.Size = new System.Drawing.Size(49, 17);
+            this.tsTimer.Text = "00:00:00";
             // 
             // EcranGame
             // 
@@ -298,5 +312,7 @@
         private System.Windows.Forms.ToolStripMenuItem musique4ToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton tsHelp;
+        private System.Windows.Forms.ToolStripStatusLabel tsTimer;
+        private System.Windows.Forms.Timer timer1;
     }
 }
