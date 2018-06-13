@@ -48,6 +48,9 @@ namespace Nyssen_Simon_XCOM
                                             //                     -> 2 = New World Order
                                             //                     -> 3 = Ambush
         private int TimePlayed = 0; // Stocke la durée de la partie (en secondes)
+        private int NbrTourJoues = 0; // Nbr de tous joués (1 tour = tous les soldats d'un joueur ont joué)
+        private int NbrSoldatsJouesJ1 = 0;
+        private int NbrSoldatsJouesJ2 = 0;
 
         #endregion
         #region Constructeurs
@@ -147,7 +150,7 @@ namespace Nyssen_Simon_XCOM
                 Close();
         }
 
-        public EcranGame(bool _audio, short Index, bool TourJoueur,
+        public EcranGame(bool _audio, short Index, bool TourJoueur, int _TimePlayed, int _NbrTourJoues,
             List<int> classes_J1, List<bool> covered_J1, List<int> HP_J1, List<bool> alive_J1, List<bool> played_J1, List<int> IndexX_J1, List<int> IndexY_J1,
             List<int> classes_J2, List<bool> covered_J2, List<int> HP_J2, List<bool> alive_J2, List<bool> played_J2, List<int> IndexX_J2, List<int> IndexY_J2) // Constructeur pour charger une partie
         {
@@ -156,7 +159,9 @@ namespace Nyssen_Simon_XCOM
             this.AudioOn = _audio;
             this.SelectedbtnIndex = Index;
             this.Joueur1Joue = TourJoueur;
-            this.FirstTurn = false;
+            this.TimePlayed = _TimePlayed;
+            this.NbrTourJoues = _NbrTourJoues;
+            this.FirstTurn = (NbrTourJoues > 1 ? false : true);
 
             this.NbrSoldats = classes_J1.Count;
             this.NbrFantassins = this.NbrSnipers = this.NbrLourds = this.NbrLegers = this.NbrSoldatsJ1 = this.NbrSoldatsJ2 = this.NbrSoldatsJoues = 0;
@@ -211,6 +216,11 @@ namespace Nyssen_Simon_XCOM
                     // On leur assigne leur position
                     Soldiers1[i].position = Cases[IndexX_J1[i], IndexY_J1[i]];
                     Soldiers2[i].position = Cases[IndexX_J2[i], IndexY_J2[i]];
+                    // On détermine si le soldat a joué ou non
+                    if (Soldiers1[i].played)
+                        NbrSoldatsJouesJ1++;
+                    if (Soldiers2[i].played)
+                        NbrSoldatsJouesJ2++;
                     // Et on prévient cette position qu'elle a un soldat dessus
                     Cases[IndexX_J1[i], IndexY_J1[i]].soldier = Soldiers1[i];
                     Cases[IndexX_J2[i], IndexY_J2[i]].soldier = Soldiers2[i];
@@ -470,19 +480,51 @@ namespace Nyssen_Simon_XCOM
         private void ChangeTour() // Change le tour
         {
             if (Joueur1Joue)
-            {
-                foreach (Soldat soldier in Soldiers2)
-                    soldier.covered = false;
-            }
+                NbrSoldatsJouesJ1++;
             else
+                NbrSoldatsJouesJ2++;
+
+            if ((Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2) - (Joueur1Joue ? NbrSoldatsJouesJ1 : NbrSoldatsJouesJ2) == 0)
             {
-                foreach (Soldat soldier in Soldiers1)
-                    soldier.covered = false;
-                FirstTurn = false;
+                NbrTourJoues++;
+                if (NbrTourJoues > 1) // Les deux joueurs ont joué chacun de leurs soldats au moins une fois
+                    FirstTurn = false;
+                if (Joueur1Joue)
+                {
+                    foreach (Soldat soldier in Soldiers1)
+                    {
+                        soldier.covered = false;
+                        soldier.played = false;
+                    }
+                    MessageBox.Show("Joueur 1 a joué tous ses soldats !");
+                    NbrSoldatsJouesJ1 = 0;
+                }
+                else
+                {
+                    foreach (Soldat soldier in Soldiers2)
+                    {
+                        soldier.covered = false;
+                        soldier.played = false;
+                    }
+                    MessageBox.Show("Joueur 2 a joué tous ses soldats !");
+                    NbrSoldatsJouesJ2 = 0;
+                }
             }
 
             Joueur1Joue = !Joueur1Joue;
             tsTour.Text = Joueur1Joue ? "Tour du joueur 1" : "Tour du joueur 2";
+            if(Joueur1Joue)
+            {
+                tsAvancement.Value = NbrSoldatsJouesJ1;
+                tsAvancement.Maximum = NbrSoldatsJ1;
+                tsNbrSoldatsJoue.Text = NbrSoldatsJouesJ1 + "/" + NbrSoldatsJ1;
+            }
+            else
+            {
+                tsAvancement.Value = NbrSoldatsJouesJ2;
+                tsAvancement.Maximum = NbrSoldatsJ2;
+                tsNbrSoldatsJoue.Text = NbrSoldatsJouesJ2 + "/" + NbrSoldatsJ2;
+            }
         }
         private void Gagne() // Détermine si la partie est terminée ou non
         {
@@ -836,6 +878,7 @@ namespace Nyssen_Simon_XCOM
         }
         private void DoAction(List<PictureBox> SoldiersIcons, List<Soldat> Soldiers, object sender) // Permet d'effectuer une action. 2 cas principaux : Il n'y a pas d'action en cours => On en choisit une OU il y a déjà une action en cours => on finit cette action
         {
+            bool ActionAnnulee = false;
             if (!ActionEnCours) // Pas encore d'action en cours => Sélection du soldat pour en choisir une
             {
                 int Index = -1; // Index de la picturebox et par conséquent du soldat sélectionné. -1 Correspond à une erreur
@@ -1000,14 +1043,12 @@ namespace Nyssen_Simon_XCOM
                                         MessageBox.Show("Le tir a échoué...");
                                     // Mise à jour des infos affichées à l'écran
                                     ttInfos.SetToolTip(SoldiersIcons[Index], Soldiers[Index].AfficherStats());
-                                    tsAvancement.Increment(1);
-                                    NbrSoldatsJoues++;
-                                    tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
                                 }
                                 break;
                             default: // Annulation
                                 tsInfo.Text = "Annulation de l'action";
                                 Eaction.Close();
+                                ActionAnnulee = true;
                                 break;
                         }
                         // Retour à l'état par défaut
@@ -1016,7 +1057,10 @@ namespace Nyssen_Simon_XCOM
                         Eaction.Dispose();
                     }
                     else
+                    {
                         MessageBox.Show("Ce soldat a déjà joué !", "Action impossible", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        ActionAnnulee = true;
+                    }
                 }
                 else
                     MessageBox.Show("ERREUR : Index négatif ! Impossible de sélectionner le soldat !", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1034,6 +1078,7 @@ namespace Nyssen_Simon_XCOM
                         // DEBUG
                         //Console.WriteLine("Position du soldat trouvée ! -> (" + IndexX + ";" + IndexY + ")");
                         HasClicked = true;
+                        ActionAnnulee = true;
                     }
                     catch (InvalidCastException ex)
                     {
@@ -1052,22 +1097,25 @@ namespace Nyssen_Simon_XCOM
             }
             else // Partie non terminée, on teste si le joueur a fini son tour
             {
-                if ((Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2) - NbrSoldatsJoues == 0) // Tous les soldats de l'escouade ont joué => Changement de joueur
-                {
-                    MessageBox.Show("Tour du joueur " + (Joueur1Joue ? "1 " : "2 ") + "terminé.\nAppuyez sur OK pour continuer", "Fin du tour", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //if ((Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2) - NbrSoldatsJoues == 0) // Tous les soldats de l'escouade ont joué => Changement de joueur
+                //{
+                //    MessageBox.Show("Tour du joueur " + (Joueur1Joue ? "1 " : "2 ") + "terminé.\nAppuyez sur OK pour continuer", "Fin du tour", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //    ChangeTour();
+                //    NbrSoldatsJoues = 0;
+                //    tsAvancement.Value = 0;
+                //    tsAvancement.Maximum = (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
+                //    tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
+                //    int i = 0;
+                //    foreach (Soldat soldier in Soldiers)
+                //    {
+                //        soldier.played = false;
+                //        ttInfos.SetToolTip(SoldiersIcons[i], soldier.AfficherStats());
+                //        i++;
+                //    }
+                //}
+                if (!ActionAnnulee)
                     ChangeTour();
-                    NbrSoldatsJoues = 0;
-                    tsAvancement.Value = 0;
-                    tsAvancement.Maximum = (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
-                    tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
-                    int i = 0;
-                    foreach (Soldat soldier in Soldiers)
-                    {
-                        soldier.played = false;
-                        ttInfos.SetToolTip(SoldiersIcons[i], soldier.AfficherStats());
-                        i++;
-                    }
-                }
+
             }
             tsInfo.Text = "Sélectionnez un soldat à jouer";
         }
@@ -1118,7 +1166,7 @@ namespace Nyssen_Simon_XCOM
             if (dlgSauvegarder.ShowDialog() == DialogResult.OK)
             {
                 StreamWriter sw = new StreamWriter(dlgSauvegarder.FileName);
-                sw.WriteLine(Joueur1Joue + ";" + SelectedbtnIndex); // Qui joue et sur quelle map
+                sw.WriteLine(Joueur1Joue + ";" + SelectedbtnIndex + ";" + TimePlayed + ";" + NbrTourJoues); // Qui joue et sur quelle map + duree partie + NbrTourJoues
                 sw.WriteLine(""); // On sépare avec une ligne vide
                 foreach (Soldat soldier in Soldiers1)
                 {
