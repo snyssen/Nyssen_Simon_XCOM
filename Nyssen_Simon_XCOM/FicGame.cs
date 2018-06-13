@@ -839,6 +839,8 @@ namespace Nyssen_Simon_XCOM
                 try
                 {
                     PictureBox KnownSender = (PictureBox)sender;
+                    // Je récupère le nom de la picturebox pour savoir le numéro de soldat
+                    // Cela nous permet plus loin de consulter la liste de soldats
                     var name = KnownSender.Name.Split('_');
                     Index = Convert.ToInt32(name[1]);
                 }
@@ -847,10 +849,10 @@ namespace Nyssen_Simon_XCOM
                     MessageBox.Show("ERREUR : Le contrôle générant cet événement n'est pas une PictureBox !\n" + ex.Message, "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 // DEBUG
-                Console.WriteLine("soldat sélectionné ! -> num " + Index);
+                //Console.WriteLine("soldat sélectionné ! -> num " + Index);
                 if (Index >= 0)
                 {
-                    if (!Soldiers[Index].played)
+                    if (!Soldiers[Index].played) // On vérifie que le soldat sélectionné n'a pas déjà joué
                     {
                         ActionEnCours = true;
                         EcranAction Eaction = new EcranAction(this.FirstTurn);
@@ -923,7 +925,7 @@ namespace Nyssen_Simon_XCOM
                                         }
                                     }
                                 }
-                                Error = Soldiers[Index].Attack(Cases[IndexX, IndexY].soldier);
+                                Error = Soldiers[Index].Attack(Cases[IndexX, IndexY].soldier); // Action de tir
                                 if (Error < 0)
                                     MessageBox.Show("ERREUR : cette case n'a pas de niveau de couverture défini !", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 else
@@ -948,39 +950,43 @@ namespace Nyssen_Simon_XCOM
                                     //}
                                     if (Error == 0)
                                     {
-                                        if (Cases[IndexX, IndexY].soldier.alive)
+                                        if (Cases[IndexX, IndexY].soldier.alive) // Le soldat visé est encore en vie
                                         {
                                             MessageBox.Show("Le tir tir a touché ! Le soldat visé a reçu " + Soldiers[Index].damage + " points de dégâts, ce qui amène sa vie à " + Cases[IndexX, IndexY].soldier.HP);
                                             List<PictureBox> Icons = (SoldiersIcons == SoldiersIcons1 ? SoldiersIcons2 : SoldiersIcons1);
                                             foreach (PictureBox pb in Icons)
                                             {
-                                                Console.WriteLine("Boucle de recherche de la PictureBox du soldat blessé");
+                                                // DEBUG
+                                                //Console.WriteLine("Boucle de recherche de la PictureBox du soldat blessé");
                                                 if (pb.Location == Cases[IndexX, IndexY].Origin)
                                                 {
-                                                    Console.WriteLine("PictureBox du soldat blessé trouvée !");
-                                                    ttInfos.SetToolTip(pb, Cases[IndexX, IndexY].soldier.AfficherStats());
+                                                    // DEBUG
+                                                    //Console.WriteLine("PictureBox du soldat blessé trouvée !");
+                                                    ttInfos.SetToolTip(pb, Cases[IndexX, IndexY].soldier.AfficherStats()); // Mise à jour des stats du soldats
                                                     break;
                                                 }
                                             }
                                         }
-                                        else
+                                        else // Le soldat visé est mort
                                         {
                                             MessageBox.Show("Le tir tir a touché ! Le soldat visé a reçu " + Soldiers[Index].damage + " points de dégâts, ce qui a achevé le soldat !");
-                                            Cases[IndexX, IndexY].soldier = null;
-                                            List<PictureBox> Icons = (SoldiersIcons == SoldiersIcons1 ? SoldiersIcons2 : SoldiersIcons1);
+                                            Cases[IndexX, IndexY].soldier = null; // On retire le soldat de la case
+                                            List<PictureBox> Icons = (SoldiersIcons == SoldiersIcons1 ? SoldiersIcons2 : SoldiersIcons1); // On récupère la liste de PB des soldats ADVERSES
                                             foreach (PictureBox pb in Icons)
                                             {
-                                                Console.WriteLine("Boucle de recherche de la PictureBox du soldat tué");
-                                                if (pb.Location == Cases[IndexX, IndexY].Origin)
+                                                // DEBUG
+                                                //Console.WriteLine("Boucle de recherche de la PictureBox du soldat tué");
+                                                if (pb.Location == Cases[IndexX, IndexY].Origin) // Et on cherche la pb du soldat tué pour la supprimer
                                                 {
-                                                    Console.WriteLine("PictureBox du soldat tué trouvée !");
+                                                    // DEBUG
+                                                    //Console.WriteLine("PictureBox du soldat tué trouvée !");
                                                     pb.Enabled = false;
                                                     pb.Dispose();
                                                     Controls.Remove(pb);
                                                     break;
                                                 }
                                             }
-                                            if (Joueur1Joue)
+                                            if (Joueur1Joue) // Enfin, on décrémente le nombre de soldats du joueur qui vient de perdre un soldat
                                                 NbrSoldatsJ2--;
                                             else
                                                 NbrSoldatsJ1--;
@@ -988,6 +994,7 @@ namespace Nyssen_Simon_XCOM
                                     }
                                     else
                                         MessageBox.Show("Le tir a échoué...");
+                                    // Mise à jour des infos affichées à l'écran
                                     ttInfos.SetToolTip(SoldiersIcons[Index], Soldiers[Index].AfficherStats());
                                     tsAvancement.Increment(1);
                                     NbrSoldatsJoues++;
@@ -999,6 +1006,7 @@ namespace Nyssen_Simon_XCOM
                                 Eaction.Close();
                                 break;
                         }
+                        // Retour à l'état par défaut
                         HasClicked = false;
                         ActionEnCours = false;
                         Eaction.Dispose();
@@ -1011,7 +1019,7 @@ namespace Nyssen_Simon_XCOM
             }
 
             else // Action en cours => Sélection du soldat pour lui appliquer une action (lancée par un autre soldat)
-            {
+            {    // => Change juste IndexX et IndexY 
                 if (!HasClicked)
                 {
                     PictureBox KnownSender = null;
@@ -1020,7 +1028,7 @@ namespace Nyssen_Simon_XCOM
                         KnownSender = (PictureBox)sender;
                         FindLocation(KnownSender.Location.X, KnownSender.Location.Y);
                         // DEBUG
-                        Console.WriteLine("Position du soldat trouvée ! -> (" + IndexX + ";" + IndexY + ")");
+                        //Console.WriteLine("Position du soldat trouvée ! -> (" + IndexX + ";" + IndexY + ")");
                         HasClicked = true;
                     }
                     catch (InvalidCastException ex)
@@ -1030,15 +1038,15 @@ namespace Nyssen_Simon_XCOM
                 }
             }
 
-            Gagne();
-            if (FinPartie != 0)
+            Gagne(); // On teste la condition de victoire
+            if (FinPartie != 0) // La partie est gagnée
             {
                 if (MessageBox.Show("Le joueur " + (FinPartie == 1 ? "1 " : "2 ") + "gagne la partie !\n\n Voulez-vous retourner au menu principal ?", "Fin de la partie", MessageBoxButtons.YesNo, MessageBoxIcon.None) == DialogResult.Yes)
                     this.Relaunch = true;
                 this.saved = true;
                 this.Close();
             }
-            else
+            else // Partie non terminée, on teste si le joueur a fini son tour
             {
                 if ((Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2) - NbrSoldatsJoues == 0) // Tous les soldats de l'escouade ont joué => Changement de joueur
                 {
