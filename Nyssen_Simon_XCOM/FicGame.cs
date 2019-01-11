@@ -479,7 +479,7 @@ namespace Nyssen_Simon_XCOM
         }
         #endregion
         #region Gameplay
-        private void ChangeTour() // Change le tour blabla
+        private void ChangeTour() // Change le tour
         {
             if (Joueur1Joue)
                 NbrSoldatsJouesJ1++;
