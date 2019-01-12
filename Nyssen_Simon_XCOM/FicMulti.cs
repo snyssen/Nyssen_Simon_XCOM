@@ -56,6 +56,8 @@ namespace Nyssen_Simon_XCOM
                 Comm = new SocComm(true);
                 Comm.ReceivedMessageChanged += this.OnMessageReceived;
                 Comm.IsConnectedChanged += this.OnIsConnectedChanged;
+                // On prévient l'utilisateur qu'il doit attendre, mais dans un thread pour ne pas bloquer l'application
+                Task.Run(() => { MessageBox.Show("Veuillez attendre qu'un client se connecte\nVous serez notifié quand ce sera le cas..."); });
             }
             catch (Exception ex) { MessageBox.Show("Une erreur a été rencontrée\n" + ex.Message); }
         }
@@ -74,9 +76,19 @@ namespace Nyssen_Simon_XCOM
         {
             SocComm TmpComm = (SocComm)sender;
             if (TmpComm.IsConnected)
+            {
                 MessageBox.Show("Connexion établie !");
+                if (TmpComm.IsServer)
+                    this.Invoke((MethodInvoker)(() => { this.Text = "Multijoueur - joueur 1"; }));
+                else
+                    this.Invoke((MethodInvoker)(() => { this.Text = "Multijoueur - joueur 2"; }));
+            }
             else
+            {
                 MessageBox.Show("La connexion a été interrompue !");
+                this.Invoke((MethodInvoker)(() => { this.Text = "Multijoueur"; }));
+            }
+                
             BtnClient.Invoke((MethodInvoker)(() => { BtnClient.Enabled = !TmpComm.IsConnected; }));
             BtnServer.Invoke((MethodInvoker)(() => { BtnServer.Enabled = !TmpComm.IsConnected; }));
             BtnSendMsg.Invoke((MethodInvoker)(() => { BtnSendMsg.Enabled = TmpComm.IsConnected; }));
@@ -86,7 +98,12 @@ namespace Nyssen_Simon_XCOM
         {
             SocComm TmpComm = (SocComm)sender;
             this.InsertMessage("Reçu -> " + TmpComm.ReceivedMessage);
-            MessageBox.Show(TmpComm.ReceivedMessage);
+        }
+
+        private void EcranMulti_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Comm.ReceivedMessageChanged -= this.OnMessageReceived;
+            Comm.IsConnectedChanged -= this.OnIsConnectedChanged;
         }
     }
 }

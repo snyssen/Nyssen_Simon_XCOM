@@ -52,6 +52,7 @@ namespace Nyssen_Simon_XCOM
             socServer = new Socket(AddressFamily.InterNetwork /* IPv4*/, SocketType.Stream, ProtocolType.Tcp);
             socServer.Bind(new IPEndPoint(MachineIP, port));
             socServer.Listen(1); // On accepte qu'un seul client dans la liste de connexion
+            Console.WriteLine("Server listening on " + MachineIP.ToString() + ":" + port.ToString());
             socServer.BeginAccept(new AsyncCallback(OnConnectionRequest), socServer);
             return true;
         }
@@ -60,6 +61,7 @@ namespace Nyssen_Simon_XCOM
         {
             Socket Serv = (Socket)iAR.AsyncState; // Récupère le socket de serveur
             socClient = Serv.EndAccept(iAR); // Initialise le socket client pour pouvoir échanger des messages avec le client connecté
+            Console.WriteLine("Received a connection request from " + socClient.LocalEndPoint.ToString());
             IsConnected = true;
             BeginReception(socClient); // Se prépare à recevoir les données du client
         }
@@ -73,9 +75,10 @@ namespace Nyssen_Simon_XCOM
             try
             {
                 socClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) { Blocking = false }; // Création du socket client
-                socClient.BeginConnect(new IPEndPoint(IPserver, port), new AsyncCallback(OnConnection), socClient); // On initie la connexion (une fois établie on est renvoyé dans "OnConnection"
+                socClient.BeginConnect(new IPEndPoint(IPserver, port), new AsyncCallback(OnConnection), socClient); // On initie la connexion (une fois établie on est renvoyé dans "OnConnection")
+                Console.WriteLine("Atempting to contact server at " + IPserver.ToString() + ":" + port.ToString());
             }
-            catch { return false; }
+            catch (Exception ex) { Console.WriteLine("CreateClient -> " + ex.Message); return false; }
             return true;
         }
         private void OnConnection(IAsyncResult iAR)
@@ -83,6 +86,7 @@ namespace Nyssen_Simon_XCOM
             Socket Client = (Socket)iAR.AsyncState; // récupère le socket client
             if (Client.Connected)
             {
+                Console.WriteLine("Client is connected");
                 BeginReception(Client);
                 IsConnected = true;
             }
@@ -99,10 +103,11 @@ namespace Nyssen_Simon_XCOM
         {
             try
             {
+                Console.WriteLine("Preparing to receive data...");
                 socBuffer = new byte[256]; // Initialisation du buffer de réception
                 soc.BeginReceive(socBuffer, 0, socBuffer.Length, SocketFlags.None, new AsyncCallback(Reception), soc);
             }
-            catch { }
+            catch (Exception ex) { Console.WriteLine("BeginReception -> " + ex.Message); }
         }
         private void Reception(IAsyncResult iAR)
         {
@@ -111,11 +116,13 @@ namespace Nyssen_Simon_XCOM
             {
                 if (soc.EndReceive(iAR) > 0) // On a reçu des données
                 {
+                    Console.WriteLine("Received -> " + ReceivedMessage);
                     ReceivedMessage = Encoding.UTF8.GetString(socBuffer);
                     BeginReception(soc);
                 }
                 else // On a reçu un message vide => Déconnexion
                 {
+                    Console.WriteLine("Received empty message, disconnecting...");
                     soc.Disconnect(true);
                     soc.Close();
                     socServer.BeginAccept(new AsyncCallback(OnConnectionRequest), socServer);
@@ -123,7 +130,7 @@ namespace Nyssen_Simon_XCOM
                     IsConnected = false;
                 }
             }
-            catch { }
+            catch (Exception ex) { Console.WriteLine("Reception -> " + ex.Message); IsConnected = false; }
         }
         #endregion
         /// <summary>
@@ -135,6 +142,7 @@ namespace Nyssen_Simon_XCOM
         {
             if (!IsConnected || socClient == null)
                 throw new Exception("Envoi d'un message impossible avant d'être connecté");
+            Console.WriteLine("Sending -> " + Message);
             socClient.Send(Encoding.UTF8.GetBytes(Message));
         }
         #region NotifyPropertyChanged

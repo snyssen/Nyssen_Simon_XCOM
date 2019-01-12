@@ -31,14 +31,14 @@
             this.BtnClient = new System.Windows.Forms.Button();
             this.BtnServer = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.TbIP = new System.Windows.Forms.TextBox();
-            this.LblIP = new System.Windows.Forms.Label();
-            this.LblPort = new System.Windows.Forms.Label();
             this.NudPort = new System.Windows.Forms.NumericUpDown();
+            this.LblPort = new System.Windows.Forms.Label();
+            this.LblIP = new System.Windows.Forms.Label();
+            this.TbIP = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.TbMsg = new System.Windows.Forms.TextBox();
-            this.BtnSendMsg = new System.Windows.Forms.Button();
             this.LbMsg = new System.Windows.Forms.ListBox();
+            this.BtnSendMsg = new System.Windows.Forms.Button();
+            this.TbMsg = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NudPort)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -80,33 +80,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Configuration de la connexion";
             // 
-            // TbIP
-            // 
-            this.TbIP.Location = new System.Drawing.Point(70, 75);
-            this.TbIP.Name = "TbIP";
-            this.TbIP.Size = new System.Drawing.Size(246, 20);
-            this.TbIP.TabIndex = 2;
-            this.TbIP.Text = "127.0.0.1";
-            this.TbIP.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // LblIP
-            // 
-            this.LblIP.AutoSize = true;
-            this.LblIP.Location = new System.Drawing.Point(6, 78);
-            this.LblIP.Name = "LblIP";
-            this.LblIP.Size = new System.Drawing.Size(58, 13);
-            this.LblIP.TabIndex = 3;
-            this.LblIP.Text = "Adresse IP";
-            // 
-            // LblPort
-            // 
-            this.LblPort.AutoSize = true;
-            this.LblPort.Location = new System.Drawing.Point(134, 103);
-            this.LblPort.Name = "LblPort";
-            this.LblPort.Size = new System.Drawing.Size(26, 13);
-            this.LblPort.TabIndex = 5;
-            this.LblPort.Text = "Port";
-            // 
             // NudPort
             // 
             this.NudPort.Location = new System.Drawing.Point(166, 101);
@@ -130,6 +103,33 @@
             0,
             0});
             // 
+            // LblPort
+            // 
+            this.LblPort.AutoSize = true;
+            this.LblPort.Location = new System.Drawing.Point(134, 103);
+            this.LblPort.Name = "LblPort";
+            this.LblPort.Size = new System.Drawing.Size(26, 13);
+            this.LblPort.TabIndex = 5;
+            this.LblPort.Text = "Port";
+            // 
+            // LblIP
+            // 
+            this.LblIP.AutoSize = true;
+            this.LblIP.Location = new System.Drawing.Point(6, 78);
+            this.LblIP.Name = "LblIP";
+            this.LblIP.Size = new System.Drawing.Size(58, 13);
+            this.LblIP.TabIndex = 3;
+            this.LblIP.Text = "Adresse IP";
+            // 
+            // TbIP
+            // 
+            this.TbIP.Location = new System.Drawing.Point(70, 75);
+            this.TbIP.Name = "TbIP";
+            this.TbIP.Size = new System.Drawing.Size(246, 20);
+            this.TbIP.TabIndex = 2;
+            this.TbIP.Text = "127.0.0.1";
+            this.TbIP.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.LbMsg);
@@ -142,12 +142,13 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Chat";
             // 
-            // TbMsg
+            // LbMsg
             // 
-            this.TbMsg.Location = new System.Drawing.Point(5, 19);
-            this.TbMsg.Name = "TbMsg";
-            this.TbMsg.Size = new System.Drawing.Size(228, 20);
-            this.TbMsg.TabIndex = 0;
+            this.LbMsg.FormattingEnabled = true;
+            this.LbMsg.Location = new System.Drawing.Point(5, 46);
+            this.LbMsg.Name = "LbMsg";
+            this.LbMsg.Size = new System.Drawing.Size(309, 147);
+            this.LbMsg.TabIndex = 2;
             // 
             // BtnSendMsg
             // 
@@ -160,13 +161,12 @@
             this.BtnSendMsg.UseVisualStyleBackColor = true;
             this.BtnSendMsg.Click += new System.EventHandler(this.BtnSendMsg_Click);
             // 
-            // LbMsg
+            // TbMsg
             // 
-            this.LbMsg.FormattingEnabled = true;
-            this.LbMsg.Location = new System.Drawing.Point(5, 46);
-            this.LbMsg.Name = "LbMsg";
-            this.LbMsg.Size = new System.Drawing.Size(309, 147);
-            this.LbMsg.TabIndex = 2;
+            this.TbMsg.Location = new System.Drawing.Point(5, 19);
+            this.TbMsg.Name = "TbMsg";
+            this.TbMsg.Size = new System.Drawing.Size(228, 20);
+            this.TbMsg.TabIndex = 0;
             // 
             // EcranMulti
             // 
@@ -177,6 +177,7 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "EcranMulti";
             this.Text = "Multijoueur";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EcranMulti_FormClosing);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NudPort)).EndInit();

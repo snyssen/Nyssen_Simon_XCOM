@@ -293,6 +293,7 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Paramètres de la partie";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EcranSetup_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.tbNbrSoldats)).EndInit();
             this.gbChoixCarte.ResumeLayout(false);
             this.gbNbrSoldats.ResumeLayout(false);

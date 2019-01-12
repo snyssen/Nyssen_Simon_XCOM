@@ -49,9 +49,8 @@ namespace Nyssen_Simon_XCOM
             InitializeComponent();
             dlgLoadGame.Filter = "Fichier de sauvegarde|*.sav|Tous fichiers|*.*";
 
-            music.PlayLooping();
-            AudioOn = true;
-            btnAudio.BackgroundImage = Properties.Resources.audio_on;
+            AudioOn = false;
+            btnAudio.BackgroundImage = Properties.Resources.audio_off;
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -64,7 +63,14 @@ namespace Nyssen_Simon_XCOM
         private void btnNewGame_Click(object sender, EventArgs e)
         {
             music.Stop();
-            setup = new EcranSetup(AudioOn);
+            if (Comm != null && Comm.IsConnected)
+            {
+                if (Comm.IsServer)
+                    Comm.SendMessage("Cmd:NewGame");
+                Comm.ReceivedMessageChanged -= this.OnMessageReceived;
+                Comm.IsConnectedChanged -= this.OnConnectionChanged;
+            }
+            setup = new EcranSetup(AudioOn, this.Comm);
             setup.ShowDialog();
             if (setup.begin)
             {
@@ -73,7 +79,15 @@ namespace Nyssen_Simon_XCOM
                 Setup = true;
             }
             else
-                music.PlayLooping();
+            {
+                if (AudioOn)
+                    music.PlayLooping();
+                if (Comm != null && Comm.IsConnected)
+                {
+                    Comm.ReceivedMessageChanged += this.OnMessageReceived;
+                    Comm.IsConnectedChanged += this.OnConnectionChanged;
+                }
+            }
         }
 
         private void btnLoadGame_Click(object sender, EventArgs e)
@@ -142,7 +156,7 @@ namespace Nyssen_Simon_XCOM
 
         private void llblCopyright_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/snyssen");
+            System.Diagnostics.Process.Start("https://snyssen.be");
             llblCopyright.LinkVisited = true;
         }
 
@@ -178,6 +192,62 @@ namespace Nyssen_Simon_XCOM
         {
             EcranMulti multi = new EcranMulti();
             multi.ShowDialog();
+            this.Comm = multi.Comm;
+            if (Comm != null && Comm.IsConnected)
+            {
+                if (Comm.IsServer)
+                {
+                    this.Text = "XCOM - Joueur 1";
+                }
+                else
+                {
+                    this.Text = "XCOM - Joueur 2";
+                }
+
+                this.btnNewGame.Enabled = this.btnLoadGame.Enabled = Comm.IsServer;
+                Comm.ReceivedMessageChanged += this.OnMessageReceived;
+                Comm.IsConnectedChanged += this.OnConnectionChanged;
+            } 
+        }
+
+        private void OnConnectionChanged(object sender, EventArgs e)
+        {
+            SocComm TmpSoc = (SocComm)sender;
+            if (!TmpSoc.IsConnected)
+            {
+                MessageBox.Show("La connexion a été perdue !");
+                btnNewGame.Invoke((MethodInvoker)(() => { btnNewGame.Enabled = true; }));
+                btnLoadGame.Invoke((MethodInvoker)(() => { btnLoadGame.Enabled = true; }));
+                this.Comm = null;
+            }
+        }
+
+        private void OnMessageReceived(object sender, EventArgs e)
+        {
+            SocComm TmpSoc = (SocComm)sender;
+            string[] RawData = TmpSoc.ReceivedMessage.Split(':');
+            string Type = RawData[0];
+            string[] Data = RawData[1].Split(';');
+            Data[Data.Length - 1] = Data[Data.Length - 1].TrimEnd('\0'); // On retire le padding du message
+
+            TreatMessage(Type, Data);
+        }
+
+        private void TreatMessage(string Type, string[] Data)
+        {
+            switch (Type)
+            {
+                case "Cmd": // Commande de lancement d'une méthode
+                    switch (Data[0])
+                    {
+                        case "NewGame":
+                            // BeginInvoke est non bloquant => permet à ce thread de finir son travail (+ attente pour être sûr qu'il ait bien fini)
+                            // Important pour que le socket puisse être transmis à la fenêtre qui sera ouverte (sinon il est bloqué au milieu de sa réception)
+                            this.BeginInvoke((MethodInvoker)(() => { System.Threading.Thread.Sleep(10); this.btnNewGame_Click(null, null); }));
+                            break;
+                    }
+                    break;
+            }
         }
     }
 }

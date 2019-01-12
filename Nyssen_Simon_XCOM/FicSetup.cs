@@ -30,7 +30,9 @@ namespace Nyssen_Simon_XCOM
         private short SelectedbtnMusic = 0; // Index de la musique -> 0 = First Flight
                                             //                     -> 1 = Squad Loadout
 
-        public EcranSetup(bool _audio)                
+        private SocComm Comm;
+
+        public EcranSetup(bool _audio, SocComm _Comm)                
         {                                  
             InitializeComponent();
             tbNbrSoldats_Scroll(null, null);
@@ -48,6 +50,26 @@ namespace Nyssen_Simon_XCOM
             }
             else
                 btnAudio.BackgroundImage = Properties.Resources.audio_off;
+
+            this.Comm = _Comm;
+            if (Comm != null && Comm.IsConnected)
+            {
+                // On s'abonne aux événements
+                Comm.ReceivedMessageChanged += this.OnMessageReceived;
+                Comm.IsConnectedChanged += this.OnConnectionChanged;
+
+                // On désactive tous les contrôles (sauf musique)
+                tbNbrSoldats.Enabled = cbFantassin.Enabled = cbSniper.Enabled = cbLourd.Enabled = cbLeger.Enabled
+                    = btnDesert.Enabled = btnSnowy.Enabled = btnUrban.Enabled = btnLancer.Enabled = false;
+
+                if (!Comm.IsServer) // Si on est client...
+                {
+                    // ...On demande une synchronisation avec le serveur
+                    Comm.SendMessage("AskSync:null");
+                    // On prévient l'utilisateur qu'il doit attendre, mais dans un thread pour ne pas bloquer l'application
+                    Task.Run(() => { MessageBox.Show("Le joueur 1 est en train de règler les paramètres de la partie..."); });
+                }
+            }
         }
 
         private void tbNbrSoldats_Scroll(object sender, EventArgs e)
@@ -160,7 +182,16 @@ namespace Nyssen_Simon_XCOM
                     NbrSnipers = (int)cbSniper.SelectedItem;
                     NbrLourds = (int)cbLourd.SelectedItem;
                     NbrLegers = (int)cbLeger.SelectedItem;
-                    Close();
+                    if (Comm != null && Comm.IsConnected)
+                    {
+                        Task.Run(() => { MessageBox.Show("En attente de confirmation du joueur 2..."); });
+                        SendSync();
+                        // On désactive tous les contrôles (sauf musique)
+                        tbNbrSoldats.Enabled = cbFantassin.Enabled = cbSniper.Enabled = cbLourd.Enabled = cbLeger.Enabled
+                            = btnDesert.Enabled = btnSnowy.Enabled = btnUrban.Enabled = btnLancer.Enabled = false;
+                    }
+                    else
+                        this.Close();
                 }
                 else
                     tbNbrSoldats_Scroll(null, null);
@@ -218,6 +249,137 @@ namespace Nyssen_Simon_XCOM
             music.Load();
             if (AudioOn)
                 music.PlayLooping();
+        }
+
+
+        private void OnMessageReceived(object sender, EventArgs e)
+        {
+            SocComm TmpSoc = (SocComm)sender;
+            string[] RawData = TmpSoc.ReceivedMessage.Split(':');
+            string Type = RawData[0];
+            string[] Data = RawData[1].Split(';');
+            Data[Data.Length - 1] = Data[Data.Length - 1].TrimEnd('\0'); // On retire le padding du message
+
+            TreatMessage(Type, Data);
+        }
+        private void TreatMessage(string Type, string[] Data)
+        {
+            switch (Type)
+            {
+                case "AskSync": // Le client demande une synchronisation avec le serveur => il est prêt et le serveur peut paramètrer la partie
+                    this.Invoke((MethodInvoker)(() =>
+                    {
+                        tbNbrSoldats.Enabled = cbFantassin.Enabled = cbSniper.Enabled = cbLourd.Enabled = cbLeger.Enabled
+                        = btnDesert.Enabled = btnSnowy.Enabled = btnUrban.Enabled = btnLancer.Enabled = true;
+                    }));
+                    break;
+                case "Sync": // Le serveur envoie un message de synchronisation des données au client
+                    AskForConf(Data);
+                    break;
+                case "Conf": // Le client confirme (ou non) qu'il accepte les paramètres
+                    TreatConf(Data);
+                    break;
+                case "Start": // Le serveur indique que la partie peut commencer
+                    begin = true;
+                    this.Invoke((MethodInvoker)(() => { this.Close(); }));
+                    break;
+            }
+        }
+
+        private void TreatConf(string[] Data)
+        {
+            bool IsConf = bool.Parse(Data[0]);
+            if (IsConf) // Joueur 2 a confirmé qu'il acceptait les paramètres de la partie
+            {
+                Comm.SendMessage("Start:null");
+                this.Invoke((MethodInvoker)(() => { this.Close(); }));
+            }
+            else // Joueur 2 a refusé les paramètres de la partie
+            {
+                MessageBox.Show("Le joueur 2 a refusé les paramètres de partie que vous avez proposé...");
+                begin = false;
+                //tbNbrSoldats.Invoke((MethodInvoker)(() => { tbNbrSoldats_Scroll(null, null); }));
+                this.BeginInvoke((MethodInvoker)(() =>
+                {
+                    tbNbrSoldats.Enabled = cbFantassin.Enabled = cbSniper.Enabled = cbLourd.Enabled = cbLeger.Enabled
+                        = btnDesert.Enabled = btnSnowy.Enabled = btnUrban.Enabled = btnLancer.Enabled = true;
+                    tbNbrSoldats_Scroll(null, null);
+                }));
+            }
+        }
+
+        private void SendSync()
+        {
+            Comm.SendMessage
+            (
+            "Sync:" + NbrFantassins + ";" + NbrSnipers + ";" + NbrLourds + ";" + NbrLegers + ";" + SelectedbtnIndex
+            );
+        }
+
+        private void AskForConf(string[] Data)
+        {
+            NbrFantassins = int.Parse(Data[0]);
+            NbrSnipers = int.Parse(Data[1]);
+            NbrLourds = int.Parse(Data[2]);
+            NbrLegers = int.Parse(Data[3]);
+            NbrSoldatsSelect = NbrFantassins + NbrSnipers + NbrLourds + NbrLegers;
+            SelectedbtnIndex = short.Parse(Data[4]);
+
+            string SelectedMap = "";
+            switch (SelectedbtnIndex)
+            {
+                case 0:
+                    SelectedMap = "Désert";
+                    break;
+                case 1:
+                    SelectedMap = "Enneigée";
+                    break;
+                case 2:
+                    SelectedMap = "Urbaine";
+                    break;
+            }
+
+            if
+            (
+                MessageBox.Show
+                (
+                    "Voici les paramètres de cette partie:\n Taille de l'escouade : "
+                    + NbrSoldatsSelect + " soldats dont\n   " + NbrFantassins + " fantassins\n   "
+                    + NbrSnipers + " Tireurs d'élite\n   " + NbrLourds + " Soldats lourds\n   "
+                    + NbrLegers + " Soldats légers.\n\nCarte sélectionnée : " + SelectedMap,
+                    "Confirmer",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question
+                 )
+                 == DialogResult.Yes
+            ) // Joueur 2 accepte les paramètres
+            {
+                Comm.SendMessage("Conf:true");
+            }
+            else // Joueur 2 refuse les paramètres
+            {
+                Comm.SendMessage("Conf:false");
+            }
+        }
+
+        private void OnConnectionChanged(object sender, EventArgs e)
+        {
+            SocComm TmpSoc = (SocComm)sender;
+            if (!TmpSoc.IsConnected)
+            {
+                MessageBox.Show("La connexion a été perdue !");
+                this.Comm = null;
+                this.begin = false;
+                this.Close();
+            }
+        }
+
+        private void EcranSetup_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (this.Comm != null)
+            {
+                Comm.ReceivedMessageChanged -= this.OnMessageReceived;
+                Comm.IsConnectedChanged -= this.OnConnectionChanged;
+            }
         }
     }
 }
