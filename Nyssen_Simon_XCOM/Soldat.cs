@@ -137,7 +137,7 @@ namespace Nyssen_Simon_XCOM
         public int Attack(Soldat target) // Attaque un soldat ciblé
         {
             if (target.DefenseCalc() < 0)
-                return (int)target.DefenseCalc();
+                return (int)target.DefenseCalc(); // Erreur
             float chance = (this._precision / ((DistanceCalc(target.position) * 2) * target.DefenseCalc())) * 1000;
 
             //Un seul nombre "aléatoire" ne semblait pas donner de nombres réellement aléatoires, je fais donc une moyenne de 3 jets
@@ -215,7 +215,7 @@ namespace Nyssen_Simon_XCOM
         {
             int distance = Math.Abs(this.position.IndexX - target.IndexX) + Math.Abs(this.position.IndexY - target.IndexY);
             // DEBUG
-            Console.WriteLine("Distance = " + distance);
+            //Console.WriteLine("Distance = " + distance);
             return distance;
         }
 

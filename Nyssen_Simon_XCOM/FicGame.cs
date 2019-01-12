@@ -931,18 +931,7 @@ namespace Nyssen_Simon_XCOM
                                     switch (Error)
                                     {
                                         case 0:
-                                            tsInfo.Text = "Soldat déplacé sur la case [" + IndexX + "," + IndexY + "].";
-                                            //if (AudioOn)
-                                            //{
-                                            //    sounds.Stream = Properties.Resources.moving_sound;
-                                            //    sounds.Load();
-                                            //    sounds.Play();
-                                            //}
-                                            SoldiersIcons[Index].Location = Soldiers[Index].position.Origin;
-                                            ttInfos.SetToolTip(SoldiersIcons[Index], Soldiers[Index].AfficherStats());
-                                            tsAvancement.Increment(1);
-                                            NbrSoldatsJoues++;
-                                            tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
+                                            MoveSoldier(SoldiersIcons[Index], Soldiers[Index], false);
                                             break;
                                         case 1:
                                             MessageBox.Show("Vous ne pouvez pas déplacer le soldat aussi loin !", "Déplacement impossible", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -989,24 +978,6 @@ namespace Nyssen_Simon_XCOM
                                     MessageBox.Show("ERREUR : cette case n'a pas de niveau de couverture défini !", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 else
                                 {
-                                    //if (AudioOn)
-                                    //{
-                                    //    switch (Soldiers[Index].classe)
-                                    //    {
-                                    //        case 0: // Fantassin
-                                    //        case 2: // Lourd
-                                    //            sounds.Stream = Properties.Resources.firing_heavy;
-                                    //            break;
-                                    //        case 1: // Sniper
-                                    //            sounds.Stream = Properties.Resources.firing_sniper;
-                                    //            break;
-                                    //        case 3: // Leger
-                                    //            sounds.Stream = Properties.Resources.firing_light;
-                                    //            break;
-                                    //    }
-                                    //    sounds.Load();
-                                    //    sounds.Play();
-                                    //}
                                     if (Error == 0)
                                     {
                                         if (Cases[IndexX, IndexY].soldier.alive) // Le soldat visé est encore en vie
@@ -1132,7 +1103,28 @@ namespace Nyssen_Simon_XCOM
             tsInfo.Text = "Sélectionnez un soldat à jouer";
         }
         #region Actions
-        private void Move()
+        private void MoveSoldier(PictureBox SoldierIcon, Soldat Soldier, bool IsOnlineUpdate)
+        {
+            tsInfo.Text = "Soldat déplacé sur la case [" + IndexX + "," + IndexY + "].";
+            SoldierIcon.Location = Soldier.position.Origin;
+            ttInfos.SetToolTip(SoldierIcon, Soldier.AfficherStats());
+            tsAvancement.Increment(1);
+            NbrSoldatsJoues++;
+            tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
+        }
+        private void ReinforceSoldier(PictureBox SoldierIcon, Soldat Soldier, bool IsOnlineUpdate)
+        {
+            Soldier.TakeCover();
+            tsInfo.Text = "Position renforcée";
+            tsAvancement.Increment(1);
+            NbrSoldatsJoues++;
+            tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
+            ttInfos.SetToolTip(SoldierIcon, Soldier.AfficherStats());
+        }
+        private void AttackSoldier()
+        {
+
+        }
         #endregion
         #endregion
         #region Musiques
