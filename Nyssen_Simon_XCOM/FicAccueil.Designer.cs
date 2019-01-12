@@ -37,24 +37,26 @@
             this.llblCopyright = new System.Windows.Forms.LinkLabel();
             this.btnAide = new System.Windows.Forms.Button();
             this.btnAudio = new System.Windows.Forms.Button();
+            this.BtnMultijoueur = new System.Windows.Forms.Button();
             this.pAccueil.SuspendLayout();
             this.SuspendLayout();
             // 
             // pAccueil
             // 
             this.pAccueil.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pAccueil.Controls.Add(this.BtnMultijoueur);
             this.pAccueil.Controls.Add(this.btnExit);
             this.pAccueil.Controls.Add(this.btnLoadGame);
             this.pAccueil.Controls.Add(this.btnNewGame);
             this.pAccueil.Location = new System.Drawing.Point(13, 13);
             this.pAccueil.Name = "pAccueil";
-            this.pAccueil.Size = new System.Drawing.Size(352, 203);
+            this.pAccueil.Size = new System.Drawing.Size(352, 267);
             this.pAccueil.TabIndex = 0;
             // 
             // btnExit
             // 
             this.btnExit.Font = new System.Drawing.Font("Gabriola", 15.75F, System.Drawing.FontStyle.Bold);
-            this.btnExit.Location = new System.Drawing.Point(4, 134);
+            this.btnExit.Location = new System.Drawing.Point(4, 199);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(341, 59);
             this.btnExit.TabIndex = 2;
@@ -91,7 +93,7 @@
             // llblCopyright
             // 
             this.llblCopyright.AutoSize = true;
-            this.llblCopyright.Location = new System.Drawing.Point(286, 239);
+            this.llblCopyright.Location = new System.Drawing.Point(286, 311);
             this.llblCopyright.Name = "llblCopyright";
             this.llblCopyright.Size = new System.Drawing.Size(86, 13);
             this.llblCopyright.TabIndex = 1;
@@ -102,7 +104,7 @@
             // btnAide
             // 
             this.btnAide.Font = new System.Drawing.Font("Gabriola", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAide.Location = new System.Drawing.Point(13, 222);
+            this.btnAide.Location = new System.Drawing.Point(12, 295);
             this.btnAide.Name = "btnAide";
             this.btnAide.Size = new System.Drawing.Size(106, 29);
             this.btnAide.TabIndex = 2;
@@ -115,18 +117,29 @@
             // 
             this.btnAudio.BackgroundImage = global::Nyssen_Simon_XCOM.Properties.Resources.audio_on;
             this.btnAudio.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnAudio.Location = new System.Drawing.Point(256, 228);
+            this.btnAudio.Location = new System.Drawing.Point(256, 300);
             this.btnAudio.Name = "btnAudio";
             this.btnAudio.Size = new System.Drawing.Size(24, 24);
             this.btnAudio.TabIndex = 3;
             this.btnAudio.UseVisualStyleBackColor = true;
             this.btnAudio.Click += new System.EventHandler(this.btnAudio_Click);
             // 
+            // BtnMultijoueur
+            // 
+            this.BtnMultijoueur.Font = new System.Drawing.Font("Gabriola", 15.75F, System.Drawing.FontStyle.Bold);
+            this.BtnMultijoueur.Location = new System.Drawing.Point(4, 134);
+            this.BtnMultijoueur.Name = "BtnMultijoueur";
+            this.BtnMultijoueur.Size = new System.Drawing.Size(341, 59);
+            this.BtnMultijoueur.TabIndex = 3;
+            this.BtnMultijoueur.Text = "Multijoueur";
+            this.BtnMultijoueur.UseVisualStyleBackColor = true;
+            this.BtnMultijoueur.Click += new System.EventHandler(this.BtnMultijoueur_Click);
+            // 
             // EcranAccueil
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(384, 261);
+            this.ClientSize = new System.Drawing.Size(384, 336);
             this.Controls.Add(this.btnAudio);
             this.Controls.Add(this.btnAide);
             this.Controls.Add(this.llblCopyright);
@@ -155,5 +168,6 @@
         private System.Windows.Forms.LinkLabel llblCopyright;
         private System.Windows.Forms.Button btnAide;
         private System.Windows.Forms.Button btnAudio;
+        private System.Windows.Forms.Button BtnMultijoueur;
     }
 }

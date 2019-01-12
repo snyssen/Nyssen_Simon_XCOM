@@ -20,6 +20,7 @@ namespace Nyssen_Simon_XCOM
         public bool AudioOn; // true si audio on
         private SoundPlayer music = new SoundPlayer(Properties.Resources._01_XCOM2_Lazarus);
         public EcranSetup setup;
+        public SocComm Comm;
 
         public bool Joueur1Joue;
         public short SelectedbtnIndex;
@@ -171,6 +172,12 @@ namespace Nyssen_Simon_XCOM
         {
             music.Stop();
             music.Dispose();
+        }
+
+        private void BtnMultijoueur_Click(object sender, EventArgs e)
+        {
+            EcranMulti multi = new EcranMulti();
+            multi.ShowDialog();
         }
     }
 }
