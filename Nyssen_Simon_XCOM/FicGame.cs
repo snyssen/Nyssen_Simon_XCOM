@@ -53,9 +53,11 @@ namespace Nyssen_Simon_XCOM
         private int NbrSoldatsJouesJ1 = 0;
         private int NbrSoldatsJouesJ2 = 0;
 
+        SocComm Comm;
+
         #endregion
         #region Constructeurs
-        public EcranGame(bool _audio, short Index, int NbrFant, int NbrSnip, int NbrLd, int NbrLg) // Constructeur pour une nouvelle partie
+        public EcranGame(bool _audio, short Index, int NbrFant, int NbrSnip, int NbrLd, int NbrLg, SocComm _Comm) // Constructeur pour une nouvelle partie
         {
             InitializeComponent();
 
@@ -70,7 +72,7 @@ namespace Nyssen_Simon_XCOM
             this.NbrSoldatsJoues = 0;
             this.FirstTurn = true;
 
-            CreationPartie();
+            CreationPartie(_Comm);
 
             if (!error)
             {
@@ -153,7 +155,7 @@ namespace Nyssen_Simon_XCOM
 
         public EcranGame(bool _audio, short Index, bool TourJoueur, int _TimePlayedJ1, int _TimePlayedJ2, int _NbrTourJoues,
             List<int> classes_J1, List<bool> covered_J1, List<int> HP_J1, List<bool> alive_J1, List<bool> played_J1, List<int> IndexX_J1, List<int> IndexY_J1,
-            List<int> classes_J2, List<bool> covered_J2, List<int> HP_J2, List<bool> alive_J2, List<bool> played_J2, List<int> IndexX_J2, List<int> IndexY_J2) // Constructeur pour charger une partie
+            List<int> classes_J2, List<bool> covered_J2, List<int> HP_J2, List<bool> alive_J2, List<bool> played_J2, List<int> IndexX_J2, List<int> IndexY_J2, SocComm _Comm) // Constructeur pour charger une partie
         {
             InitializeComponent();
 
@@ -206,7 +208,7 @@ namespace Nyssen_Simon_XCOM
 
             tsTour.Text = Joueur1Joue ? "Tour du joueur 1" : "Tour du joueur 2";
 
-            CreationPartie();
+            CreationPartie(_Comm);
 
             if (!error)
             {
@@ -273,8 +275,15 @@ namespace Nyssen_Simon_XCOM
             }
         }
 
-        private void CreationPartie() // Création de la partie, instructions communes aux deux constructeurs
+        private void CreationPartie(SocComm _Comm) // Création de la partie, instructions communes aux deux constructeurs
         {
+            Comm = _Comm;
+            if (Comm != null)
+            {
+                Comm.IsConnectedChanged += OnConnectionChanged;
+                Comm.ReceivedMessageChanged += OnMessageReceived;
+            }
+
             timer1.Start();
             tsInfo.Text = "Sélectionnez un soldat à jouer";
             dlgSauvegarder.Filter = "Fichier de sauvegarde|*.sav|Tous fichiers|*.*";
@@ -335,6 +344,7 @@ namespace Nyssen_Simon_XCOM
             else
                 Close();
         }
+
         #endregion
         #region Méthodes
         #region Graphisme
@@ -1121,6 +1131,9 @@ namespace Nyssen_Simon_XCOM
             }
             tsInfo.Text = "Sélectionnez un soldat à jouer";
         }
+        #region Actions
+        private void Move()
+        #endregion
         #endregion
         #region Musiques
         private void ChangeSoundtrack()
@@ -1200,17 +1213,17 @@ namespace Nyssen_Simon_XCOM
         #region Gameplay
         private void SoldiersIcons1_Click(object sender, EventArgs e) // On clique sur un soldat du joueur 1
         {
-            if (Joueur1Joue || ActionEnCours) // Joueur 1 joue => On sélectionne le soldat pour lui demander une action OU Joueur 2 joue mais Action en cours => ce soldat est ciblé par un tir ennemi
+            if ((Joueur1Joue && Comm == null) || (Joueur1Joue && Comm != null && Comm.IsServer) || ActionEnCours) // Joueur 1 joue (SOIT en solo SOIT online et on est serveur (=J1)) => On sélectionne le soldat pour lui demander une action OU Joueur 2 joue mais Action en cours => ce soldat est ciblé par un tir ennemi
                 DoAction(SoldiersIcons1, Soldiers1, sender);
             else
-                MessageBox.Show("C'est au tour du joueur 2 de jouer !", "Action impossible", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("C'est au tour du joueur" + (Joueur1Joue ? "1" : "2") + "de jouer !", "Action impossible", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
         private void SoldiersIcons2_Click(object sender, EventArgs e) // On clique sur un soldat du joueur 2
         {
-            if (!Joueur1Joue || ActionEnCours)  // Joueur 2 joue => On sélectionne le soldat pour lui demander une action OU Joueur 1 joue mais Action en cours => ce soldat est ciblé par un tir ennemi
+            if ((!Joueur1Joue && Comm == null) || (!Joueur1Joue && Comm != null && !Comm.IsServer) || ActionEnCours)  // Joueur 2 joue (SOIT en solo SOIT online et on est client (=J2)) => On sélectionne le soldat pour lui demander une action OU Joueur 1 joue mais Action en cours => ce soldat est ciblé par un tir ennemi
                 DoAction(SoldiersIcons2, Soldiers2, sender);
             else
-                MessageBox.Show("C'est au tour du joueur 1 de jouer !", "Action impossible", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("C'est au tour du joueur" + (Joueur1Joue ? "1" : "2") + "de jouer !", "Action impossible", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
         private void pbCase_Click(object sender, EventArgs e) // On clique sur une case (qui est alors obscurcie par la pbCase qui affiche son niveau de couverture)
         {
@@ -1361,6 +1374,41 @@ namespace Nyssen_Simon_XCOM
         {
             EcranAide aide = new EcranAide();
             aide.ShowDialog();
+        }
+        #endregion
+        #region Communications
+        private void OnMessageReceived(object sender, EventArgs e)
+        {
+            SocComm TmpSoc = (SocComm)sender;
+            string[] RawData = TmpSoc.ReceivedMessage.Split(':');
+            string Type = RawData[0];
+            string[] Data = RawData[1].Split(';');
+            Data[Data.Length - 1] = Data[Data.Length - 1].TrimEnd('\0'); // On retire le padding du message
+
+            TreatMessage(Type, Data);
+        }
+
+        private void OnConnectionChanged(object sender, EventArgs e)
+        {
+            SocComm TmpSoc = (SocComm)sender;
+            if (!TmpSoc.IsConnected)
+            {
+                MessageBox.Show("La connexion a été perdue, vous êtes désigné vainqueur !");
+                this.Invoke((MethodInvoker)(() => {
+                    this.Relaunch = true;
+                    this.saved = true;
+                    this.Comm = null;
+                    this.Close();
+                }));
+            }
+        }
+
+        private void TreatMessage(string Type, string[] Data)
+        {
+            switch (Type)
+            {
+
+            }
         }
         #endregion
         #endregion
