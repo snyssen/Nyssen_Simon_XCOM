@@ -147,6 +147,8 @@ namespace Nyssen_Simon_XCOM
                 Random rand = new Random();
                 Joueur1Joue = rand.Next(1, 3) == 1 ? true : false;
                 tsTour.Text = Joueur1Joue ? "Tour du joueur 1" : "Tour du joueur 2";
+                if (Comm != null && Comm.IsConnected && Comm.IsServer)
+                    Comm.SendMessage("SyncTour:" + Joueur1Joue.ToString());
             }
 
             else
@@ -1405,6 +1407,11 @@ namespace Nyssen_Simon_XCOM
         {
             switch (Type)
             {
+                case "SyncTour": // Au démarrage de la partie, le serveur envoie à qui est le tour
+                    Joueur1Joue = bool.Parse(Data[0]);
+                    tsTour.Text = Joueur1Joue ? "Tour du joueur 1" : "Tour du joueur 2";
+                    break;
+
                 case "Move": // L'autre terminal a déplacé un de ses soldats
                     // Data[0] = Index, Data[1] = IndexX, Data[2] = IndexY
                     IndexX = int.Parse(Data[1]);

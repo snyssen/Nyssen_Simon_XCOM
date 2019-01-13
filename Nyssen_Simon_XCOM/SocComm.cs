@@ -134,7 +134,11 @@ namespace Nyssen_Simon_XCOM
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Reception -> " + ex.Message); IsConnected = false;
+                Console.WriteLine("Reception -> " + ex.Message);
+                if (ex.Message == "An existing connection was forcibly closed by the remote host")
+                    IsConnected = false;
+                else
+                    BeginReception(soc);
             }
         }
         #endregion
@@ -149,6 +153,22 @@ namespace Nyssen_Simon_XCOM
                 throw new Exception("Envoi d'un message impossible avant d'être connecté");
             Console.WriteLine("Sending -> " + Message);
             socClient.Send(Encoding.UTF8.GetBytes(Message));
+        }
+        public void Disconnect()
+        {
+            if (socClient != null)
+            {
+                if (socClient.Connected)
+                    socClient.Disconnect(false);
+                socClient.Close();
+            }
+            if (socServer != null)
+            {
+                if (socServer.Connected)
+                    socServer.Disconnect(false);
+                socServer.Close();
+            }
+            IsConnected = false;
         }
         #region NotifyPropertyChanged
         // voir -> https://stackoverflow.com/questions/2246777/raise-an-event-whenever-a-propertys-value-changed
