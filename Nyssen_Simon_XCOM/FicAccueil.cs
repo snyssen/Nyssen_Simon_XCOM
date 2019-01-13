@@ -72,6 +72,11 @@ namespace Nyssen_Simon_XCOM
             }
             setup = new EcranSetup(AudioOn, this.Comm);
             setup.ShowDialog();
+            if (setup.Comm != null)
+            {
+                this.Comm = setup.Comm;
+                setup.Comm = null;
+            }
             if (setup.begin)
             {
                 Close();

@@ -25,6 +25,7 @@ namespace Nyssen_Simon_XCOM
                 accueil = new EcranAccueil();
                 Application.Run(accueil);
                 Comm = accueil.Comm;
+                accueil.Comm = null;
                 if (accueil.GameLaunch) // On veut lancer/reprendre une partie
                 {
                     if (accueil.Setup) // On veut commencer une nouvelle partie => Choix des paramètres

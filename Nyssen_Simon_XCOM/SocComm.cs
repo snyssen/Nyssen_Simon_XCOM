@@ -91,7 +91,10 @@ namespace Nyssen_Simon_XCOM
                 IsConnected = true;
             }
             else
-                throw new Exception("Le serveur ne répond pas");
+            {
+                System.Windows.Forms.MessageBox.Show("Le serveur ne répond pas...");
+                IsConnected = false;
+            }
         }
         #endregion
         #region Réception
@@ -116,7 +119,6 @@ namespace Nyssen_Simon_XCOM
             {
                 if (soc.EndReceive(iAR) > 0) // On a reçu des données
                 {
-                    Console.WriteLine("Received -> " + ReceivedMessage);
                     ReceivedMessage = Encoding.UTF8.GetString(socBuffer);
                     BeginReception(soc);
                 }
@@ -130,7 +132,10 @@ namespace Nyssen_Simon_XCOM
                     IsConnected = false;
                 }
             }
-            catch (Exception ex) { Console.WriteLine("Reception -> " + ex.Message); IsConnected = false; }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Reception -> " + ex.Message); IsConnected = false;
+            }
         }
         #endregion
         /// <summary>
@@ -182,12 +187,10 @@ namespace Nyssen_Simon_XCOM
             get { return this._ReceivedMessage; }
             set
             {
-                if (value != this._ReceivedMessage)
-                {
-                    this._ReceivedMessage = value;
-                    OnPropertyChanged();
-                    OnReceivedMessageChanged(EventArgs.Empty);
-                }
+                Console.WriteLine("Received -> " + value);
+                this._ReceivedMessage = value;
+                OnPropertyChanged();
+                OnReceivedMessageChanged(EventArgs.Empty);
             }
         }
         #endregion

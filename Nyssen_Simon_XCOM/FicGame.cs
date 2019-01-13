@@ -282,6 +282,10 @@ namespace Nyssen_Simon_XCOM
             {
                 Comm.IsConnectedChanged += OnConnectionChanged;
                 Comm.ReceivedMessageChanged += OnMessageReceived;
+                if (Comm.IsServer)
+                    this.Text = "Partie en cours - Joueur 1";
+                else
+                    this.Text = "Partie en cours - Joueur 2";
             }
 
             timer1.Start();
@@ -538,7 +542,7 @@ namespace Nyssen_Simon_XCOM
                 tsNbrSoldatsJoue.Text = NbrSoldatsJouesJ2 + "/" + NbrSoldatsJ2;
             }
         }
-        private void Gagne() // Détermine si la partie est terminée ou non
+        private void Gagne(bool ActionAnnulee) // Détermine si la partie est terminée ou non
         {
             if (NbrSoldatsJ1 <= 0)
                 FinPartie = 2;
@@ -549,6 +553,21 @@ namespace Nyssen_Simon_XCOM
                 else
                     FinPartie = 0;
             }
+
+            if (FinPartie != 0) // La partie est gagnée
+            {
+                if (MessageBox.Show("Le joueur " + (FinPartie == 1 ? "1 " : "2 ") + "gagne la partie !\n\n Voulez-vous retourner au menu principal ?", "Fin de la partie", MessageBoxButtons.YesNo, MessageBoxIcon.None) == DialogResult.Yes)
+                    this.Relaunch = true;
+                this.saved = true;
+                this.Close();
+            }
+            else // Partie non terminée, on teste si le joueur a fini son tour
+            {
+                if (!ActionAnnulee)
+                    ChangeTour();
+
+            }
+            tsInfo.Text = "Sélectionnez un soldat à jouer";
         }
         private void FindLocation(int posX, int posY) // Détermine la case sur laquelle on se trouve à partir de coordonnées posX, posY. Renvoie cette position en changeant IndexX et IndexY
         {
@@ -931,7 +950,7 @@ namespace Nyssen_Simon_XCOM
                                     switch (Error)
                                     {
                                         case 0:
-                                            MoveSoldier(SoldiersIcons[Index], Soldiers[Index], false);
+                                            MoveSoldier(SoldiersIcons[Index], Soldiers[Index], false, Index);
                                             break;
                                         case 1:
                                             MessageBox.Show("Vous ne pouvez pas déplacer le soldat aussi loin !", "Déplacement impossible", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -944,7 +963,7 @@ namespace Nyssen_Simon_XCOM
                                 while (Error != 0);
                                 break;
                             case 1: // Renforcement du soldat
-                                ReinforceSoldier(SoldiersIcons[Index], Soldiers[Index], false);
+                                ReinforceSoldier(SoldiersIcons[Index], Soldiers[Index], false, Index);
                                 break;
                             case 2: // Tir initié par le soldat
                                 tsInfo.Text = "Veuillez sélectionner un soldat à viser";
@@ -969,7 +988,7 @@ namespace Nyssen_Simon_XCOM
                                     }
                                 }
                                 Error = Soldiers[Index].Attack(Cases[IndexX, IndexY].soldier); // Action de tir
-                                AttackSoldier(Error, SoldiersIcons[Index], (SoldiersIcons == SoldiersIcons1 ? SoldiersIcons2 : SoldiersIcons1) /* Liste d'icônes des soldats ADVERSES */, Soldiers[Index], false);
+                                AttackSoldier(Error, SoldiersIcons[Index], (SoldiersIcons == SoldiersIcons1 ? SoldiersIcons2 : SoldiersIcons1) /* Liste d'icônes des soldats ADVERSES */, Soldiers[Index], false, Index);
                                 break;
                             default: // Annulation
                                 tsInfo.Text = "Annulation de l'action";
@@ -1013,49 +1032,29 @@ namespace Nyssen_Simon_XCOM
                 }
             }
 
-            Gagne(); // On teste la condition de victoire
-            if (FinPartie != 0) // La partie est gagnée
-            {
-                if (MessageBox.Show("Le joueur " + (FinPartie == 1 ? "1 " : "2 ") + "gagne la partie !\n\n Voulez-vous retourner au menu principal ?", "Fin de la partie", MessageBoxButtons.YesNo, MessageBoxIcon.None) == DialogResult.Yes)
-                    this.Relaunch = true;
-                this.saved = true;
-                this.Close();
-            }
-            else // Partie non terminée, on teste si le joueur a fini son tour
-            {
-                //if ((Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2) - NbrSoldatsJoues == 0) // Tous les soldats de l'escouade ont joué => Changement de joueur
-                //{
-                //    MessageBox.Show("Tour du joueur " + (Joueur1Joue ? "1 " : "2 ") + "terminé.\nAppuyez sur OK pour continuer", "Fin du tour", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //    ChangeTour();
-                //    NbrSoldatsJoues = 0;
-                //    tsAvancement.Value = 0;
-                //    tsAvancement.Maximum = (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
-                //    tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
-                //    int i = 0;
-                //    foreach (Soldat soldier in Soldiers)
-                //    {
-                //        soldier.played = false;
-                //        ttInfos.SetToolTip(SoldiersIcons[i], soldier.AfficherStats());
-                //        i++;
-                //    }
-                //}
-                if (!ActionAnnulee)
-                    ChangeTour();
-
-            }
-            tsInfo.Text = "Sélectionnez un soldat à jouer";
+            Gagne(ActionAnnulee); // On teste la condition de victoire
+            
         }
         #region Actions
-        private void MoveSoldier(PictureBox SoldierIcon, Soldat Soldier, bool IsOnlineUpdate)
+        // Index dans ces fonctions important uniquement pour la comm
+        private void MoveSoldier(PictureBox SoldierIcon, Soldat Soldier, bool IsOnlineUpdate, int Index)
         {
+            if (IsOnlineUpdate)
+            {
+                Soldier.Move(Cases[IndexX, IndexY]);
+            }
             tsInfo.Text = "Soldat déplacé sur la case [" + IndexX + "," + IndexY + "].";
             SoldierIcon.Location = Soldier.position.Origin;
             ttInfos.SetToolTip(SoldierIcon, Soldier.AfficherStats());
             tsAvancement.Increment(1);
             NbrSoldatsJoues++;
             tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
+            if (!IsOnlineUpdate && Comm != null && Comm.IsConnected)
+            {
+                Comm.SendMessage("Move:" + Index + ";" + IndexX + ";" + IndexY);
+            }
         }
-        private void ReinforceSoldier(PictureBox SoldierIcon, Soldat Soldier, bool IsOnlineUpdate)
+        private void ReinforceSoldier(PictureBox SoldierIcon, Soldat Soldier, bool IsOnlineUpdate, int Index)
         {
             Soldier.TakeCover();
             tsInfo.Text = "Position renforcée";
@@ -1063,8 +1062,21 @@ namespace Nyssen_Simon_XCOM
             NbrSoldatsJoues++;
             tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
             ttInfos.SetToolTip(SoldierIcon, Soldier.AfficherStats());
+            if (!IsOnlineUpdate && Comm != null && Comm.IsConnected)
+            {
+                Comm.SendMessage("Cover:" + Index);
+            }
         }
-        private void AttackSoldier(int Error, PictureBox SoldierIcon, List<PictureBox> Icons, Soldat Soldier, bool IsOnlineUpdate)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Error">Code d'erreur renvoyé par Soldat.Attack()</param>
+        /// <param name="SoldierIcon">Icône du soldat qui tire</param>
+        /// <param name="Icons">Liste d'icônes des soldats du joueur visé</param>
+        /// <param name="Soldier">Soldat qui tire</param>
+        /// <param name="IsOnlineUpdate">Vrai si effectué par sync avec l'autre terminal</param>
+        /// <param name="Index">Index, utile seulement pour envoyer les données</param>
+        private void AttackSoldier(int Error, PictureBox SoldierIcon, List<PictureBox> Icons, Soldat Soldier, bool IsOnlineUpdate, int Index)
         {
             if (Error < 0)
                 MessageBox.Show("ERREUR : cette case n'a pas de niveau de couverture défini !", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1072,7 +1084,8 @@ namespace Nyssen_Simon_XCOM
             {
                 if (Error == 0) // Le tir a touché
                 {
-                    // TODO : si le tir est effectué par l'autre terminal, il faut retiré les HP au soldat visé !
+                    if (IsOnlineUpdate)
+                        Cases[IndexX, IndexY].soldier.HP = Soldier.damage; // En cas sync, il faut retirer les points de vie au soldat visé
 
                     if (Cases[IndexX, IndexY].soldier.alive) // Le soldat visé est encore en vie
                     {
@@ -1112,6 +1125,10 @@ namespace Nyssen_Simon_XCOM
                 }
                 // Mise à jour des infos affichées à l'écran
                 ttInfos.SetToolTip(SoldierIcon, Soldier.AfficherStats());
+            }
+            if (!IsOnlineUpdate && Comm != null && Comm.IsConnected)
+            {
+                Comm.SendMessage("Attack:" + Index + ";" + IndexX + ";" + IndexY + ";" + Error);
             }
         }
         #endregion
@@ -1197,14 +1214,14 @@ namespace Nyssen_Simon_XCOM
             if ((Joueur1Joue && Comm == null) || (Joueur1Joue && Comm != null && Comm.IsServer) || ActionEnCours) // Joueur 1 joue (SOIT en solo SOIT online et on est serveur (=J1)) => On sélectionne le soldat pour lui demander une action OU Joueur 2 joue mais Action en cours => ce soldat est ciblé par un tir ennemi
                 DoAction(SoldiersIcons1, Soldiers1, sender);
             else
-                MessageBox.Show("C'est au tour du joueur" + (Joueur1Joue ? "1" : "2") + "de jouer !", "Action impossible", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("C'est au tour du joueur " + (Joueur1Joue ? "1" : "2") + " de jouer !", "Action impossible", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
         private void SoldiersIcons2_Click(object sender, EventArgs e) // On clique sur un soldat du joueur 2
         {
             if ((!Joueur1Joue && Comm == null) || (!Joueur1Joue && Comm != null && !Comm.IsServer) || ActionEnCours)  // Joueur 2 joue (SOIT en solo SOIT online et on est client (=J2)) => On sélectionne le soldat pour lui demander une action OU Joueur 1 joue mais Action en cours => ce soldat est ciblé par un tir ennemi
                 DoAction(SoldiersIcons2, Soldiers2, sender);
             else
-                MessageBox.Show("C'est au tour du joueur" + (Joueur1Joue ? "1" : "2") + "de jouer !", "Action impossible", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("C'est au tour du joueur " + (Joueur1Joue ? "1" : "2") + " de jouer !", "Action impossible", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
         private void pbCase_Click(object sender, EventArgs e) // On clique sur une case (qui est alors obscurcie par la pbCase qui affiche son niveau de couverture)
         {
@@ -1388,7 +1405,46 @@ namespace Nyssen_Simon_XCOM
         {
             switch (Type)
             {
-
+                case "Move": // L'autre terminal a déplacé un de ses soldats
+                    // Data[0] = Index, Data[1] = IndexX, Data[2] = IndexY
+                    IndexX = int.Parse(Data[1]);
+                    IndexY = int.Parse(Data[2]);
+                    if (Joueur1Joue) // C'est le joueur 1 qui vient de jouer
+                    {
+                        this.Invoke((MethodInvoker)(() => MoveSoldier(SoldiersIcons1[int.Parse(Data[0])], Soldiers1[int.Parse(Data[0])], true, 0)));
+                    }
+                    else
+                    {
+                        this.Invoke((MethodInvoker)(() => MoveSoldier(SoldiersIcons2[int.Parse(Data[0])], Soldiers2[int.Parse(Data[0])], true, 0)));
+                    }
+                    Gagne(false); // Vérifie les conditions de victoire et fait passer le tour
+                    break;
+                case "Cover": // L'autre terminal a renforcé la position d'un de ses soldats
+                    // Data[0] = Index
+                    if (Joueur1Joue)
+                    {
+                        this.Invoke((MethodInvoker)(() => ReinforceSoldier(SoldiersIcons1[int.Parse(Data[0])], Soldiers1[int.Parse(Data[0])], true, 0)));
+                    }
+                    else
+                    {
+                        this.Invoke((MethodInvoker)(() => ReinforceSoldier(SoldiersIcons2[int.Parse(Data[0])], Soldiers2[int.Parse(Data[0])], true, 0)));
+                    }
+                    Gagne(false); // Vérifie les conditions de victoire et fait passer le tour
+                    break;
+                case "Attack": // L'autre terminal a tiré sur un des soldats de ce terminal
+                    // Data[0] = Index, Data[1] = IndexX, Data[2] = IndexY, Data[3] = Error
+                    IndexX = int.Parse(Data[1]);
+                    IndexY = int.Parse(Data[2]);
+                    if (Joueur1Joue)
+                    {
+                        this.Invoke((MethodInvoker)(() => AttackSoldier(int.Parse(Data[3]), SoldiersIcons1[int.Parse(Data[0])], SoldiersIcons2, Soldiers1[int.Parse(Data[0])], true, 0)));
+                    }
+                    else
+                    {
+                        this.Invoke((MethodInvoker)(() => AttackSoldier(int.Parse(Data[3]), SoldiersIcons2[int.Parse(Data[0])], SoldiersIcons1, Soldiers2[int.Parse(Data[0])], true, 0)));
+                    }
+                    Gagne(false); // Vérifie les conditions de victoire et fait passer le tour
+                    break;
             }
         }
         #endregion

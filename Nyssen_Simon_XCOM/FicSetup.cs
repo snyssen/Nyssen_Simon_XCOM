@@ -30,7 +30,7 @@ namespace Nyssen_Simon_XCOM
         private short SelectedbtnMusic = 0; // Index de la musique -> 0 = First Flight
                                             //                     -> 1 = Squad Loadout
 
-        private SocComm Comm;
+        public SocComm Comm;
 
         public EcranSetup(bool _audio, SocComm _Comm)                
         {                                  
