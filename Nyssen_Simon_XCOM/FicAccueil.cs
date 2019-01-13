@@ -97,9 +97,16 @@ namespace Nyssen_Simon_XCOM
 
         private void btnLoadGame_Click(object sender, EventArgs e)
         {
-            GameLaunch = true;
-            Setup = false;
+            if (dlgLoadGame.ShowDialog() == DialogResult.OK)
+            {
+                if (Comm != null && Comm.IsConnected)
+                    Comm.SendMessage("Load:" + File.ReadAllText(dlgLoadGame.FileName));
+                LoadSaveFile(dlgLoadGame.FileName);
+            }
+        }
 
+        private void LoadSaveFile(string FileName)
+        {
             classes_J1 = new List<int>();
             covered_J1 = new List<bool>();
             HP_J1 = new List<int>();
@@ -116,47 +123,46 @@ namespace Nyssen_Simon_XCOM
             IndexX_J2 = new List<int>();
             IndexY_J2 = new List<int>();
 
-            if (dlgLoadGame.ShowDialog() == DialogResult.OK)
+            StreamReader sr = new StreamReader(FileName);
+            string lecture;
+            while ((lecture = sr.ReadLine()) != "") // Conditions générales de parties
             {
-                StreamReader sr = new StreamReader(dlgLoadGame.FileName);
-                string lecture;
-                while ((lecture = sr.ReadLine()) != "") // Conditions générales de parties
-                {
-                    string[] tab = lecture.Split(';');
-                    if (tab[0] == "True") // Tour du joueur
-                        Joueur1Joue = true;
-                    else
-                        Joueur1Joue = false;
-                    SelectedbtnIndex = short.Parse(tab[1]); // Map de la partie
-                    TimePlayedJ1 = int.Parse(tab[2]);
-                    TimePlayedJ2 = int.Parse(tab[3]);
-                    NbrTourJoues = int.Parse(tab[4]);
-                }
-                while ((lecture = sr.ReadLine()) != "") // Soldats du joueur 1
-                {
-                    string[] tab = lecture.Split(';');
-                    classes_J1.Add(int.Parse(tab[0]));
-                    covered_J1.Add(tab[1] == "True" ? true : false);
-                    HP_J1.Add(int.Parse(tab[2]));
-                    alive_J1.Add(tab[3] == "True" ? true : false);
-                    played_J1.Add(tab[4] == "True" ? true : false);
-                    IndexX_J1.Add(int.Parse(tab[5]));
-                    IndexY_J1.Add(int.Parse(tab[6]));
-                }
-                while ((lecture = sr.ReadLine()) != null) // Soldats du joueur 2
-                {
-                    string[] tab = lecture.Split(';');
-                    classes_J2.Add(int.Parse(tab[0]));
-                    covered_J2.Add(tab[1] == "True" ? true : false);
-                    HP_J2.Add(int.Parse(tab[2]));
-                    alive_J2.Add(tab[3] == "True" ? true : false);
-                    played_J2.Add(tab[4] == "True" ? true : false);
-                    IndexX_J2.Add(int.Parse(tab[5]));
-                    IndexY_J2.Add(int.Parse(tab[6]));
-                }
-                sr.Close();
-                Close();
+                string[] tab = lecture.Split(';');
+                if (tab[0] == "True") // Tour du joueur
+                    Joueur1Joue = true;
+                else
+                    Joueur1Joue = false;
+                SelectedbtnIndex = short.Parse(tab[1]); // Map de la partie
+                TimePlayedJ1 = int.Parse(tab[2]);
+                TimePlayedJ2 = int.Parse(tab[3]);
+                NbrTourJoues = int.Parse(tab[4]);
             }
+            while ((lecture = sr.ReadLine()) != "") // Soldats du joueur 1
+            {
+                string[] tab = lecture.Split(';');
+                classes_J1.Add(int.Parse(tab[0]));
+                covered_J1.Add(tab[1] == "True" ? true : false);
+                HP_J1.Add(int.Parse(tab[2]));
+                alive_J1.Add(tab[3] == "True" ? true : false);
+                played_J1.Add(tab[4] == "True" ? true : false);
+                IndexX_J1.Add(int.Parse(tab[5]));
+                IndexY_J1.Add(int.Parse(tab[6]));
+            }
+            while ((lecture = sr.ReadLine()) != null) // Soldats du joueur 2
+            {
+                string[] tab = lecture.Split(';');
+                classes_J2.Add(int.Parse(tab[0]));
+                covered_J2.Add(tab[1] == "True" ? true : false);
+                HP_J2.Add(int.Parse(tab[2]));
+                alive_J2.Add(tab[3] == "True" ? true : false);
+                played_J2.Add(tab[4] == "True" ? true : false);
+                IndexX_J2.Add(int.Parse(tab[5]));
+                IndexY_J2.Add(int.Parse(tab[6]));
+            }
+            sr.Close();
+            GameLaunch = true;
+            Setup = false;
+            Close();
         }
 
         private void llblCopyright_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -232,10 +238,18 @@ namespace Nyssen_Simon_XCOM
             SocComm TmpSoc = (SocComm)sender;
             string[] RawData = TmpSoc.ReceivedMessage.Split(':');
             string Type = RawData[0];
-            string[] Data = RawData[1].Split(';');
-            Data[Data.Length - 1] = Data[Data.Length - 1].TrimEnd('\0'); // On retire le padding du message
+            RawData[1] = RawData[1].TrimEnd('\0'); // On retire le padding du message
+            if (Type == "Load") // On veut sauvegarder les datas dans un fichier pour le lire
+            {
+                File.WriteAllText(System.AppDomain.CurrentDomain.BaseDirectory + "Tmp.sav", RawData[1]);
+                this.Invoke((MethodInvoker)(() => { LoadSaveFile(System.AppDomain.CurrentDomain.BaseDirectory + "Tmp.sav"); }));
+            }
+            else
+            {
+                string[] Data = RawData[1].Split(';');
 
-            TreatMessage(Type, Data);
+                TreatMessage(Type, Data);
+            }
         }
 
         private void TreatMessage(string Type, string[] Data)

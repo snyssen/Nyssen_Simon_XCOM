@@ -22,7 +22,6 @@ namespace Nyssen_Simon_XCOM
         private int NbrLourds; // Nombre de soldats lourds (par escouade)
         private int NbrLegers; // Nombre de soldats légers (par escouade)
         private int NbrSoldats; // Nombre de soldats toute classe confondue (par escouade)
-        private int NbrSoldatsJoues; // Nombre de soldats ayant joués sur ce tour (par escouade)
         private int NbrSoldatsJ1; // Nombre de soldats du joueur 1
         private int NbrSoldatsJ2; // Nombre de soldats du joueur 2
         bool error = false; // Détecte une erreur
@@ -69,8 +68,8 @@ namespace Nyssen_Simon_XCOM
             this.NbrLegers = NbrLg;
             this.NbrSoldats = NbrFantassins + NbrSnipers + NbrLourds + NbrLegers;
             this.NbrSoldatsJ1 = this.NbrSoldatsJ2 = this.NbrSoldats;
-            this.NbrSoldatsJoues = 0;
             this.FirstTurn = true;
+            this.NbrSoldatsJouesJ1 = this.NbrSoldatsJouesJ2 = 0;
 
             CreationPartie(_Comm);
 
@@ -170,7 +169,7 @@ namespace Nyssen_Simon_XCOM
             this.FirstTurn = (NbrTourJoues > 1 ? false : true);
 
             this.NbrSoldats = classes_J1.Count;
-            this.NbrFantassins = this.NbrSnipers = this.NbrLourds = this.NbrLegers = this.NbrSoldatsJ1 = this.NbrSoldatsJ2 = this.NbrSoldatsJoues = 0;
+            this.NbrFantassins = this.NbrSnipers = this.NbrLourds = this.NbrLegers = this.NbrSoldatsJ1 = this.NbrSoldatsJ2 = 0;
             foreach (int classe in classes_J1) // Compte des classes
             {
                 switch (classe)
@@ -202,10 +201,15 @@ namespace Nyssen_Simon_XCOM
                 if (alive)
                     this.NbrSoldatsJ2++;
             }
-            foreach (bool played in (this.Joueur1Joue ? played_J1 : played_J2)) // Compte du nombre de soldats ayant joués
+            foreach (bool played in played_J1) // Compte du nombre de soldats ayant joués
             {
                 if (played)
-                    NbrSoldatsJoues++;
+                    NbrSoldatsJouesJ1++;
+            }
+            foreach (bool played in played_J2) // Compte du nombre de soldats ayant joués
+            {
+                if (played)
+                    NbrSoldatsJouesJ2++;
             }
 
             tsTour.Text = Joueur1Joue ? "Tour du joueur 1" : "Tour du joueur 2";
@@ -502,10 +506,11 @@ namespace Nyssen_Simon_XCOM
             else
                 NbrSoldatsJouesJ2++;
 
-            if ((Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2) - (Joueur1Joue ? NbrSoldatsJouesJ1 : NbrSoldatsJouesJ2) == 0)
+            // Est-ce que le joueur a joué tous ses soldats ?
+            if ((Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2) - (Joueur1Joue ? NbrSoldatsJouesJ1 : NbrSoldatsJouesJ2) <= 0)
             {
                 NbrTourJoues++;
-                if (NbrTourJoues > 1) // Les deux joueurs ont joué chacun de leurs soldats au moins une fois
+                if (NbrTourJoues > 1) // Les deux joueurs ont joué chacun de leurs soldats au moins une fois => Ils peuvent maintenant tirer
                     FirstTurn = false;
                 if (Joueur1Joue)
                 {
@@ -1048,9 +1053,6 @@ namespace Nyssen_Simon_XCOM
             tsInfo.Text = "Soldat déplacé sur la case [" + IndexX + "," + IndexY + "].";
             SoldierIcon.Location = Soldier.position.Origin;
             ttInfos.SetToolTip(SoldierIcon, Soldier.AfficherStats());
-            tsAvancement.Increment(1);
-            NbrSoldatsJoues++;
-            tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
             if (!IsOnlineUpdate && Comm != null && Comm.IsConnected)
             {
                 Comm.SendMessage("Move:" + Index + ";" + IndexX + ";" + IndexY);
@@ -1060,9 +1062,6 @@ namespace Nyssen_Simon_XCOM
         {
             Soldier.TakeCover();
             tsInfo.Text = "Position renforcée";
-            tsAvancement.Increment(1);
-            NbrSoldatsJoues++;
-            tsNbrSoldatsJoue.Text = NbrSoldatsJoues + "/" + (Joueur1Joue ? NbrSoldatsJ1 : NbrSoldatsJ2);
             ttInfos.SetToolTip(SoldierIcon, Soldier.AfficherStats());
             if (!IsOnlineUpdate && Comm != null && Comm.IsConnected)
             {

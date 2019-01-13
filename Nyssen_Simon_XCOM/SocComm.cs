@@ -47,7 +47,7 @@ namespace Nyssen_Simon_XCOM
         private bool CreateServer(int port)
         {
             IPAddress MachineIP;
-            if ((MachineIP = ValidateAddress(Dns.GetHostName())) == null)
+            if ((MachineIP = ValidateAddress("127.0.0.1")) == null)
                 return false;
             socServer = new Socket(AddressFamily.InterNetwork /* IPv4*/, SocketType.Stream, ProtocolType.Tcp);
             socServer.Bind(new IPEndPoint(MachineIP, port));

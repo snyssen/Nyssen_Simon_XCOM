@@ -102,8 +102,11 @@ namespace Nyssen_Simon_XCOM
 
         private void EcranMulti_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Comm.ReceivedMessageChanged -= this.OnMessageReceived;
-            Comm.IsConnectedChanged -= this.OnIsConnectedChanged;
+            if (Comm != null)
+            {
+                Comm.ReceivedMessageChanged -= this.OnMessageReceived;
+                Comm.IsConnectedChanged -= this.OnIsConnectedChanged;
+            }
         }
     }
 }
